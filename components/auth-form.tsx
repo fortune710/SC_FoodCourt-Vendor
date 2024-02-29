@@ -7,6 +7,7 @@ import Icon from './ui/icon';
 
 import { Link } from 'expo-router'
 import styleUtility from '../utils/styles';
+import useAuth from '../hooks/useAuth';
 
 interface AuthFormProps {
     type: 'login'|'sign-up'|'forgot-password'
@@ -18,33 +19,21 @@ const RememberMeContainer = View;
 export default function AuthForm({ type }: AuthFormProps) {
     const [checkboxClicked, setCheckbox] = useState(false);
 
+    const { signIn } = useAuth();
+
 
     if (type !== 'forgot-password') {
         return (
-            <View>
-                <Image
-                    source={{ uri: require('../assets/food.svg') }}
-                />
-
-                <Text>
-                    { type === 'login' ? 'Login' : 'Sign Up' }
-                </Text>
-
+            <View style={styles.formContainer}>
                 {
                     type === 'sign-up' && 
                     <Input
-                        leftIcon={
-                            <Icon iconFile={require('../assets/icons/mail.svg')}/>
-                        }
                         inputContainerStyle={styles.inputContainer}
                         placeholder='Name'
                     />
                 }
 
                 <Input
-                    leftIcon={
-                        <Icon iconFile={require('../assets/icons/mail.svg')}/>
-                    }
                     inputContainerStyle={styles.inputContainer}
                     placeholder='Email'
                 />
@@ -65,7 +54,7 @@ export default function AuthForm({ type }: AuthFormProps) {
                 {
                     type === 'login' ? 
                     <View style={[styleUtility.flexJustifyBetween, { width: '100%' }]}>
-                        <RememberMeContainer>
+                        <RememberMeContainer style={{ display: 'flex', flexDirection: 'row', alignItems: 'center' }}>
                             <CheckBox
                                 checked={checkboxClicked}
                                 onPress={() => setCheckbox(!checkboxClicked)}
@@ -73,7 +62,7 @@ export default function AuthForm({ type }: AuthFormProps) {
                                 checkedIcon={'checkbox-marked'}
                                 uncheckedIcon={'checkbox-blank-outline'}
                                 checkedColor='#f72f2f'
-                                style={{ marginRight: 7 }}
+                                //style={{ marginRight: 7 }}
                             />
                             <Text>Remember Me</Text>
                         </RememberMeContainer>
@@ -99,16 +88,22 @@ export default function AuthForm({ type }: AuthFormProps) {
                     </TermsAndConditionsContainer>
                 }
 
-                <Button>
-                    Continue
-                </Button>
+                <View style={styles.actions}>
+                    <Button
+                        titleStyle={{ textAlign: 'center' }} 
+                        buttonStyle={styles.mainAction}
+                    >
+                        Continue
+                    </Button>
 
-                <Link 
-                    style={styles.moveToOtherPage}
-                    href={ type === 'login' ? `/sign-up` : '/login'}
-                >
-                    { type === 'login' ? 'New User? Create Account' : 'Already Have an Account? Login' }
-                </Link>
+                    <Link 
+                        style={styles.moveToOtherPage}
+                        href={ type === 'login' ? `/sign-up` : '/login'}
+                    >
+                        { type === 'login' ? 'New User? Create Account' : 'Already Have an Account? Login' }
+                    </Link>
+                </View>
+
 
             </View>
         )
@@ -158,6 +153,27 @@ const styles = StyleSheet.create({
         borderRadius: 32, borderColor: '#f72f2f',
         paddingVertical: 10,
         paddingHorizontal: 15,
-        color: '#f72f2f'
+        color: '#f72f2f',
+        textAlign: 'center',
+        width: '80%'
+    },
+    mainAction: {
+        width: '90%',
+        backgroundColor: '#f72f2f',
+        borderRadius: 32,
+        display: 'flex',
+        alignItems: 'center',
+        flexDirection: 'column'
+
+    },
+    formContainer: {
+        marginVertical: 12
+    },
+
+    actions: {
+        display: 'flex',
+        flexDirection: 'column',
+        alignItems: 'center',
+        width: '100%'
     }
 })
