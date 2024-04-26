@@ -23,6 +23,8 @@ const styles = StyleSheet.create({
         display: "flex",
         flexDirection: "column",
         padding: 10,
+        marginVertical: 10,
+        minHeight: 'auto'
     },
     
 })

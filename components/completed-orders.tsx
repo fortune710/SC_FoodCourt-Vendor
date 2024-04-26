@@ -1,15 +1,15 @@
 import React from "react";
-import { View } from "react-native";
+import { ScrollView, View } from "react-native";
 import OrderCardCompleted from "./orders/order-card-completed";
 
 export default function CompletedOrders() {
     return (
-        <View>
+        <ScrollView>
             <OrderCardCompleted/>
             <OrderCardCompleted/>
             <OrderCardCompleted/>
             <OrderCardCompleted/>
             <OrderCardCompleted/>
-        </View>
+        </ScrollView>
     )
 }

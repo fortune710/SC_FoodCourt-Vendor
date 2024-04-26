@@ -2,6 +2,8 @@ import React from "react";
 import { View, Text, StyleSheet } from "react-native";
 import { Image } from "expo-image"; 
 import utilityStyles from '../../utils/styles';
+import OrderCardName from "./order-card-name";
+import { globalStyles } from "../../constants/Styles";
 
 const OrderItemIcon = View
 
@@ -12,15 +14,7 @@ interface OrderCardDetailsProps {
 export default function OrderCardDetails({ showTime }: OrderCardDetailsProps) {
     return (
         <>
-            <View style={styles.header}>
-                <Text>Order No. 12345:</Text>
-                <Text style={styles.date}>13-11-2023</Text>
-            </View>
-            
-            <View style={styles.customer}>
-                <Text>Customer: Susan Sharon </Text>
-                <Text style={styles.time}>13:25</Text>
-            </View>
+            <OrderCardName/>
 
             <View style={styles.orderDescription}>
                 <Text>
@@ -29,14 +23,12 @@ export default function OrderCardDetails({ showTime }: OrderCardDetailsProps) {
                     morbi eget bibendum volutpat ipsum amet nunc orci.
                 </Text>
 
-                <View>
-                    <View>
+                <View style={[globalStyles.flexItemsCenter, globalStyles.justifyBetween]}>
+                    <View style={{ display: 'flex', alignItems: 'center', flexDirection: 'row', marginVertical:7 }}>
                         <View style={styles.orderItem}>
                             <OrderItemIcon style={styles.orderItemType}>
                                 <Image
-                                    source={{
-                                        uri: "https://cdn.builder.io/api/v1/image/assets/TEMP/6b0be5ea14d58de9c30289921bf630117df978d4109955a6302773e3fb884d32?apiKey=730671e7852c4d91bc984b7d2d07d7fb&",
-                                    }}
+                                    source={require('../../assets/food.svg')}
                                 />
                             </OrderItemIcon>
                             <Text>Food</Text>
@@ -83,7 +75,7 @@ const styles = StyleSheet.create({
         padding: 16,
     },
     date: {
-        fontFamily: "Montserrat, sans-serif",
+        fontFamily: "Montserrat",
         fontSize: 16,
         fontWeight: "600",
     },
@@ -106,7 +98,8 @@ const styles = StyleSheet.create({
         paddingHorizontal: 15,
         textAlign: 'center',
         backgroundColor: '#d9d9d9',
-        color: 'black'
+        color: 'black',
+        width:'auto'
 
     },
     orderDescription: {

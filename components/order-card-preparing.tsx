@@ -67,7 +67,7 @@ const styles = StyleSheet.create({
         padding: 16,
     },
     date: {
-        fontFamily: "Montserrat, sans-serif",
+        fontFamily: "Montserrat",
         fontSize: 16,
         fontWeight: "600",
     },
