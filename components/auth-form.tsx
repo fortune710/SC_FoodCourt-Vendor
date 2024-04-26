@@ -7,7 +7,7 @@ import Icon from './ui/icon';
 
 import { Link } from 'expo-router'
 import styleUtility from '../utils/styles';
-import useAuth from '../hooks/useAuth';
+//import useAuth from '../hooks/useAuth';
 
 interface AuthFormProps {
     type: 'login'|'sign-up'|'forgot-password'
@@ -19,7 +19,7 @@ const RememberMeContainer = View;
 export default function AuthForm({ type }: AuthFormProps) {
     const [checkboxClicked, setCheckbox] = useState(false);
 
-    const { signIn } = useAuth();
+    //const { signIn } = useAuth();
 
 
     if (type !== 'forgot-password') {
