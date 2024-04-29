@@ -1,11 +1,13 @@
-import React, { useEffect, useRef } from "react";
-import { Link, SplashScreen, Stack, useRootNavigation } from "expo-router";
-import { useFonts, loadAsync } from "expo-font";
-import { createTheme, Text, ThemeProvider } from "@rneui/themed";
+import React, { useEffect } from "react";
+import { SplashScreen, Stack } from "expo-router";
+import { useFonts } from "expo-font";
+import { createTheme, ThemeProvider } from "@rneui/themed";
 import { verticalScale } from "react-native-size-matters";
-import { Pressable } from "react-native";
 
-import { FontAwesome, MaterialIcons } from "@expo/vector-icons"
+import FontAwesome from "@expo/vector-icons/FontAwesome"
+import MaterialIcons from "@expo/vector-icons/MaterialIcons"
+import { Ionicons, Octicons } from "@expo/vector-icons";
+import { StatusBar } from "expo-status-bar";
 
 
 const theme = createTheme({
@@ -29,15 +31,15 @@ const theme = createTheme({
 SplashScreen.preventAutoHideAsync()
 
 export default function RootLayout() {
-
-    const route = useRootNavigation();
     
 
     const [fontsLoaded, error] = useFonts({
-        "Inter": require('../assets/fonts/Inter-Regular.ttf'),
+        "Inter-Regular": require('../assets/fonts/Inter-Regular.ttf'),
         "Montserrat": require('../assets/fonts/Montserrat-Regular.ttf'),
         ...MaterialIcons.font,
-        ...FontAwesome.font
+        ...FontAwesome.font,
+        ...Ionicons.font,
+        ...Octicons.font
     });
 
     
@@ -49,37 +51,38 @@ export default function RootLayout() {
         if (fontsLoaded) {
             SplashScreen.hideAsync();
         }
-        loadAsync({
-            ...MaterialIcons.font
-        })
     }, [fontsLoaded]);
+    
+    
 
     if (!fontsLoaded) {
         return null;
     }
 
+    return <RootLayoutNav/>
+
+}
+
+
+function RootLayoutNav() {
+
+    
     return (
         <ThemeProvider theme={theme}>
-            <Stack screenOptions={{
-                headerTitleAlign: 'left',
-                headerLeft: () => (
-                    <Pressable onPress={() => console.log(route?.getCurrentRoute())}>
-                        <MaterialIcons name="menu" size={24} color="black" />
-                    </Pressable>
-                ),
-                headerRight: () => (
-                    <Link href="/pickup">
-                        <MaterialIcons name="shopping-bag" size={24} color="black" />
-                    </Link>
-                )
-            }}>
+            <StatusBar 
+                backgroundColor="#fff" 
+                style="dark"
+            />
+            <Stack screenOptions={{ headerShown: false }}>
                 <Stack.Screen name="menu"/>
                 <Stack.Screen name="login"/>
                 <Stack.Screen name="pickup"/>
                 <Stack.Screen name="index"/>
                 <Stack.Screen name="sign-up"/>
                 <Stack.Screen name="home"/>
+                <Stack.Screen name="settings"/>
             </Stack>
         </ThemeProvider>
     )
 }
+
