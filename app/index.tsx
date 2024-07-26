@@ -7,6 +7,7 @@ import { scale } from "react-native-size-matters";
 import useThemeColor from "../hooks/useThemeColor";
 import NewOrders from "../components/order-lists/new";
 import PreparingOrders from "../components/order-lists/preparing";
+import Header from "../components/header,";
 
 export default function OrdersPage() {
     const [activeTab, setActiveTab] = useState(0);
@@ -14,6 +15,7 @@ export default function OrdersPage() {
 
     return (
         <Page>
+            <Header style="dark"/>
             <Tab 
                 value={activeTab} 
                 onChange={setActiveTab} 

@@ -28,37 +28,39 @@ const APP_OPTIONS = [
 
 ]
 
-const ACCOUNT_OPTIONS = [
-    {
-        name: "Profile",
-        icon: require('../../assets/icons/profile-icon.svg'),
-        onPress: () => {},
-        canToggle: false,
-        style: { width: 32, height: 32 }
-    },
-    {
-        name: "Accepting Orders",
-        icon: require('../../assets/icons/download-icon.svg'),
-        onPress: () => {},
-        canToggle: true,
-        style: { width: 32, height: 35 }
-    },
-    {
-        name: "Notifications",
-        icon: require('../../assets/icons/bell-icon.svg'),
-        onPress: () => {},
-        canToggle: true,
-        style: { width: 30, height: 34 }
-    },
-
-]
 
 
 export default function SettingsPage() {
-
     const primary = useThemeColor({}, "primary");
-
     const router = useRouter();
+
+    const ACCOUNT_OPTIONS = [
+        {
+            name: "Profile",
+            icon: require('../../assets/icons/profile-icon.svg'),
+            onPress: () => {
+                return router.push("/settings/profile")
+            },
+            canToggle: false,
+            style: { width: 32, height: 32 }
+        },
+        {
+            name: "Accepting Orders",
+            icon: require('../../assets/icons/download-icon.svg'),
+            onPress: () => {},
+            canToggle: true,
+            style: { width: 32, height: 35 }
+        },
+        {
+            name: "Notifications",
+            icon: require('../../assets/icons/bell-icon.svg'),
+            onPress: () => {},
+            canToggle: true,
+            style: { width: 30, height: 34 }
+        },
+    
+    ]
+
     return (
         <Page 
             style={{ backgroundColor: primary }} 
@@ -115,7 +117,7 @@ export default function SettingsPage() {
                                             
                                             href={option.href}
                                         >
-                                            <View style={styles.listItemStyle}>
+                                            <View style={[styles.listItemStyle, { marginVertical: 10 }]}>
                                                 <View style={globalStyles.flexItemsCenter}>
                                                     <Image 
                                                         source={option.icon} 
@@ -184,5 +186,10 @@ const styles = StyleSheet.create({
         paddingHorizontal: 25
     },
     optionCategory: { width: "100%", marginTop: 15 },
-    listItemStyle: { justifyContent: "space-between", width: "100%", display: "flex", flexDirection: "row" }
+    listItemStyle: { 
+        justifyContent: "space-between", 
+        width: "100%", 
+        display: "flex", 
+        flexDirection: "row",
+    }
 })
