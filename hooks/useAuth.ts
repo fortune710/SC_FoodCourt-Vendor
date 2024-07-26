@@ -1,5 +1,3 @@
-import { createUserWithEmailAndPassword, getIdToken, signInWithEmailAndPassword } from 'firebase/auth';
-import { auth } from '../utils/firebase';
 import { supabase } from '../utils/supabase';
 
 export default function useAuth() {
@@ -17,6 +15,13 @@ export default function useAuth() {
         const res = await supabase.auth.signUp({
             email, password
         })
+        await supabase.from('profile').insert([
+            { name: "", email,  }
+        ])
+        await supabase.from('resturants').insert([
+            { name: "", user_id: res.data.user?.id!, email }
+        ])
+
         return res.data.user
     }
 
