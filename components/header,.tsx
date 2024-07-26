@@ -8,6 +8,7 @@ import { scale, verticalScale } from "react-native-size-matters";
 import { useState } from "react";
 import { Text } from "@rneui/themed";
 import useThemeColor from "../hooks/useThemeColor";
+import { Image } from "expo-image";
 
 
 const ICON_SIZE = 35;
@@ -20,6 +21,10 @@ const toolbarColorPerPage: Record<string, string> = {
 interface HeaderProps {
     style?: "light"|"dark"
 }
+
+const MenuLight = require('../assets/icons/menu-icon-light.svg');
+const MenuRed = require('../assets/icons/menu-icon-red.svg');
+const ShoppingBag = require('../assets/icons/shopping-bag.svg');
 
 
 export default function Header({ style }: HeaderProps) {
@@ -36,7 +41,7 @@ export default function Header({ style }: HeaderProps) {
 
     const labelColor = {
         "light": "#fff",
-        "dark": undefined
+        "dark": "#000"
     }
 
     return (
@@ -71,28 +76,26 @@ export default function Header({ style }: HeaderProps) {
                 </View>
             }
         
-            <View style={[styles.hedaer,{ backgroundColor: toolbarColorPerPage[pageName], }]}>
+            <View style={[styles.header,{ backgroundColor: toolbarColorPerPage[pageName], }]}>
                 <View style={globalStyles.flexItemsCenter}>
                     <Pressable onPress={() => setMenuOpen(!menuOpen)}>
-                        <MaterialIcons 
-                            name="menu" 
-                            size={ICON_SIZE - 10} 
-                            color={iconColor[style!]} 
+                        <Image 
+                            style={styles.headerIcon} 
+                            source={style === 'light' ? MenuLight : MenuRed}
                         />
                     </Pressable>
 
-                    <Text style={[styles.hedaerTitle, { color: labelColor[style!] }]}>
+                    <Text style={[styles.headerTitle, { color: labelColor[style!] }]}>
                         {pageName === 'index' ? 'Orders' : pageName}
                     </Text>
                 </View>
 
-                <Link href="/pickup">
-                    <MaterialIcons 
-                        name="shopping-bag" 
-                        size={ICON_SIZE - 10} 
-                        color={iconColor[style!]} 
-                    />
-                </Link>
+                {
+                    pageName === 'settings/index' ?  null :
+                    <Link href="/pickup">
+                        <Image style={styles.headerIcon} source={ShoppingBag}/>
+                    </Link>
+                }
 
             </View>
         
@@ -112,6 +115,7 @@ const styles = StyleSheet.create({
         zIndex: 200,
         position: "relative"
     },
+    headerIcon: { width: 24, height: 24 },
     menuButons: {
         position: "absolute",
         top: "25%",
@@ -120,13 +124,13 @@ const styles = StyleSheet.create({
         justifyContent: "center",
         flexDirection: "column"
     },
-    hedaer: {
+    header: {
         ...globalStyles.flexItemsCenter,
         justifyContent: "space-between",
         height: verticalScale(50),
-        paddingHorizontal: scale(10)
+        paddingHorizontal: scale(18)
     },
-    hedaerTitle: {
+    headerTitle: {
         fontSize: scale(24),
         fontWeight: "700",
         marginLeft: 20,
