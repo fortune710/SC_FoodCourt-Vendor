@@ -1,13 +1,12 @@
-import { Button, CheckBox, Input } from '@rneui/themed';
+import { Button, Input, CheckBox } from '@rneui/themed';
 import { Image } from 'expo-image';
 import React, { useState } from 'react';
 import { Pressable, StyleSheet, Text } from 'react-native';
 import { View } from 'react-native';
-import Icon from './ui/icon';
-
-import { Link } from 'expo-router'
+import { Link, useRouter } from 'expo-router'
 import styleUtility from '../utils/styles';
-//import useAuth from '../hooks/useAuth';
+import { verticalScale } from 'react-native-size-matters';
+import useAuth from '../hooks/useAuth';
 
 interface AuthFormProps {
     type: 'login'|'sign-up'|'forgot-password'
@@ -19,7 +18,29 @@ const RememberMeContainer = View;
 export default function AuthForm({ type }: AuthFormProps) {
     const [checkboxClicked, setCheckbox] = useState(false);
 
-    //const { signIn } = useAuth();
+    const [email, setEmail] = useState("");
+    const [name, setName] = useState("");
+    const [resturantName, setResturantName] = useState("");
+    const [password, setPassword] = useState("");
+
+
+    const { signIn, signUpWithEmail } = useAuth();
+    const router = useRouter();
+
+    const handleContinue = async () => {
+        switch (type) {
+            case "login":
+                await signIn(email, password);
+                return router.push('/index');
+            case "sign-up":
+                await signUpWithEmail(email, password);
+                return router.push('/index');
+            case "forgot-password":
+                break;
+            default:
+                return;
+        }
+    }
 
 
     if (type !== 'forgot-password') {
@@ -27,42 +48,81 @@ export default function AuthForm({ type }: AuthFormProps) {
             <View style={styles.formContainer}>
                 {
                     type === 'sign-up' && 
-                    <Input
-                        inputContainerStyle={styles.inputContainer}
-                        placeholder='Name'
-                    />
+                    <>
+                        <Input
+                            inputContainerStyle={styles.inputContainer}
+                            placeholder='Name'
+                            leftIcon={
+                                <Image 
+                                    style={{ width: 23, height: 20 }} 
+                                    source={require('../assets/icons/user.svg')}
+                                />
+                            }    
+                            value={name}
+                            onChangeText={(text) => setName(text)}    
+                        />
+
+                        <Input
+                            inputContainerStyle={styles.inputContainer}
+                            placeholder='Resturant Name'
+                            leftIcon={
+                                <Image 
+                                    style={{ width: 23, height: 20 }} 
+                                    source={require('../assets/icons/user.svg')}
+                                />
+                            }    
+                            value={resturantName}
+                            onChangeText={(text) => setResturantName(text)}    
+                        />
+
+                    
+                    
+                    </>
                 }
 
                 <Input
                     inputContainerStyle={styles.inputContainer}
                     placeholder='Email'
+                    leftIcon={
+                        <Image 
+                            style={{ width: 23, height: 20 }} 
+                            source={require('../assets/icons/email_icon.svg')}
+                        />
+                    }
+                    value={email}
+                    onChangeText={(text) => setEmail(text)}
                 />
 
                 <Input
                     leftIcon={
-                        <Icon iconFile={require('../assets/icons/padlock.svg')}/>
+                        <Image 
+                            style={{ width: 20, height: 20 }} 
+                            source={require('../assets/icons/padlock.svg')}
+                        />
                     }
                     rightIcon={
                         <Pressable>
-                            <Icon iconFile={require('../assets/icons/eye.svg')}/>
+                            <Image 
+                                style={{ width: 20, height: 20 }} 
+                                source={require('../assets/icons/eye.svg')}
+                            />
                         </Pressable>
                     }
                     inputContainerStyle={styles.inputContainer}
                     placeholder='Password'
+                    value={password}
+                    onChangeText={(text) => setPassword(text)}
                 />
 
                 {
                     type === 'login' ? 
-                    <View style={[styleUtility.flexJustifyBetween, { width: '100%' }]}>
-                        <RememberMeContainer style={{ display: 'flex', flexDirection: 'row', alignItems: 'center' }}>
-                            <CheckBox
-                                checked={checkboxClicked}
-                                onPress={() => setCheckbox(!checkboxClicked)}
-                                iconType='material-community'
-                                checkedIcon={'checkbox-marked'}
-                                uncheckedIcon={'checkbox-blank-outline'}
-                                checkedColor='#f72f2f'
-                                //style={{ marginRight: 7 }}
+                    <View style={[styleUtility.flexJustifyBetween, { width: '100%', paddingHorizontal: 20 }]}>
+                        <RememberMeContainer 
+                            style={styles.checkboxContainer}
+                        >
+                            <CheckBox 
+                                checked
+                                containerStyle={styles.checkbox}
                             />
                             <Text>Remember Me</Text>
                         </RememberMeContainer>
@@ -72,14 +132,12 @@ export default function AuthForm({ type }: AuthFormProps) {
                         </Link>
                     </View>
                     :
-                    <TermsAndConditionsContainer>
-                        <CheckBox
-                            checked={checkboxClicked}
-                            onPress={() => setCheckbox(!checkboxClicked)}
-                            iconType='material-community'
-                            checkedIcon={'checkbox-marked'}
-                            uncheckedIcon={'checkbox-blank-outline'}
-                            checkedColor='#f72f2f'
+                    <TermsAndConditionsContainer
+                        style={styles.checkboxContainer}
+                    >
+                        <CheckBox 
+                            checked
+                            containerStyle={styles.checkbox}
                         />
 
                         <Text>
@@ -111,10 +169,16 @@ export default function AuthForm({ type }: AuthFormProps) {
 
     return (
         <View>
-            <Image
-                source={{ uri: require('../assets/forgot-password.svg') }}
-                style={{ height: 220, width: '100%' }}
-            />
+            {
+                /*
+                
+                <Image
+                    source={{ uri: require('../assets/forgot-password.svg') }}
+                    style={{ height: 220, width: '100%' }}
+                />
+                
+                */
+            }
 
             <View>
                 <Text>Forgot Password</Text>
@@ -125,11 +189,12 @@ export default function AuthForm({ type }: AuthFormProps) {
             </View>
 
             <Input
-                    leftIcon={
-                        <Icon iconFile={require('../assets/icons/mail.svg')}/>
-                    }
-                    inputContainerStyle={styles.inputContainer}
-                    placeholder='Email'
+                /*
+                leftIcon={
+                    <Icon iconFile={require('../assets/icons/mail.svg')}/>
+                }*/
+                inputContainerStyle={styles.inputContainer}
+                placeholder='Email'
             />
 
 
@@ -146,21 +211,26 @@ export default function AuthForm({ type }: AuthFormProps) {
 
 const styles = StyleSheet.create({
     inputContainer: {
-        borderWidth: 1, paddingHorizontal: 10, borderRadius: 32, borderColor: '#f72f2f'
+        borderWidth: 1, 
+        paddingHorizontal: 20, 
+        borderRadius: 32, 
+        borderColor: '#f72f2f',
+        paddingVertical: 5
     },
     moveToOtherPage: {
         borderWidth: 1, 
-        borderRadius: 32, borderColor: '#f72f2f',
-        paddingVertical: 10,
+        borderRadius: 32, 
+        borderColor: '#f72f2f',
+        marginTop: 25,
+        paddingVertical: 21,
         paddingHorizontal: 15,
         color: '#f72f2f',
         textAlign: 'center',
         width: '80%'
     },
     mainAction: {
-        width: '90%',
-        backgroundColor: '#f72f2f',
-        borderRadius: 32,
+        borderRadius: 28,
+        paddingHorizontal: 50,
         display: 'flex',
         alignItems: 'center',
         flexDirection: 'column'
@@ -174,6 +244,13 @@ const styles = StyleSheet.create({
         display: 'flex',
         flexDirection: 'column',
         alignItems: 'center',
-        width: '100%'
-    }
+        width: '100%',
+        marginTop: verticalScale(25)
+    },
+    checkboxContainer: { 
+        display: 'flex', 
+        flexDirection: 'row', 
+        alignItems: 'center', 
+    },
+    checkbox: { margin: 0, padding: 0 }
 })

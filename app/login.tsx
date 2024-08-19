@@ -6,6 +6,7 @@ import { StyleSheet, View } from "react-native";
 import AuthForm from "../components/auth-form";
 import Button from "../components/ui/button";
 import { useRouter } from "expo-router";
+import { globalStyles } from "../constants/Styles";
 
 export default function LoginPage() {
     const primary = useThemeColor({}, "primary");
@@ -18,10 +19,10 @@ export default function LoginPage() {
 
     return (
         <Page>
-            <View style={{ display:'flex', flexDirection: 'row', justifyContent: 'center' }}>
+            <View style={[globalStyles.flexItemsCenter, { width: "100%", marginVertical: 20, justifyContent: "center" }]}>
                 <Image
-                    source={require("../assets/images/login-illustration.svg")}
-                    style={{ height: 233, width: 286, }}
+                    source={require('../assets/images/login-image.png')}
+                    style={{ height: 233, width: 286 }}
                 />
             </View>
 
