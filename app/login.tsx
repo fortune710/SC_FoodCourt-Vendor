@@ -4,7 +4,7 @@ import { Image } from "expo-image";
 import useThemeColor from "../hooks/useThemeColor";
 import { StyleSheet, View } from "react-native";
 import AuthForm from "../components/auth-form";
-import Button from "../components/ui/button";
+import Button from "../components/custom/button";
 import { useRouter } from "expo-router";
 import { globalStyles } from "../constants/Styles";
 

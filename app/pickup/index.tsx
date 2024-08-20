@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import Page from "../../components/page";
 import { View } from "react-native";
-import Input from "../../components/ui/input";
+import Input from "../../components/custom/input";
 import { Button } from "@rneui/themed";
 import { Image } from "expo-image";
 import { scale, verticalScale } from "react-native-size-matters";
