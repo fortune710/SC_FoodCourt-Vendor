@@ -7,6 +7,8 @@ import { Link, useRouter } from 'expo-router'
 import styleUtility from '../utils/styles';
 import { verticalScale } from 'react-native-size-matters';
 import useAuth from '../hooks/useAuth';
+import { Eye, Lock, Mail, UserRound } from 'lucide-react-native';
+import useThemeColor from '~/hooks/useThemeColor';
 
 interface AuthFormProps {
     type: 'login'|'sign-up'|'forgot-password'
@@ -26,15 +28,16 @@ export default function AuthForm({ type }: AuthFormProps) {
 
     const { signIn, signUpWithEmail } = useAuth();
     const router = useRouter();
+    const primary = useThemeColor({}, "primary")
 
     const handleContinue = async () => {
         switch (type) {
             case "login":
-                await signIn(email, password);
-                return router.push('/index');
+                //await signIn(email, password);
+                return router.push('/orders');
             case "sign-up":
-                await signUpWithEmail(email, password);
-                return router.push('/index');
+                //await signUpWithEmail(email, password);
+                return router.push('/orders');
             case "forgot-password":
                 break;
             default:
@@ -53,10 +56,7 @@ export default function AuthForm({ type }: AuthFormProps) {
                             inputContainerStyle={styles.inputContainer}
                             placeholder='Name'
                             leftIcon={
-                                <Image 
-                                    style={{ width: 23, height: 20 }} 
-                                    source={require('../assets/icons/user.svg')}
-                                />
+                                <UserRound stroke={primary} />
                             }    
                             value={name}
                             onChangeText={(text) => setName(text)}    
@@ -65,12 +65,7 @@ export default function AuthForm({ type }: AuthFormProps) {
                         <Input
                             inputContainerStyle={styles.inputContainer}
                             placeholder='Resturant Name'
-                            leftIcon={
-                                <Image 
-                                    style={{ width: 23, height: 20 }} 
-                                    source={require('../assets/icons/user.svg')}
-                                />
-                            }    
+                            leftIcon={<UserRound stroke={primary} />}    
                             value={resturantName}
                             onChangeText={(text) => setResturantName(text)}    
                         />
@@ -83,29 +78,16 @@ export default function AuthForm({ type }: AuthFormProps) {
                 <Input
                     inputContainerStyle={styles.inputContainer}
                     placeholder='Email'
-                    leftIcon={
-                        <Image 
-                            style={{ width: 23, height: 20 }} 
-                            source={require('../assets/icons/email_icon.svg')}
-                        />
-                    }
+                    leftIcon={<Mail stroke={primary} />}
                     value={email}
                     onChangeText={(text) => setEmail(text)}
                 />
 
                 <Input
-                    leftIcon={
-                        <Image 
-                            style={{ width: 20, height: 20 }} 
-                            source={require('../assets/icons/padlock.svg')}
-                        />
-                    }
+                    leftIcon={<Lock stroke={primary}/>}
                     rightIcon={
                         <Pressable>
-                            <Image 
-                                style={{ width: 20, height: 20 }} 
-                                source={require('../assets/icons/eye.svg')}
-                            />
+                            <Eye stroke={primary}/>
                         </Pressable>
                     }
                     inputContainerStyle={styles.inputContainer}
@@ -150,6 +132,7 @@ export default function AuthForm({ type }: AuthFormProps) {
                     <Button
                         titleStyle={{ textAlign: 'center' }} 
                         buttonStyle={styles.mainAction}
+                        onPress={handleContinue}
                     >
                         Continue
                     </Button>
@@ -237,7 +220,8 @@ const styles = StyleSheet.create({
 
     },
     formContainer: {
-        marginVertical: 12
+        marginVertical: 12,
+        paddingHorizontal: 8
     },
 
     actions: {

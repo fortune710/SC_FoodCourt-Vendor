@@ -1,39 +1,40 @@
 import { Image } from "expo-image";
 import React, { useState } from "react";
-import { Pressable, StyleSheet, Text, View } from "react-native";
+import { Pressable, StyleSheet, View } from "react-native";
 import { scale } from "react-native-size-matters";
 import { CategoryListItemProps } from "../utils/types";
+import { ChevronDown } from "lucide-react-native";
+import useThemeColor from "~/hooks/useThemeColor";
+import { Text } from "~/components/ui/text"
 
 
 export default function CategoryListItem({ foodName, addons, price }: CategoryListItemProps) {
     const [showAddons, setShowAddons] = useState(false);
+    const primary = useThemeColor({}, "primary")
     
     return (
-        <View style={styles.listItem}>
+        <View className="py-4" style={styles.listItem}>
             <View style={styles.header}>
-                <Text>{foodName}</Text>
-                <Text>N{price}</Text>
+                <Text className="text-xl font-medium">{foodName}</Text>
+                <Text className="text-xl font-medium">N{price}</Text>
             </View>
             <Pressable  
                 onPress={() => setShowAddons(!showAddons)}
-                style={[styles.header, { width: scale(150) }]}
+                style={[styles.header, { width: scale(75) }]}
             >
-                <Text>Addons</Text>
-                <Image
-                    source={{ uri: require('../assets/icons/caret-down.svg') }}
-                    style={{ width: scale(20), height: scale(20) }}
-                />
+                <Text className="text-lg">Add ons</Text>
+                <ChevronDown stroke={primary}/>
             </Pressable>
 
             {
                 !showAddons ? null :
-                <View style={{ width: '100%' }}>
+                <View className="py-2 space-y-1" style={{ width: '100%' }}>
                     {
                         addons.map((addon) => (
-                        <View style={styles.header}>
-                            <Text>{addon.foodName}</Text>
-                            <Text>{addon.price}</Text>
-                        </View>
+                            <View style={styles.header}>
+                                <Text className="font-medium">{addon.foodName}</Text>
+                                <Text className="font-medium">{addon.price}</Text>
+                            </View>
                         ))
                     }
                 </View>

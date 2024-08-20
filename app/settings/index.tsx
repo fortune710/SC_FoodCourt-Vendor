@@ -2,7 +2,7 @@ import { Dimensions, Platform, Pressable, View } from "react-native";
 import Page from "../../components/page";
 import { StyleSheet } from "react-native";
 import { scale, verticalScale } from "react-native-size-matters";
-import Header from "../../components/header,";
+import Header from "../../components/header";
 import { StatusBar } from "expo-status-bar";
 import { ListItem, Switch, Text } from "@rneui/themed";
 import useThemeColor from "../../hooks/useThemeColor";

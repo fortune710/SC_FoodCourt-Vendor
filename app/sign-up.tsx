@@ -6,6 +6,7 @@ import { StyleSheet, View } from "react-native";
 import AuthForm from "../components/auth-form";
 import { useRouter } from "expo-router";
 import { globalStyles } from "../constants/Styles";
+import { scale, verticalScale } from "react-native-size-matters";
 
 export default function SignUpPage() {
     
@@ -15,7 +16,7 @@ export default function SignUpPage() {
             <View style={[globalStyles.flexItemsCenter, { width: "100%", marginVertical: 20, justifyContent: "center" }]}>
                 <Image
                     source={require('../assets/images/login-image.png')}
-                    style={{ height: 233, width: 286 }}
+                    style={{ height: scale(200), width: verticalScale(210) }}
                 />
             </View>
 
