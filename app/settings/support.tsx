@@ -1,7 +1,7 @@
 import React from 'react';
 import { View, Text, StyleSheet } from 'react-native';
 import { Image } from 'expo-image';
-import BackButton from 'components/ui/back-button';
+import BackButton from '~/components/custom/back-button';
 import ContactOption from 'components/support/contact';
 import { Mail } from 'lucide-react-native';
 import { useRouter } from 'expo-router';

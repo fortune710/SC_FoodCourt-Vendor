@@ -3,10 +3,10 @@ import { Image } from "expo-image";
 import Page from "components/page";
 import useThemeColor from "hooks/useThemeColor";
 import { View } from "react-native";
-import BackArrowButton from "components/ui/back-arrow-button";
+import BackArrowButton from "~/components/custom/back-arrow-button";
 import { useRouter } from "expo-router";
 import { globalStyles } from "constants/Styles";
-import Button from "components/ui/button";
+import Button from "~/components/custom/button";
 
 export default function EditProfile() {
     const primary = useThemeColor({}, "primary");

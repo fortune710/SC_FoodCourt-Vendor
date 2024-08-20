@@ -1,8 +1,8 @@
 import Header from "components/header,";
 import Page from "components/page";
 import ContactOption from "components/support/contact";
-import BackArrowButton from "components/ui/back-arrow-button";
-import BackButton from "components/ui/back-button";
+import BackArrowButton from "~/components/custom/back-arrow-button";
+import BackButton from "~/components/custom/back-button";
 import { Image } from "expo-image";
 import { useRouter } from "expo-router";
 import useThemeColor from "hooks/useThemeColor";

@@ -2,7 +2,7 @@ import React, { useState } from "react"
 import { View, StyleSheet, Text, Pressable } from "react-native" 
 import { Image } from "expo-image"
 import { Switch } from "@rneui/themed"
-import Icon from '../components/ui/icon';
+import Icon from './custom/icon';
 import { Alert } from "react-native";
 import OrderCardDetails from "./orders/order-card-details";
 

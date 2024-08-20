@@ -5,7 +5,21 @@ import { createTheme, ThemeProvider } from "@rneui/themed";
 import { verticalScale } from "react-native-size-matters";
 
 import { StatusBar } from "expo-status-bar";
+import '../global.css'
 
+import { NAV_THEME } from '~/lib/constants';
+import { useColorScheme } from '~/lib/useColorScheme';
+import { Theme } from "@react-navigation/native";
+import { PortalHost } from '@rn-primitives/portal';
+
+const LIGHT_THEME: Theme = {
+    dark: false,
+    colors: NAV_THEME.light,
+};
+  const DARK_THEME: Theme = {
+    dark: true,
+    colors: NAV_THEME.dark,
+};
 
 const theme = createTheme({
     lightColors: {
@@ -77,6 +91,7 @@ function RootLayoutNav() {
                 style="dark"
             />
             <Stack screenOptions={{ headerShown: false }}/>
+            <PortalHost/>
         </ThemeProvider>
     )
 }
