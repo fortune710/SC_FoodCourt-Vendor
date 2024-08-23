@@ -5,7 +5,7 @@ import { Text } from "~/components/ui/text";
 export default function StaffPage() {
     return (
         <Page>
-            <Header/>
+            <Header headerTitle="Staff"/>
             <Text>Staff Page</Text>
         </Page>
     )

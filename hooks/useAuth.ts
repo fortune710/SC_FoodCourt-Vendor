@@ -1,32 +1,48 @@
 import { supabase } from '../utils/supabase';
 
+interface SignUpData {
+    email: string;
+    password: string;
+    name: string
+}
+
 export default function useAuth() {
+
+    const getCurrentUser = async () => {
+        const user = await supabase.auth.getUser();
+        return user;
+    }
     
     const signIn = async (email: string, password: string) => {
         const res = await supabase.auth.signInWithPassword({
             email,
             password,
         })
+        console.log(res.data.user)
         
-        return ""
+        return res.data.user;
     }
 
-    const signUpWithEmail = async (email: string, password: string) => {
-        const res = await supabase.auth.signUp({
-            email, password
+    const signUpWithEmail = async (data: SignUpData) => {
+        const res = await supabase.auth.signUp({ 
+            email: data.email, 
+            password: data.password, 
+            options: {
+                data: {
+                    full_name: data.name,
+                    image_url:  `https://api.dicebear.com/9.x/initials/png?seed=${data.name}`,
+                    username: data.name.toLowerCase().replace(" ", ""),
+                    user_type: "admin"
+                }
+            }
         })
-        await supabase.from('profile').insert([
-            { name: "", email,  }
-        ])
-        await supabase.from('resturants').insert([
-            { name: "", user_id: res.data.user?.id!, email }
-        ])
 
         return res.data.user
     }
 
     return {
         signIn,
-        signUpWithEmail
+        signUpWithEmail,
+        getCurrentUser
     }
 }

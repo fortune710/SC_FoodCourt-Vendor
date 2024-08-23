@@ -7,6 +7,7 @@ import AuthForm from "../components/auth-form";
 import Button from "../components/custom/button";
 import { useRouter } from "expo-router";
 import { globalStyles } from "../constants/Styles";
+import useAuth from "~/hooks/useAuth";
 
 export default function LoginPage() {
     const primary = useThemeColor({}, "primary");
@@ -15,6 +16,8 @@ export default function LoginPage() {
     const moveToCreateAccount = () => {
         return router.push("/create-account")
     }
+
+    const { signIn } = useAuth();
     
 
     return (

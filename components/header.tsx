@@ -8,7 +8,7 @@ import { scale, verticalScale } from "react-native-size-matters";
 import { useState } from "react";
 import useThemeColor from "../hooks/useThemeColor";
 import { Image } from "expo-image";
-import { LayoutGrid, UsersRound, Settings, X } from "lucide-react-native";
+import { LayoutGrid, UsersRound, Settings, X, Mail, Package } from "lucide-react-native";
 import { Text } from "./ui/text";
 import { Text as RNEText } from "@rneui/themed"
 
@@ -21,7 +21,9 @@ const toolbarColorPerPage: Record<string, string> = {
 }
 
 interface HeaderProps {
-    style?: "light"|"dark"
+    style?: "light"|"dark",
+    headerTitle?: string,
+    rightIcon?: React.ReactNode
 }
 
 const MenuLight = require('../assets/icons/menu-icon-light.svg');
@@ -29,7 +31,7 @@ const MenuRed = require('../assets/icons/menu-icon-red.svg');
 const ShoppingBag = require('../assets/icons/shopping-bag.svg');
 
 
-export default function Header({ style }: HeaderProps) {
+export default function Header({ style = "dark", headerTitle, rightIcon }: HeaderProps) {
     const [menuOpen, setMenuOpen] = useState<boolean>(false);
     const route = useRootNavigation();
     const pageName = route?.getCurrentRoute()?.name! as string;
@@ -53,6 +55,26 @@ export default function Header({ style }: HeaderProps) {
         return setMenuOpen(false)
     }
 
+    const moveToAdmin = () => {
+        router.push("/admin/staff")
+        return setMenuOpen(false)
+    }
+
+    const moveToOrders = () => {
+        router.push("/orders")
+        return setMenuOpen(false)
+    }
+
+    const title = () => {
+        if (!headerTitle) {
+            return pageName === 'index' ? 'Orders' : pageName
+        }
+
+        return headerTitle
+    }
+
+
+
 
     return (
         <>
@@ -70,15 +92,20 @@ export default function Header({ style }: HeaderProps) {
                             <LayoutGrid color='white' size={ICON_SIZE}/>                    
                         </Pressable>
 
+                        <Pressable onPress={moveToOrders} className="flex flex-row items-center gap-2">
+                            <Package size={ICON_SIZE} color='white'/>
+                            <Text className="text-white text-xl font-semibold">Orders</Text>
+                        </Pressable>
+
                         <Pressable>
-                            <Ionicons na me="mail" color='white' size={ICON_SIZE}/>                    
+                            <Mail color='white' size={ICON_SIZE}/>                    
                         </Pressable>
 
                         <Link href="/settings" onPressOut={() => setMenuOpen(false)}>
                             <Settings color='white' size={ICON_SIZE}/>                    
                         </Link>
 
-                        <Pressable className="flex flex-row items-center gap-2">
+                        <Pressable onPress={moveToAdmin} className="flex flex-row items-center gap-2">
                             <UsersRound size={ICON_SIZE} color='white'/>
                             <Text className="text-white text-xl font-semibold">Admin</Text>
                         </Pressable>
@@ -99,15 +126,17 @@ export default function Header({ style }: HeaderProps) {
                     </Pressable>
 
                     <RNEText style={[styles.headerTitle, { color: labelColor[style!] }]}>
-                        {pageName === 'index' ? 'Orders' : pageName}
+                        {title()}
                     </RNEText>
                 </View>
 
                 {
+                    !rightIcon ?
                     pageName === 'settings/index' ?  null :
                     <Link href="/pickup">
                         <Image style={styles.headerIcon} source={ShoppingBag}/>
                     </Link>
+                    : rightIcon
                 }
 
             </View>
@@ -116,9 +145,6 @@ export default function Header({ style }: HeaderProps) {
     )
 }
 
-Header.defaultProps = {
-    "style": "dark"
-}
 
 const styles = StyleSheet.create({
     menu: {
