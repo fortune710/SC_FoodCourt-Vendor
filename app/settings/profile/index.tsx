@@ -1,4 +1,4 @@
-import Header from "components/header,";
+import Header from "~/components/header";
 import Page from "components/page";
 import ContactOption from "components/support/contact";
 import BackArrowButton from "~/components/custom/back-arrow-button";

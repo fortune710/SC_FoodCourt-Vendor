@@ -1,14 +1,16 @@
 import { Dimensions, Pressable, View } from "react-native";
-import { Link, SplashScreen, Stack, useRootNavigation } from "expo-router";
+import { Link, SplashScreen, Stack, useRootNavigation, useRouter } from "expo-router";
 import { MaterialIcons } from "@expo/vector-icons";
 import { Ionicons, Octicons } from "@expo/vector-icons";
 import { globalStyles } from "../constants/Styles";
 import { StyleSheet } from "react-native";
 import { scale, verticalScale } from "react-native-size-matters";
 import { useState } from "react";
-import { Text } from "@rneui/themed";
 import useThemeColor from "../hooks/useThemeColor";
 import { Image } from "expo-image";
+import { LayoutGrid, UsersRound, Settings, X, Mail, Package } from "lucide-react-native";
+import { Text } from "./ui/text";
+import { Text as RNEText } from "@rneui/themed"
 
 
 const ICON_SIZE = 35;
@@ -19,7 +21,9 @@ const toolbarColorPerPage: Record<string, string> = {
 }
 
 interface HeaderProps {
-    style?: "light"|"dark"
+    style?: "light"|"dark",
+    headerTitle?: string,
+    rightIcon?: React.ReactNode
 }
 
 const MenuLight = require('../assets/icons/menu-icon-light.svg');
@@ -27,10 +31,12 @@ const MenuRed = require('../assets/icons/menu-icon-red.svg');
 const ShoppingBag = require('../assets/icons/shopping-bag.svg');
 
 
-export default function Header({ style }: HeaderProps) {
+export default function Header({ style = "dark", headerTitle, rightIcon }: HeaderProps) {
     const [menuOpen, setMenuOpen] = useState<boolean>(false);
     const route = useRootNavigation();
     const pageName = route?.getCurrentRoute()?.name! as string;
+
+    const router = useRouter();
 
     const primary = useThemeColor({}, "primary")
 
@@ -44,31 +50,65 @@ export default function Header({ style }: HeaderProps) {
         "dark": "#000"
     }
 
+    const moveToMenu = () => {
+        router.push("/menu")
+        return setMenuOpen(false)
+    }
+
+    const moveToAdmin = () => {
+        router.push("/admin/staff")
+        return setMenuOpen(false)
+    }
+
+    const moveToOrders = () => {
+        router.push("/orders")
+        return setMenuOpen(false)
+    }
+
+    const title = () => {
+        if (!headerTitle) {
+            return pageName === 'index' ? 'Orders' : pageName
+        }
+
+        return headerTitle
+    }
+
+
+
+
     return (
         <>
             {
                 !menuOpen ? null :
                 <View style={styles.menu}>
+                    <View className="">
+                        <Pressable onPress={() => setMenuOpen(false)}>
+                            <X size={ICON_SIZE} color="red"/>
+                        </Pressable>
+                    </View>
                     
-                    <View style={styles.menuButons}>
-                        <Pressable>
-                            <Octicons name="apps" color='white' size={ICON_SIZE}/>                    
+                    <View className="flex flex-col gap-4">
+                        <Pressable onPress={moveToMenu}>
+                            <LayoutGrid color='white' size={ICON_SIZE}/>                    
                         </Pressable>
 
-                        <View style={[globalStyles.flexItemsCenter, { marginVertical: verticalScale(25), justifyContent: "space-between" }]}>
-                            <Pressable onPress={() => setMenuOpen(false)}>
-                                <MaterialIcons name="close" size={ICON_SIZE} color="red"/>
-                            </Pressable>
+                        <Pressable onPress={moveToOrders} className="flex flex-row items-center gap-2">
+                            <Package size={ICON_SIZE} color='white'/>
+                            <Text className="text-white text-xl font-semibold">Orders</Text>
+                        </Pressable>
 
-                            <Pressable style={{ marginLeft: "40%" }}>
-                                <Ionicons name="mail" color='white' size={ICON_SIZE}/>                    
-                            </Pressable>
-                        </View>
-
+                        <Pressable>
+                            <Mail color='white' size={ICON_SIZE}/>                    
+                        </Pressable>
 
                         <Link href="/settings" onPressOut={() => setMenuOpen(false)}>
-                            <Ionicons name="settings-outline" color='white' size={ICON_SIZE}/>                    
+                            <Settings color='white' size={ICON_SIZE}/>                    
                         </Link>
+
+                        <Pressable onPress={moveToAdmin} className="flex flex-row items-center gap-2">
+                            <UsersRound size={ICON_SIZE} color='white'/>
+                            <Text className="text-white text-xl font-semibold">Admin</Text>
+                        </Pressable>
                     </View>
 
 
@@ -85,16 +125,18 @@ export default function Header({ style }: HeaderProps) {
                         />
                     </Pressable>
 
-                    <Text style={[styles.headerTitle, { color: labelColor[style!] }]}>
-                        {pageName === 'index' ? 'Orders' : pageName}
-                    </Text>
+                    <RNEText style={[styles.headerTitle, { color: labelColor[style!] }]}>
+                        {title()}
+                    </RNEText>
                 </View>
 
                 {
+                    !rightIcon ?
                     pageName === 'settings/index' ?  null :
                     <Link href="/pickup">
                         <Image style={styles.headerIcon} source={ShoppingBag}/>
                     </Link>
+                    : rightIcon
                 }
 
             </View>
@@ -103,9 +145,6 @@ export default function Header({ style }: HeaderProps) {
     )
 }
 
-Header.defaultProps = {
-    "style": "dark"
-}
 
 const styles = StyleSheet.create({
     menu: {
@@ -113,7 +152,13 @@ const styles = StyleSheet.create({
         width: Dimensions.get("window").width,
         height: Dimensions.get("window").height,
         zIndex: 200,
-        position: "relative"
+        position: "absolute",
+        bottom: 0,
+        top: 0,
+        display: "flex",
+        flexDirection: "row",
+        justifyContent: "center",
+        gap: 50
     },
     headerIcon: { width: 24, height: 24 },
     menuButons: {
@@ -131,7 +176,7 @@ const styles = StyleSheet.create({
         paddingHorizontal: scale(18)
     },
     headerTitle: {
-        fontSize: scale(24),
+        fontSize: scale(22),
         fontWeight: "700",
         marginLeft: 20,
         textTransform: "capitalize"

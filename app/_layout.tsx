@@ -11,6 +11,9 @@ import { NAV_THEME } from '~/lib/constants';
 import { useColorScheme } from '~/lib/useColorScheme';
 import { Theme } from "@react-navigation/native";
 import { PortalHost } from '@rn-primitives/portal';
+import { AppState } from "react-native";
+import { supabase } from "~/utils/supabase";
+import Toast from "react-native-toast-message";
 
 const LIGHT_THEME: Theme = {
     dark: false,
@@ -51,9 +54,15 @@ const theme = createTheme({
 
 SplashScreen.preventAutoHideAsync()
 
-export default function RootLayout() {
-    
+AppState.addEventListener('change', (state) => {
+    if (state === 'active') {
+      supabase.auth.startAutoRefresh()
+    } else {
+      supabase.auth.stopAutoRefresh()
+    }
+})
 
+export default function RootLayout() {
     const [fontsLoaded, error] = useFonts({
         "Inter-Regular": require('../assets/fonts/Inter-Regular.ttf'),
         "Montserrat": require('../assets/fonts/Montserrat-Regular.ttf'),
@@ -91,6 +100,7 @@ function RootLayoutNav() {
                 style="dark"
             />
             <Stack screenOptions={{ headerShown: false }}/>
+            <Toast position="top" />
             <PortalHost/>
         </ThemeProvider>
     )

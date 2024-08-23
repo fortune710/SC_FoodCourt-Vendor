@@ -5,7 +5,7 @@ import BackButton from '~/components/custom/back-button';
 import ContactOption from 'components/support/contact';
 import { Mail } from 'lucide-react-native';
 import { useRouter } from 'expo-router';
-import Header from 'components/header,';
+import Header from '~/components/header';
 import Page from 'components/page';
 import useThemeColor from 'hooks/useThemeColor';
 import { verticalScale } from 'react-native-size-matters';

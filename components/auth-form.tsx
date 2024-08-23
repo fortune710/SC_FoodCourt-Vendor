@@ -1,12 +1,17 @@
-import { Button, Input, CheckBox } from '@rneui/themed';
+import { Button, Input } from '@rneui/themed';
 import { Image } from 'expo-image';
 import React, { useState } from 'react';
-import { Pressable, StyleSheet, Text } from 'react-native';
+import { KeyboardAvoidingView, Pressable, StyleSheet, Text } from 'react-native';
 import { View } from 'react-native';
 import { Link, useRouter } from 'expo-router'
 import styleUtility from '../utils/styles';
 import { verticalScale } from 'react-native-size-matters';
 import useAuth from '../hooks/useAuth';
+import { Eye, Lock, Mail, UserRound } from 'lucide-react-native';
+import useThemeColor from '~/hooks/useThemeColor';
+import { Checkbox } from './ui/checkbox';
+import Toast from 'react-native-toast-message';
+import useResturant from '~/hooks/useResturant';
 
 interface AuthFormProps {
     type: 'login'|'sign-up'|'forgot-password'
@@ -20,32 +25,64 @@ export default function AuthForm({ type }: AuthFormProps) {
 
     const [email, setEmail] = useState("");
     const [name, setName] = useState("");
-    const [resturantName, setResturantName] = useState("");
     const [password, setPassword] = useState("");
 
 
     const { signIn, signUpWithEmail } = useAuth();
+    const { getResturantByAdminId } = useResturant();
     const router = useRouter();
+    const primary = useThemeColor({}, "primary")
 
     const handleContinue = async () => {
-        switch (type) {
-            case "login":
-                await signIn(email, password);
-                return router.push('/index');
-            case "sign-up":
-                await signUpWithEmail(email, password);
-                return router.push('/index');
-            case "forgot-password":
-                break;
-            default:
-                return;
+        try {
+            switch (type) {
+                case "login":
+                    const user = await signIn(email, password);
+                    const resturant = await getResturantByAdminId(user?.id!);
+                    if (resturant.length > 0) return router.push('/orders');
+                    
+                    return router.push({
+                        pathname: '/create-resturant',
+                        params: {
+                            admin_id: user?.id
+                        }
+                    });
+                case "sign-up":
+                    await signUpWithEmail({
+                        email: email,
+                        password: password,
+                        name: name,
+                    })
+                    .then((user) => {
+                        Toast.show({
+                            text1: "Sign Up Successful",
+                            type: "success"
+                        })
+                        return router.push({
+                            pathname: '/create-resturant',
+                            params: {
+                                admin_id: user?.id
+                            }
+                        });
+                    })
+                    .catch((error) =>  console.log(error))
+                case "forgot-password":
+                    break;
+                default:
+                    return;
+            }
+        } catch (error) {
+            Toast.show({
+                text1: "Error: " +error,
+                type: "error"
+            })
         }
     }
 
 
     if (type !== 'forgot-password') {
         return (
-            <View style={styles.formContainer}>
+            <KeyboardAvoidingView behavior='padding' style={styles.formContainer}>
                 {
                     type === 'sign-up' && 
                     <>
@@ -53,27 +90,13 @@ export default function AuthForm({ type }: AuthFormProps) {
                             inputContainerStyle={styles.inputContainer}
                             placeholder='Name'
                             leftIcon={
-                                <Image 
-                                    style={{ width: 23, height: 20 }} 
-                                    source={require('../assets/icons/user.svg')}
-                                />
+                                <UserRound stroke={primary} />
                             }    
                             value={name}
                             onChangeText={(text) => setName(text)}    
                         />
 
-                        <Input
-                            inputContainerStyle={styles.inputContainer}
-                            placeholder='Resturant Name'
-                            leftIcon={
-                                <Image 
-                                    style={{ width: 23, height: 20 }} 
-                                    source={require('../assets/icons/user.svg')}
-                                />
-                            }    
-                            value={resturantName}
-                            onChangeText={(text) => setResturantName(text)}    
-                        />
+                        
 
                     
                     
@@ -83,29 +106,16 @@ export default function AuthForm({ type }: AuthFormProps) {
                 <Input
                     inputContainerStyle={styles.inputContainer}
                     placeholder='Email'
-                    leftIcon={
-                        <Image 
-                            style={{ width: 23, height: 20 }} 
-                            source={require('../assets/icons/email_icon.svg')}
-                        />
-                    }
+                    leftIcon={<Mail stroke={primary} />}
                     value={email}
                     onChangeText={(text) => setEmail(text)}
                 />
 
                 <Input
-                    leftIcon={
-                        <Image 
-                            style={{ width: 20, height: 20 }} 
-                            source={require('../assets/icons/padlock.svg')}
-                        />
-                    }
+                    leftIcon={<Lock stroke={primary}/>}
                     rightIcon={
                         <Pressable>
-                            <Image 
-                                style={{ width: 20, height: 20 }} 
-                                source={require('../assets/icons/eye.svg')}
-                            />
+                            <Eye stroke={primary}/>
                         </Pressable>
                     }
                     inputContainerStyle={styles.inputContainer}
@@ -120,10 +130,7 @@ export default function AuthForm({ type }: AuthFormProps) {
                         <RememberMeContainer 
                             style={styles.checkboxContainer}
                         >
-                            <CheckBox 
-                                checked
-                                containerStyle={styles.checkbox}
-                            />
+                            <Checkbox checked={checkboxClicked} onCheckedChange={setCheckbox}/>
                             <Text>Remember Me</Text>
                         </RememberMeContainer>
 
@@ -132,13 +139,8 @@ export default function AuthForm({ type }: AuthFormProps) {
                         </Link>
                     </View>
                     :
-                    <TermsAndConditionsContainer
-                        style={styles.checkboxContainer}
-                    >
-                        <CheckBox 
-                            checked
-                            containerStyle={styles.checkbox}
-                        />
+                    <TermsAndConditionsContainer className='flex flex-row gap-2 items-center px-5'>
+                        <Checkbox checked={checkboxClicked} onCheckedChange={setCheckbox}/>
 
                         <Text>
                             I have read and accepted the <Link href={'/terms'}>Terms and Conditions</Link>
@@ -150,20 +152,21 @@ export default function AuthForm({ type }: AuthFormProps) {
                     <Button
                         titleStyle={{ textAlign: 'center' }} 
                         buttonStyle={styles.mainAction}
+                        onPress={handleContinue}
                     >
                         Continue
                     </Button>
 
                     <Link 
                         style={styles.moveToOtherPage}
-                        href={ type === 'login' ? `/sign-up` : '/login'}
+                        href={type === 'login' ? `/sign-up` : '/login'}
                     >
                         { type === 'login' ? 'New User? Create Account' : 'Already Have an Account? Login' }
                     </Link>
                 </View>
 
 
-            </View>
+            </KeyboardAvoidingView>
         )
     }
 
@@ -237,7 +240,8 @@ const styles = StyleSheet.create({
 
     },
     formContainer: {
-        marginVertical: 12
+        marginVertical: 12,
+        paddingHorizontal: 8
     },
 
     actions: {
