@@ -1,5 +1,7 @@
 import Toast from "react-native-toast-message"
 import { supabase } from "~/utils/supabase"
+import useCurrentUser from "./useCurrentUser"
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 
 interface ResturantData {
     admin_id: string,
@@ -9,8 +11,11 @@ interface ResturantData {
 }
 
 export default function useResturant() {
+    const { currentUser } = useCurrentUser();
+    const queryClient = useQueryClient();
+
     const getResturantByAdminId = async (admin_id: string) => {
-        const { data, error } = await supabase.from('restaurants').select('*').eq('admin_id', admin_id)
+        const { data, error } = await supabase.from('restaurants').select('*').eq('admin_id', admin_id).single()
         
         if(error) {
             console.log(error.message)
@@ -20,33 +25,56 @@ export default function useResturant() {
         return data
     }
 
-    const createResturant = async (data: ResturantData) => {
-        try {
-            const existingRestaurant = await getResturantByAdminId(data.admin_id)
-            if(existingRestaurant.length > 0) {
-                Toast.show({
-                    text1: "Resturant already exists",
-                    type: "error"
-                })
-                return existingRestaurant[0]
-            }
+    const getResturantByAdmin = async () => {
+        const { data, error } = await supabase.
+        from('restaurants').select('*').eq('admin_id', currentUser?.id).single()
+        
+        if(error) throw new Error(error.message)
 
-            const { data: res } = await supabase.from('restaurants').insert([data])
+        return data
+    }
+
+    const createResturantInSupabase = async (data: ResturantData) => {
+        const existingRestaurant = await getResturantByAdminId(data.admin_id)
+        if(existingRestaurant.length > 0) {
+            return existingRestaurant[0]
+        }
+
+        await supabase.from('restaurants').insert([data])
+    }
+
+    const { isLoading, data: resturant, error } = useQuery({
+        queryKey: ["resturant"],
+        queryFn: getResturantByAdmin,
+        enabled: !!currentUser?.id
+    })
+
+    const { mutateAsync: createResturant } = useMutation({
+        mutationFn: createResturantInSupabase,
+        onSuccess: () => {
+            queryClient.invalidateQueries({ queryKey: ["resturant"] })
             return Toast.show({
                 text1: "Resturant created successfully",
                 type: "success"
             })
-        } catch (e) {
+        },
+        onError: () => {
             return Toast.show({
                 text1: "Resturant creation failed",
                 type: "error"
             })
         }
-    }
+    })
+
+
 
 
     return {
         createResturant,
-        getResturantByAdminId
+        getResturantByAdminId,
+
+        isLoading,
+        resturant,
+        error
     }
 }
