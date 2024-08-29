@@ -24,10 +24,8 @@ export default function useMenuItems() {
     async function getMenuItemsByResturantId() {
         const { data, error } = await supabase.from('menu_items').select('*').eq('resturant_id', resturant?.id)
         if(error) throw new Error(error.message);
-
-        const menuItems = groupArrayBy(data as MenuItem[], "category") as Record<string, MenuItem[]>
         
-        return menuItems;
+        return data as MenuItem[];
     }
 
     async function updateMenuItemInSupabase(data: MenuItem) {
@@ -42,13 +40,14 @@ export default function useMenuItems() {
         await supabase.from('menu_items').delete().eq('id', id)
     }
 
-    const { isLoading, data: menuItems, error } = useQuery({
+    const { isLoading, data: menuItemsRaw, error } = useQuery({
         queryKey: ["menu-items"],
         queryFn: getMenuItemsByResturantId,
         enabled: !!resturant?.id
     })
 
     function getSingleMenuItem(id: number, category: string) {
+        const menuItems = groupArrayBy(menuItemsRaw as MenuItem[], "category") as Record<string, MenuItem[]>
         const menuItem: MenuItem = menuItems![category].find(item => item.id === id) as MenuItem;
         return menuItem;
     }
@@ -111,8 +110,8 @@ export default function useMenuItems() {
         updateMenuItem,
         deleteMenuItem,
 
-
-        menuItems,
+        menuItemsRaw,
+        menuItems: groupArrayBy(menuItemsRaw as MenuItem[], "category") as Record<string, MenuItem[]>,
         isLoading,
         error
     }
