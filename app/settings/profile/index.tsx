@@ -7,10 +7,33 @@ import { Image } from "expo-image";
 import { useRouter } from "expo-router";
 import useThemeColor from "hooks/useThemeColor";
 import { Edit, Lock, Mail, Phone } from "lucide-react-native";
-import { StyleSheet, TouchableOpacity, View } from "react-native";
+import { StyleSheet, TouchableOpacity, View ,  SafeAreaView} from "react-native";
+import { StatusBar } from 'react-native';
+import { Ionicons } from '@expo/vector-icons';
+import { scale } from "react-native-size-matters";
 
 import { Text } from "@rneui/themed";
 import { globalStyles } from "constants/Styles";
+
+interface ProfileItemProps {
+    icon: React.ComponentProps<typeof Ionicons>['name'];
+    label: string;
+    value: string;
+  }
+
+const ProfileItem: React.FC<ProfileItemProps> = ({ icon, label, value }) => (
+    <View style={styles.profileItem}>
+      <View style={styles.iconContainer}>
+        <Ionicons name={icon} size={24} color="#FF3B30" />
+      </View>
+      <View>
+        <Text style={styles.label}>{label}</Text>
+        <Text style={styles.value}>{value}</Text>
+      </View>
+    </View>
+  );
+  
+
 
 export default function ProfilePage() {
     const primary = useThemeColor({}, "primary");
@@ -18,53 +41,131 @@ export default function ProfilePage() {
 
     return (
         <Page>
-            <View style={[globalStyles.flexItemsCenter, globalStyles.justifyBetween]}>
+             <StatusBar backgroundColor="#F72F2F" barStyle="light-content" />
+            {/* <View style={[globalStyles.flexItemsCenter, globalStyles.justifyBetween]}>
                 <BackArrowButton onPress={() => router.back()} color="#fff"/>
                 <TouchableOpacity onPress={() => router.push("/settings/profile/edit")}>
                     <Edit stroke="#fff"/>
                 </TouchableOpacity>
-            </View>
+            </View> */}
+            <SafeAreaView style={styles.container}>
+      <View style={styles.header}>
+        <TouchableOpacity onPress={() => router.back()}>
+          <Ionicons name="arrow-back" size={24} color="white" />
+        </TouchableOpacity>
+        <TouchableOpacity style={styles.editButton} onPress={() => router.push("/settings/profile/edit")}>
+          <Ionicons name="pencil" size={24} color="white" />
+        </TouchableOpacity>
+      </View>
+      
+      <View style={styles.profileInfo}>
+        <View style={styles.profileInfoText}>
+        <Text style={styles.name}>Naomi Andrews</Text>
+        <Text style={styles.subName}>Uvuvwevwevwe</Text>
+        </View>
+       
+      </View> 
+      <Image
+          source={require("../../../assets/images/food-court-avatar.png") } // Replace with actual image URL
+          style={styles.profileImage}
+        />
+      
+      <View style={styles.diagonal} />
+      
+      <View style={styles.detailsContainer}>
+        <ProfileItem icon="mail" label="Email" value="naomi.andrew@gmail.com" />
+        <ProfileItem icon="call" label="Phone Number" value="+234 804 225 8973" />
+        <ProfileItem icon="lock-closed" label="Password" value="••••••••••" />
+      </View>
+    </SafeAreaView>
+            
 
-            <View style={styles.banner}/>
-
-            <View>
-                <Text>Naomi Andrews</Text>
-                <Image 
-                    source={{ uri: require("../../../assets/images/food-court-avatar.png") }} 
-                    style={{ width: 120, height: 120, zIndex: 20 }}
-                />
-            </View>
-            <ContactOption
-                title="Email"
-                subtitle="example@email.com"
-                onPress={() => {/* Handle email press */}}
-                icon={<Mail stroke={primary}/>}
-            />
-
-            <ContactOption
-                title="Phone Number"
-                subtitle="+234 804 225 8973"
-                onPress={() => {/* Handle email press */}}
-                icon={<Phone stroke={primary}/>}
-            />
-            <ContactOption
-                title="Password"
-                subtitle="eample@email.com"
-                onPress={() => {/* Handle email press */}}
-                icon={<Lock stroke={primary}/>}
-            />
+           
 
         </Page>
     )
 }
 
 const styles = StyleSheet.create({
-    banner: {
-        backgroundColor: "#F72F2F",
-        zIndex: -20,
-        position: "absolute",
-        top: 0,
-        width: "100%",
-        height: 200,
-    }
-})
+    container: {
+      flex: 1,
+      backgroundColor: '#FF3B30',
+    },
+    header: {
+      flexDirection: 'row',
+      justifyContent: 'space-between',
+      padding: 16,
+    },
+    editButton: {
+      padding: 8,
+    },
+    profileInfo: {
+    flexDirection: 'row',
+      alignItems: 'center',
+      marginTop: scale(2),
+    },
+    profileInfoText: {
+      flex: 1,
+      marginLeft: scale(20),
+    },
+    name: {
+      fontSize: 24,
+      fontWeight: 'bold',
+      color: 'white',
+    },
+    subName: {
+      fontSize: 18,
+      color: 'white',
+      marginTop: 4,
+    },
+    profileImage: {
+      width: 100,
+      height: 100,
+      borderRadius: 50,
+      marginTop : scale(10),
+      marginRight: scale(20),
+      borderWidth: 3,
+      borderColor: 'white',
+      position: 'absolute',
+      top: scale(100),
+      right: scale(20),
+      zIndex: 100,
+    
+    },
+    diagonal: {
+      height: 150,
+      width: '200%',
+      backgroundColor: 'white',
+    transform: [{ skewY: '-20deg' }],
+      
+    },
+    detailsContainer: {
+      flex: 1,
+      backgroundColor: 'white',
+      paddingTop: 30,
+      paddingHorizontal: 16,
+    },
+    profileItem: {
+      flexDirection: 'row',
+      alignItems: 'center',
+      marginBottom: 20,
+    },
+    iconContainer: {
+      width: 40,
+      height: 40,
+      borderRadius: 20,
+      borderWidth: 1,
+      borderColor: '#FF3B30',
+      justifyContent: 'center',
+      alignItems: 'center',
+      marginRight: 16,
+    },
+    label: {
+      fontSize: 14,
+      color: '#888',
+    },
+    value: {
+      fontSize: 16,
+      color: '#333',
+    },
+  });

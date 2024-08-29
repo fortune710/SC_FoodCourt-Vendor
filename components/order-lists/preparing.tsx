@@ -1,9 +1,12 @@
-import { ScrollView } from "react-native";
+import { ScrollView ,StyleSheet} from "react-native";
 import OrderCardPreparing from "../orders/order-card-preparing";
+import {scale} from "react-native-size-matters"
 
 export default function PreparingOrders(){
     return (
-        <ScrollView>
+        <ScrollView contentContainerStyle = {styles.container}
+        showsVerticalScrollIndicator={false}
+        >
             <OrderCardPreparing/>
             <OrderCardPreparing/>
             <OrderCardPreparing/>
@@ -12,3 +15,12 @@ export default function PreparingOrders(){
         </ScrollView>
     )
 }
+
+const styles = StyleSheet.create({
+    container:{
+        
+        paddingBottom:scale(300)
+
+    }
+
+})

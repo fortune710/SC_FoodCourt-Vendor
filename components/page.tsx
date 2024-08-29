@@ -1,5 +1,5 @@
 import React from "react";
-import { Dimensions, ScrollView, StyleProp, StyleSheet, ViewStyle } from "react-native";
+import { Dimensions, ScrollView, StyleProp, StyleSheet, ViewStyle,View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 
 /**
@@ -12,6 +12,7 @@ interface PageProps {
     children: React.ReactNode;
     safeAreaBgColor?: string;
     style?: StyleProp<ViewStyle>;
+    contentContainerStyle?: StyleProp<ViewStyle>;
 }
 
 export default function Page({ children, style, safeAreaBgColor }: PageProps) {
@@ -21,9 +22,9 @@ export default function Page({ children, style, safeAreaBgColor }: PageProps) {
     
     return (
         <SafeAreaView style={safeArea}>
-            <ScrollView style={[styles.pageStyle, style ?? {}]}>
+            <View style={[styles.pageStyle, style ?? {}]}>
                 { children }
-            </ScrollView>
+            </View>
         </SafeAreaView>
     )
 }

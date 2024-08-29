@@ -1,11 +1,13 @@
 import React, { useState } from "react";
 import Page from "../../components/page";
-import { View } from "react-native";
+import { View , StyleSheet} from "react-native";
 import Input from "../../components/custom/input";
 import { Button } from "@rneui/themed";
 import { Image } from "expo-image";
-import { scale, verticalScale } from "react-native-size-matters";
+import { scale, verticalScale, moderateScale } from "react-native-size-matters";
 import { useRouter } from "expo-router";
+import Header from "../../components/page-header";
+
 
 export default function PickupPage() {
     const router = useRouter();
@@ -21,13 +23,14 @@ export default function PickupPage() {
         })
     }
     return (
-        <Page>
-            <Image
+        <Page >
+            <Header headerTitle="Pickup" /> 
+            {/* <Image
                 source={{ uri: require('../../assets/pickup-design.png') }}
-                style={{ width: 185, height: 200, zIndex: 20 }}
-            />
+                style={{ width: 185, height: 200, }}
+            /> */}
             <View
-                style={{ width: '100%', paddingHorizontal: 30 }}
+                style={styles.inputcontainer}
             >
                 <Input
                     placeholder="Enter Order Numbers"
@@ -42,3 +45,14 @@ export default function PickupPage() {
         </Page>
     )
 }
+
+const styles = StyleSheet.create({
+   
+    inputcontainer: {
+        flex: 1,
+        justifyContent: 'center',
+        paddingHorizontal: 30,
+        width: '100%',
+        height: verticalScale(550),
+    }
+})
