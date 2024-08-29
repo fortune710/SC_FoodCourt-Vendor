@@ -39,7 +39,7 @@ export default function AuthForm({ type }: AuthFormProps) {
                 case "login":
                     const user = await signIn(email, password);
                     const resturant = await getResturantByAdminId(user?.id!);
-                    if (resturant.length > 0) return router.push('/orders');
+                    if (resturant) return router.push('/orders');
                     
                     return router.push({
                         pathname: '/create-resturant',

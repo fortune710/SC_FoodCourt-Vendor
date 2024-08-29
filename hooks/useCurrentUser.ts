@@ -1,10 +1,11 @@
+import { useQuery } from "@tanstack/react-query";
 import useAuth from "./useAuth";
 
 export default function useCurrentUser() {
-    const { getCurrentUser: currentUser } = useAuth();
+    const { getCurrentUser: currentUserFunction } = useAuth();
 
     const getCurrentUser = async () => {
-        const { data } = await currentUser();
+        const { data } = await currentUserFunction();
         return {
             id: data.user?.id,
             user_type: data.user?.user_metadata.user_type,
@@ -15,7 +16,16 @@ export default function useCurrentUser() {
         };
     }
 
+    const { data: currentUser, isLoading, error } = useQuery({
+        queryKey: ["current-user"],
+        queryFn: getCurrentUser
+    })
+
     return {
-        getCurrentUser
+        getCurrentUser,
+
+        currentUser,
+        isLoading,
+        error
     }
 }

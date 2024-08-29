@@ -14,6 +14,7 @@ import { PortalHost } from '@rn-primitives/portal';
 import { AppState } from "react-native";
 import { supabase } from "~/utils/supabase";
 import Toast from "react-native-toast-message";
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 
 const LIGHT_THEME: Theme = {
     dark: false,
@@ -89,19 +90,23 @@ export default function RootLayout() {
 
 }
 
+const queryClient = new QueryClient();
+
 
 function RootLayoutNav() {
 
     
     return (
         <ThemeProvider theme={theme}>
-            <StatusBar 
-                backgroundColor="#fff" 
-                style="dark"
-            />
-            <Stack screenOptions={{ headerShown: false }}/>
-            <Toast position="top" />
-            <PortalHost/>
+            <QueryClientProvider client={queryClient}>
+                <StatusBar 
+                    backgroundColor="#fff" 
+                    style="dark"
+                />
+                <Stack screenOptions={{ headerShown: false }}/>
+                <Toast position="top" />
+                <PortalHost/>
+            </QueryClientProvider>
         </ThemeProvider>
     )
 }
