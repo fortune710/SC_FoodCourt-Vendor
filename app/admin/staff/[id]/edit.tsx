@@ -2,22 +2,26 @@ import Header from "~/components/header";
 import Page from "~/components/page";
 import { Text } from "~/components/ui/text";
 import React, { useState } from 'react';
-import { View, Image, StyleSheet, SafeAreaView, TouchableOpacity, TextInput, ScrollView } from 'react-native';
+import { View, Image, StyleSheet, SafeAreaView, TouchableOpacity, TextInput, ScrollView, ActivityIndicator } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { scale } from "react-native-size-matters";
-import { useRouter } from "expo-router";
+import { useLocalSearchParams, useRouter } from "expo-router";
 import { StatusBar, Modal} from "react-native";
+import useStaffProfile from "~/hooks/useStaffProfile";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "~/components/ui/select";
+import { STAFF_POSITIONS } from "~/utils/constants";
+import useRestaurantStaff from "~/hooks/useRestaurantStaff";
 
 
 
 
 
 interface InputFieldProps {
-    label: string;
-    value: string;
-    onChangeText: (text: string) => void;
-    isEditable?: boolean;
-  }
+  label: string;
+  value: string;
+  onChangeText: (text: string) => void;
+  isEditable?: boolean;
+}
   
   const InputField: React.FC<InputFieldProps> = ({ label, value, onChangeText, isEditable = true }) => (
     <View style={styles.inputContainer}>
@@ -32,22 +36,42 @@ interface InputFieldProps {
   );
 
 export default function editStaffPage() {
-    const router = useRouter();
-    const [email, setEmail] = useState('naomi.andrews@gmail.com');
-  const [phoneNumber, setPhoneNumber] = useState('+234 804 225 8973');
-  const [position, setPosition] = useState('Front Desk');
+  const router = useRouter();
+  const { id } = useLocalSearchParams();
+  const { profile, isLoading } = useStaffProfile(id as string);
+  const { updateStaff } = useRestaurantStaff();
+
+  const [email, setEmail] = useState(profile?.email);
+  const [phoneNumber, setPhoneNumber] = useState(profile?.phone_number);
+  const [position, setPosition] = useState(profile?.position);
   const [showConfirmation, setShowConfirmation] = useState(false);
 
   const handleSave = () => {
     setShowConfirmation(true);
   };
 
-  const confirmSave = () => {
+  const confirmSave = async () => {
     // Implement save logic here
+    await updateStaff({
+      email: email!,
+      phone_number: phoneNumber!,
+      position: position!,
+      id: id as string
+    })
     setShowConfirmation(false);
+    //return router.push(`/admin/staff/${id}`)
   };
 
+  if (isLoading) {
     return (
+      <Page>
+        <ActivityIndicator/>
+      </Page>
+    )
+  }
+
+
+  return (
         <Page>
             <StatusBar backgroundColor="white" barStyle="dark-content" />
              <SafeAreaView style={styles.container}>
@@ -61,7 +85,7 @@ export default function editStaffPage() {
       <ScrollView style={styles.content}>
         <View style={styles.profileImageContainer}>
           <Image
-            source={require ('~/assets/images/food-court-avatar.png')} // Replace with actual image URL
+            source={{ uri: profile?.image_url }} // Replace with actual image URL
             style={styles.profileImage}
           />
           <TouchableOpacity style={styles.cameraButton}>
@@ -69,18 +93,35 @@ export default function editStaffPage() {
           </TouchableOpacity>
         </View>
 
-        <Text style={styles.name}>Naomi Andrews</Text>
-        <Text style={styles.subName}>Uvuvwevwevwe</Text>
+        <Text style={styles.name}>{profile?.full_name}</Text>
+        <Text style={styles.subName}>@{profile?.username}</Text>
 
-        <InputField label="Email" value={email} onChangeText={setEmail} />
-        <InputField label="Phone Number" value={phoneNumber} onChangeText={setPhoneNumber} />
+        <InputField label="Email" value={email!} onChangeText={setEmail} />
+        <InputField label="Phone Number" value={phoneNumber!} onChangeText={setPhoneNumber} />
         
         <View style={styles.inputContainer}>
           <Text style={styles.inputLabel}>Position</Text>
-          <TouchableOpacity style={styles.positionInput}>
-            <Text style={styles.positionText}>{position}</Text>
-            <Ionicons name="chevron-down" size={24} color="#888" />
-          </TouchableOpacity>
+          <Select 
+            className="w-full"
+            onValueChange={(option) => setPosition(option?.value!)}
+            defaultValue={{ label: position!, value: position! }}
+          >
+              <SelectTrigger className='w-full'>
+                <SelectValue
+                  className='text-foreground text-sm native:text-lg'
+                  placeholder='Select a position'
+                />
+              </SelectTrigger>
+              <SelectContent className='w-full'>
+                {
+                  STAFF_POSITIONS.map((time) => (
+                    <SelectItem key={time} label={time} value={time}>
+                      {time}
+                    </SelectItem>
+                  ))
+                }
+              </SelectContent>
+          </Select>
         </View>
 
         <TouchableOpacity style={styles.saveButton} onPress={handleSave}>
@@ -91,11 +132,12 @@ export default function editStaffPage() {
           <Text style={styles.cancelButtonText}>Cancel</Text>
         </TouchableOpacity>
       </ScrollView>
+
       <Modal
-          transparent={true}
-          visible={showConfirmation}
-          onRequestClose={() => setShowConfirmation(false)}
-        >
+        transparent={true}
+        visible={showConfirmation}
+        onRequestClose={() => setShowConfirmation(false)}
+      >
           <View style={styles.modalOverlay}>
             <View style={styles.modalContent}>
               <Text style={styles.modalTitle}>Confirm Save</Text>
@@ -104,6 +146,7 @@ export default function editStaffPage() {
                 <TouchableOpacity style={styles.modalButton} onPress={() => setShowConfirmation(false)}>
                   <Text style={styles.modalButtonText}>Cancel</Text>
                 </TouchableOpacity>
+
                 <TouchableOpacity style={[styles.modalButton, styles.modalButtonConfirm]} onPress={confirmSave}>
                   <Text style={[styles.modalButtonText, styles.modalButtonTextConfirm]}>Confirm</Text>
                 </TouchableOpacity>
@@ -112,8 +155,8 @@ export default function editStaffPage() {
           </View>
         </Modal>
     </SafeAreaView>
-        </Page>
-    )
+    </Page>
+  )
 }
 
 

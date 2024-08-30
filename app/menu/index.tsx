@@ -65,7 +65,7 @@ export default function MenuPage(){
                 {
                     isLoading ? <ActivityIndicator/> :
                     availableCategories.map((category) => (
-                        <View className="mb-6">
+                        <View className="mb-6" key={category}>
                             <Text className="text-2xl font-semibold">{category}</Text>
                             {
                                 menuItems![category]?.map((menuItem: MenuItem) => (
