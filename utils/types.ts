@@ -23,3 +23,12 @@ export interface CreateMenuItemData {
 export interface MenuItem extends CreateMenuItemData {
     id: number
 }
+
+export enum SupabaseTables {
+    Profiles = "profiles",
+    Restaurants = "restaurants",
+    MenuItems = "menu_items",
+    RestaurantStaff = "restaurant-staff",
+    Orders = "orders",
+    OrderItems = "order_items"
+}
