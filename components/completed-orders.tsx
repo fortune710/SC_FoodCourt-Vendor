@@ -1,10 +1,12 @@
 import React from "react";
-import { ScrollView, View } from "react-native";
+import { ScrollView, View, StyleSheet } from "react-native";
 import OrderCardCompleted from "./orders/order-card-completed";
+import {scale} from "react-native-size-matters"
 
 export default function CompletedOrders() {
     return (
-        <ScrollView>
+        <ScrollView contentContainerStyle = {styles.container}
+        showsVerticalScrollIndicator={false}>
             <OrderCardCompleted/>
             <OrderCardCompleted/>
             <OrderCardCompleted/>
@@ -12,4 +14,14 @@ export default function CompletedOrders() {
             <OrderCardCompleted/>
         </ScrollView>
     )
+
+
 }
+const styles = StyleSheet.create({
+    container:{
+        
+        paddingBottom:scale(300)
+
+    }
+
+})
