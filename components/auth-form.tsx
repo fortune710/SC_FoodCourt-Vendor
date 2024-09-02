@@ -42,7 +42,7 @@ export default function AuthForm({ type }: AuthFormProps) {
                     if (resturant) return router.push('/orders');
                     
                     return router.push({
-                        pathname: '/create-resturant',
+                        pathname: '/restaurant/create',
                         params: {
                             admin_id: user?.id
                         }
