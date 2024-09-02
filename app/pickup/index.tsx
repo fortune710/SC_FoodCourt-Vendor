@@ -25,10 +25,11 @@ export default function PickupPage() {
     return (
         <Page >
             <Header headerTitle="Pickup" /> 
-            {/* <Image
-                source={{ uri: require('../../assets/pickup-design.png') }}
+            {/*  */}
+            <Image
+                source={{ uri: require('~/assets/pickup-design.png') }}
                 style={{ width: 185, height: 200, }}
-            /> */}
+            />
             <View
                 style={styles.inputcontainer}
             >

@@ -1,8 +1,13 @@
 import { useQuery } from "@tanstack/react-query";
 import useAuth from "./useAuth";
+import { supabase } from "~/utils/supabase";
 
 export default function useCurrentUser() {
     const { getCurrentUser: currentUserFunction } = useAuth();
+
+    const updateUser = async() => {
+        await supabase.auth.updateUser({})
+    }
 
     const getCurrentUser = async () => {
         const { data } = await currentUserFunction();

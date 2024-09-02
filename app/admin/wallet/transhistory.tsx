@@ -9,18 +9,18 @@ import { useRouter } from 'expo-router';
 
 
 interface Transaction {
-    id: string;
-    type: 'Payout' | 'Order Income';
-    amount: string;
-    date: string;
-    description: string;
-  }
+  id: string;
+  type: 'Payout' | 'Order Income';
+  amount: string;
+  date: string;
+  description: string;
+}
 
   
   
   
-  const TransactionItem: React.FC<{ item: Transaction }> = ({ item }) => (
-    <View>
+const TransactionItem: React.FC<{ item: Transaction }> = ({ item }) => (
+  <View>
     <View style={styles.transactionItem}>
       <View style={[styles.iconContainer, { backgroundColor: item.type === 'Payout' ? '#FFECEC' : '#E6FFEC' }]}>
         <Ionicons 
