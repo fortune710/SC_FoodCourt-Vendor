@@ -32,3 +32,11 @@ export enum SupabaseTables {
     Orders = "orders",
     OrderItems = "order_items"
 }
+
+export enum OrderStatus {
+    New = 0,
+    Preparing = 1,
+    Completed = 2,
+    Cancelled = 3,
+    Collected = 4
+}
