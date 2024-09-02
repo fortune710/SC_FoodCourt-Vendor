@@ -75,10 +75,10 @@ function DashboardMetricsContainer() {
     ]
 
     return (
-        <View className='flex flex-row gap-4 w-full'>
+        <View className='flex flex-row w-full flex-wrap'>
             {
                 metrics.map((metric) => (
-                    <View className='w-1/2'>
+                    <View className='w-1/2 py-2 px-2'>
                         <DashboardMetricsCard {...metric}/>
                     </View>
                 ))
@@ -105,7 +105,7 @@ function ChartData() {
             <CardHeader>
                 <CardTitle>Order Fulfillment Rate</CardTitle>
             </CardHeader>
-            <CardContent>
+            <CardContent className='flex flex-row items-center justify-between'>
                 <View className='w-3/5'>
                     <Text>Total Orders</Text>
                     <Text>Completed</Text>

@@ -2,43 +2,51 @@ import Header from "~/components/page-header";
 import Page from "~/components/page";
 import { Text } from "~/components/ui/text";
 import React from 'react';
-import { View , Image, StyleSheet, SafeAreaView, TouchableOpacity, ScrollView } from 'react-native';
+import { View , Image, StyleSheet, SafeAreaView, TouchableOpacity, ScrollView, ActivityIndicator } from 'react-native';
 import { Ionicons } from '@expo/vector-icons'; 
 import { scale } from 'react-native-size-matters';
 import { StatusBar } from 'react-native';
-import { useRouter } from 'expo-router';
+import { useLocalSearchParams, useRouter } from 'expo-router';
+import useStaffProfile from "~/hooks/useStaffProfile";
 
 
 
 
 interface ProfileItemProps {
-    icon: React.ComponentProps<typeof Ionicons>['name'];
-    label: string;
-    value: string;
-  }
+  icon: React.ComponentProps<typeof Ionicons>['name'];
+  label: string;
+  value: string;
+}
   
-  const ProfileItem: React.FC<ProfileItemProps> = ({ icon, label, value }) => (
-    <View style={styles.profileItem}>
-      <View style={styles.iconContainer}>
-        <Ionicons name={icon} size={20} color="#FF3B30" />
-      </View>
-      <View style={styles.itemContent}>
-        <Text style={styles.itemLabel}>{label}</Text>
-        <Text style={styles.itemValue}>{value}</Text>
-      </View>
+const ProfileItem: React.FC<ProfileItemProps> = ({ icon, label, value }) => (
+  <View style={styles.profileItem}>
+    <View style={styles.iconContainer}>
+      <Ionicons name={icon} size={20} color="#FF3B30" />
     </View>
-  );
+    <View style={styles.itemContent}>
+      <Text style={styles.itemLabel}>{label}</Text>
+      <Text style={styles.itemValue}>{value}</Text>
+    </View>
+  </View>
+);
 
 export default function StaffPage() {
   const router = useRouter();
-    return (
-      
-        // <Page>
+  const { id } = useLocalSearchParams();
+  const { profile, isLoading } = useStaffProfile(id as string);
 
-        //     <Header showTitle={false}  backButtonColor="blue" backTextColor="blue" />
-        //     <Text>individual staff page</Text>
-        // </Page>
-        <Page>
+  if (isLoading) {
+    return (
+      <Page>
+        <ActivityIndicator/>
+      </Page>
+    )
+  }
+  
+  
+  return (
+      
+      <Page>
         <StatusBar backgroundColor="#F72F2F" barStyle="light-content" />
         <SafeAreaView style={styles.container}>
         <View style={styles.header}>
@@ -51,13 +59,12 @@ export default function StaffPage() {
         <ScrollView style={styles.content}>
           <View style={styles.profileCard}>
             <Image
-              source={require('~/assets/images/food-court-avatar.png')} // Replace with actual image URL
+              source={{ uri: profile?.image_url  }} // Replace with actual image URL
               style={styles.profileImage}
             />
             <View style={styles.profileDetails}>
-            <Text style={styles.name}>Naomi Andrews</Text>
-            <Text style={styles.subName}>Uvuvwevwevwe</Text>
-            <Text style={styles.username}>@nu.Andrews</Text>
+            <Text style={styles.name}>{profile?.full_name}</Text>
+            <Text style={styles.username}>@{profile?.username}</Text>
             
             <View style={styles.actionButtons}>
               <TouchableOpacity style={styles.actionButton}>
@@ -78,16 +85,17 @@ export default function StaffPage() {
 
   
           <View style={styles.detailsSection}>
-            <ProfileItem icon="mail" label="Email" value="naomi.andrews@gmail.com" />
-            <ProfileItem icon="call" label="Phone Number" value="+234 804 225 8973" />
-            <ProfileItem icon="briefcase" label="Position" value="Front Desk" />
+            <ProfileItem icon="mail" label="Email" value={profile?.email!} />
+            <ProfileItem icon="call" label="Phone Number" value={profile?.phone_number!} />
+            <ProfileItem icon="briefcase" label="Position" value={profile?.position!} />
+
             <TouchableOpacity style={styles.permissionsItem}>
               <ProfileItem icon="shield-checkmark" label="Permissions" value="" />
               <Ionicons name="chevron-down" size={24} color="#888" />
             </TouchableOpacity>
           </View>
   
-          <TouchableOpacity style={styles.editButton} onPress={() => router.push('/admin/staff/1/edit')}>
+          <TouchableOpacity style={styles.editButton} onPress={() => router.push(`/admin/staff/${id}/edit`)}>
             <Text style={styles.editButtonText}>Edit Details</Text>
           </TouchableOpacity>
   

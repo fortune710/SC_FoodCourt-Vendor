@@ -9,6 +9,8 @@ import useThemeColor from "../../hooks/useThemeColor";
 import { globalStyles } from "../../constants/Styles";
 import { Image } from "expo-image";
 import { Link, useRouter } from "expo-router";
+import { LogOut } from "lucide-react-native";
+import useAuth from "~/hooks/useAuth";
 
 const AccountContainer = View
 const AppContainer = View
@@ -33,6 +35,8 @@ const APP_OPTIONS = [
 export default function SettingsPage() {
     const primary = useThemeColor({}, "primary");
     const router = useRouter();
+    const { signOut } = useAuth();
+
 
     const ACCOUNT_OPTIONS = [
         {
@@ -139,9 +143,9 @@ export default function SettingsPage() {
                         
                     </View>
 
-                    <Pressable onPress={() => router.push('/login')} style={styles.signOut}>
-                        <Image source={require('../../assets/icons/log-out.svg')} style={{ width: 35, height: 30, marginRight: 15 }}/>
-                        <Text style={{ fontWeight: "600" }}>Sign Out</Text>
+                    <Pressable onPress={signOut} style={styles.signOut}>
+                        <LogOut stroke={primary} size={35} />
+                        <Text style={{ fontWeight: "600", marginLeft: 10 }}>Sign Out</Text>
                     </Pressable>
                 </View>
 
