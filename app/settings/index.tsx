@@ -11,6 +11,9 @@ import { Image } from "expo-image";
 import { Link, useRouter } from "expo-router";
 import { LogOut } from "lucide-react-native";
 import useAuth from "~/hooks/useAuth";
+import useResturant from "~/hooks/useResturant";
+import useCurrentUser from "~/hooks/useCurrentUser";
+import { Avatar, AvatarFallback, AvatarImage } from "~/components/ui/avatar";
 
 const AccountContainer = View
 const AppContainer = View
@@ -37,11 +40,15 @@ export default function SettingsPage() {
     const router = useRouter();
     const { signOut } = useAuth();
 
+    const { resturant } = useResturant();
+    const { currentUser } = useCurrentUser();
+
+
 
     const ACCOUNT_OPTIONS = [
         {
             name: "Profile",
-            icon: require('../../assets/icons/profile-icon.svg'),
+            icon: require('~/assets/icons/profile-icon.svg'),
             onPress: () => {
                 return router.push("/settings/profile")
             },
@@ -50,14 +57,14 @@ export default function SettingsPage() {
         },
         {
             name: "Accepting Orders",
-            icon: require('../../assets/icons/download-icon.svg'),
+            icon: require('~/assets/icons/download-icon.svg'),
             onPress: () => {},
             canToggle: true,
             style: { width: 32, height: 35 }
         },
         {
             name: "Notifications",
-            icon: require('../../assets/icons/bell-icon.svg'),
+            icon: require('~/assets/icons/bell-icon.svg'),
             onPress: () => {},
             canToggle: true,
             style: { width: 30, height: 34 }
@@ -77,6 +84,20 @@ export default function SettingsPage() {
 
                 <View style={[globalStyles.flexItemsCenter, { justifyContent: 'center', zIndex: 50, flexDirection: "column" }]}>
                     <View style={styles.optionsContainer}>
+                        {
+                            currentUser?.user_type === "admin" &&
+                            <View className="w-full flex flex-row items-center gap-2 mb-4">
+                                <Avatar alt="Zach Nugent's Avatar">
+                                    <AvatarImage source={{ uri: resturant?.image_url }} />
+                                    <AvatarFallback>
+                                        <Text>{resturant?.name.at(0)}</Text>
+                                    </AvatarFallback>
+                                </Avatar>
+
+                                <Text className="text-xl font-semibold">{resturant?.name}</Text>                 
+                            </View>
+                        }
+                         
                         <AccountContainer>
                             <Text>Accounts</Text>
                             <View style={styles.optionCategory}>

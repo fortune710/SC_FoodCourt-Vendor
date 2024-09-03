@@ -53,7 +53,7 @@ export default function useOrderPickup(orderIds: number[]) {
     return data;
   }
 
-  async function markAsCollected(orderId: string) {
+  async function markAsCollected(orderId: number) {
     const { error } = await supabase
         .from('orders')
         .update({ 
