@@ -2,12 +2,14 @@ import Toast from "react-native-toast-message"
 import { supabase } from "~/utils/supabase"
 import useCurrentUser from "./useCurrentUser"
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { SupabaseTables } from "~/utils/types";
 
 interface ResturantData {
     admin_id: string,
     name: string,
     phone_number?: string,
-    website_link?: string
+    website_link?: string,
+    is_closed?: boolean
 }
 
 export default function useResturant() {
@@ -43,6 +45,11 @@ export default function useResturant() {
         await supabase.from('restaurants').insert([data])
     }
 
+    const updateResturantInSupabase = async (data: Partial<ResturantData>) => {
+        const { error } = await supabase.from(SupabaseTables.Restaurants).update(data).eq('admin_id', currentUser?.id!);
+        if (error) throw new Error(error.message)
+    }
+
     const { isLoading, data: resturant, error } = useQuery({
         queryKey: ["resturant"],
         queryFn: getResturantByAdmin,
@@ -66,10 +73,30 @@ export default function useResturant() {
         }
     })
 
+    const { mutateAsync: updateResturant } = useMutation({
+        mutationFn: updateResturantInSupabase,
+        onSuccess: () => {
+            queryClient.invalidateQueries({ queryKey: ["resturant"] })
+            return Toast.show({
+                text1: "Resturant updated successfully",
+                type: "success"
+            })
+        },
+        onError: () => {
+            return Toast.show({
+                text1: "Resturant update failed",
+                type: "error"
+            })
+        }
+    })
+
+
 
 
 
     return {
+        updateResturant,
+
         createResturant,
         getResturantByAdminId,
 
