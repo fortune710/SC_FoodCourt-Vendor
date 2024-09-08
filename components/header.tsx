@@ -8,9 +8,10 @@ import { scale, verticalScale } from "react-native-size-matters";
 import { useState } from "react";
 import useThemeColor from "../hooks/useThemeColor";
 import { Image } from "expo-image";
-import { LayoutGrid, UsersRound, Settings, X, Mail, Package } from "lucide-react-native";
+import { LayoutGrid, UsersRound, Settings, X, Mail, Package, Home, Menu, Wallet, ChartPie } from "lucide-react-native";
 import { Text } from "./ui/text";
 import { Text as RNEText } from "@rneui/themed"
+import useCurrentUser from "~/hooks/useCurrentUser";
 
 
 const ICON_SIZE = 35;
@@ -36,9 +37,9 @@ export default function Header({ style = "dark", headerTitle, rightIcon }: Heade
     const route = useRootNavigation();
     const pageName = route?.getCurrentRoute()?.name! as string;
 
-    const router = useRouter();
 
-    const primary = useThemeColor({}, "primary")
+    const primary = useThemeColor({}, "primary");
+    const { currentUser } = useCurrentUser();
 
     const iconColor = {
         "light": "#fff",
@@ -50,20 +51,6 @@ export default function Header({ style = "dark", headerTitle, rightIcon }: Heade
         "dark": "#000"
     }
 
-    const moveToMenu = () => {
-        router.push("/menu")
-        return setMenuOpen(false)
-    }
-
-    const moveToAdmin = () => {
-        router.replace("/admin/dashboard")
-        return setMenuOpen(false)
-    }
-
-    const moveToOrders = () => {
-        router.push("/orders")
-        return setMenuOpen(false)
-    }
 
     const title = () => {
         if (!headerTitle) {
@@ -75,45 +62,18 @@ export default function Header({ style = "dark", headerTitle, rightIcon }: Heade
 
 
 
-
     return (
         <>
             {
                 !menuOpen ? null :
-                <View style={styles.menu}>
-                    <View className="">
-                        <Pressable onPress={() => setMenuOpen(false)}>
-                            <X size={ICON_SIZE} color="red"/>
-                        </Pressable>
-                    </View>
-                    
-                    <View className="flex flex-col gap-4">
-                        <Pressable onPress={moveToMenu}>
-                            <LayoutGrid color='white' size={ICON_SIZE}/>                    
-                        </Pressable>
-
-                        <Pressable onPress={moveToOrders} className="flex flex-row items-center gap-2">
-                            <Package size={ICON_SIZE} color='white'/>
-                            <Text className="text-white text-xl font-semibold">Orders</Text>
-                        </Pressable>
-
-                        <Pressable>
-                            <Mail color='white' size={ICON_SIZE}/>                    
-                        </Pressable>
-
-                        <Link href="/settings" onPressOut={() => setMenuOpen(false)}>
-                            <Settings color='white' size={ICON_SIZE}/>                    
-                        </Link>
-
-                        <Pressable onPress={moveToAdmin} className="flex flex-row items-center gap-2">
-                            <UsersRound size={ICON_SIZE} color='white'/>
-                            <Text className="text-white text-xl font-semibold">Admin</Text>
-                        </Pressable>
-                    </View>
-
-
-
-                </View>
+                <>
+                    {
+                        currentUser?.user_type === 'admin' ? 
+                        <AdminStaffMenu closeMenu={() => setMenuOpen(false)}/>
+                        :
+                        <VendorStaffMenu closeMenu={() => setMenuOpen(false)}/>
+                    }
+                </>
             }
         
             <View style={[styles.header,{ backgroundColor: toolbarColorPerPage[pageName], }]}>
@@ -142,6 +102,140 @@ export default function Header({ style = "dark", headerTitle, rightIcon }: Heade
             </View>
         
         </>
+    )
+}
+
+const AdminStaffMenu = ({ closeMenu }: { closeMenu: () => void }) => {
+    const router = useRouter();
+
+    const moveToDashboard = () => {
+        router.push('/admin/dashboard')
+        return closeMenu()
+    }
+
+    const moveToMenu = () => {
+        router.push('/admin/menu')
+        return closeMenu()
+    }
+
+    const moveToOrders = () => {
+        router.push('/admin/orders')
+        return closeMenu()
+    }
+
+    const moveToStaff = () => {
+        router.push('/admin/staff')
+        return closeMenu()
+    }
+
+    const moveToSettings = () => {
+        router.push('/settings')
+        return closeMenu()
+    }
+
+    const moveToWallet = () => {
+        router.push('/admin/wallet')
+        return closeMenu()
+    }
+
+
+
+
+    return (
+        <View style={styles.menu}>
+            <View className="flex flex-col gap-4">
+                <Pressable onPress={moveToDashboard} className="flex flex-row items-center gap-2">
+                    <Home size={ICON_SIZE} color='white'/>
+                    <Text className="text-white text-xl font-semibold">Dashboard</Text>
+                </Pressable>
+
+                <Pressable className="flex flex-row items-center gap-2" onPress={moveToDashboard}>
+                    <ChartPie color='white' size={ICON_SIZE}/>    
+                    <Text className="text-white text-xl font-semibold">Analytics</Text>                                                     
+                </Pressable>
+
+                <Pressable className="flex flex-row items-center gap-2" onPress={moveToMenu}>
+                    <LayoutGrid color='white' size={ICON_SIZE}/> 
+                    <Text className="text-white text-xl font-semibold">Menu</Text>                                     
+                </Pressable>
+
+
+                <Pressable className="flex flex-row items-center gap-2">
+                    <Mail color='white' size={ICON_SIZE}/>  
+                    <Text className="text-white text-xl font-semibold">Orders</Text>                  
+                </Pressable>
+
+                <Pressable onPress={moveToWallet} className="flex flex-row items-center gap-2">
+                    <Wallet color='white' size={ICON_SIZE}/>  
+                    <Text className="text-white text-xl font-semibold">Wallet</Text>                  
+                </Pressable>
+
+                <Pressable onPress={moveToStaff} className="flex flex-row items-center gap-2">
+                    <UsersRound size={ICON_SIZE} color='white'/>
+                    <Text className="text-white text-xl font-semibold">Staff</Text>
+                </Pressable>
+
+                <Pressable onPress={moveToSettings} className="flex flex-row items-center gap-2">
+                    <Settings color='white' size={ICON_SIZE}/>    
+                    <Text className="text-white text-xl font-semibold">Settings</Text>                
+                </Pressable>
+            </View>
+
+        </View>
+    )
+}
+
+
+const VendorStaffMenu = ({ closeMenu }: { closeMenu: () => void }) => {
+    const router = useRouter();
+
+    const moveToMenu = () => {
+        router.push("/menu")
+        return closeMenu()
+    }
+
+    const moveToAdmin = () => {
+        router.replace("/admin/staff")
+        return closeMenu()
+    }
+
+    const moveToOrders = () => {
+        router.push("/orders")
+        return closeMenu()
+    }
+
+    return (
+    <View style={styles.menu}>
+        <View className="">
+            <Pressable onPress={closeMenu}>
+                <X size={ICON_SIZE} color="red"/>
+            </Pressable>
+        </View>
+        
+        <View className="flex flex-col gap-4">
+            <Pressable onPress={moveToMenu}>
+                <LayoutGrid color='white' size={ICON_SIZE}/>                    
+            </Pressable>
+
+            <Pressable onPress={moveToOrders} className="flex flex-row items-center gap-2">
+                <Package size={ICON_SIZE} color='white'/>
+                <Text className="text-white text-xl font-semibold">Orders</Text>
+            </Pressable>
+
+            <Pressable>
+                <Mail color='white' size={ICON_SIZE}/>                    
+            </Pressable>
+
+            <Link href="/settings" onPressOut={closeMenu}>
+                <Settings color='white' size={ICON_SIZE}/>                    
+            </Link>
+
+            <Pressable onPress={moveToAdmin} className="flex flex-row items-center gap-2">
+                <UsersRound size={ICON_SIZE} color='white'/>
+                <Text className="text-white text-xl font-semibold">Admin</Text>
+            </Pressable>
+        </View>
+    </View>
     )
 }
 

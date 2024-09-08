@@ -7,17 +7,54 @@ import { scale } from 'react-native-size-matters';
 import { StatusBar } from 'react-native';
 import { useRouter } from 'expo-router';
 import { useState } from 'react';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "~/components/ui/select";
+import { useSafeAreaInsets } from "react-native-safe-area-context";
+import { STAFF_POSITIONS } from "~/utils/constants";
+import useRestaurantStaff from "~/hooks/useRestaurantStaff";
 
 
 
 
 
 export default function CreateStaffPage() {
-    const [firstName, setFirstName] = useState('');
+  const [firstName, setFirstName] = useState('');
   const [lastName, setLastName] = useState('');
-  const [otherNames, setOtherNames] = useState('');
+  const [phoneNumber, setPhoneNumber] = useState('');
   const [email, setEmail] = useState('');
+  const [position, setPosition] = useState('');
+
+  const insets = useSafeAreaInsets();
+
+  const contentInsets = {
+    top: insets.top,
+    bottom: insets.bottom,
+    left: 12,
+    right: 12,
+  };
+
+
   const router = useRouter();
+
+  const { addStaffMember } = useRestaurantStaff();
+
+  const submitForm = async () => {
+    await addStaffMember({
+      full_name: `${firstName} ${lastName}`,
+      phone_number: phoneNumber,
+      email: email,
+      position: position,
+      password: "Password"
+    })
+
+    setFirstName('');
+    setLastName('');
+    setPhoneNumber('');
+    setEmail('');
+    setPosition('');
+
+    //router.back();
+
+  }
 
   return (
     <Page>
@@ -43,18 +80,21 @@ export default function CreateStaffPage() {
           value={firstName}
           onChangeText={setFirstName}
         />
+
         <TextInput
           style={styles.input}
           placeholder="Last Name"
           value={lastName}
           onChangeText={setLastName}
         />
+
         <TextInput
           style={styles.input}
-          placeholder="Other Names"
-          value={otherNames}
-          onChangeText={setOtherNames}
+          placeholder="Phone Number"
+          value={phoneNumber}
+          onChangeText={setPhoneNumber}
         />
+
         <TextInput
           style={styles.input}
           placeholder="Email"
@@ -63,7 +103,29 @@ export default function CreateStaffPage() {
           keyboardType="email-address"
         />
 
-        <TouchableOpacity style={styles.createButton}>
+        <Select 
+          className="w-full"
+          onValueChange={(option) => setPosition(option?.value!)}
+        >
+            <SelectTrigger className='w-full'>
+                <SelectValue
+                  className='text-foreground text-sm native:text-lg'
+                  placeholder='Select a position'
+                />
+            </SelectTrigger>
+            <SelectContent insets={contentInsets} className='w-full'>
+                {
+                  STAFF_POSITIONS.map((time) => (
+                    <SelectItem key={time} label={time} value={time}>
+                        {time}
+                    </SelectItem>
+                  ))
+                }
+            </SelectContent>
+        </Select>     
+
+
+        <TouchableOpacity onPress={submitForm} style={styles.createButton}>
           <Text style={styles.createButtonText}>Create</Text>
         </TouchableOpacity>
         

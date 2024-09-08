@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { supabase } from "~/utils/supabase";
+import { supabase, supabaseAdmin } from "~/utils/supabase";
 import useRestaurant from "./useResturant";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import Toast from "react-native-toast-message";
@@ -9,6 +9,7 @@ interface StaffMember {
   email: string;
   full_name: string;
   position: string;
+  image_url: string;
 }
 
 interface SignUpData {
@@ -16,6 +17,14 @@ interface SignUpData {
   password: string;
   full_name: string;
   position: string;
+  phone_number?: string;
+}
+
+interface UpdateStaffMember {
+  id: string;
+  position: string;
+  phone_number?: string;
+  email: string
 }
 
 export default function useRestaurantStaff() {
@@ -25,16 +34,15 @@ export default function useRestaurantStaff() {
 
   async function signUpStaff(data: SignUpData) {
     // Sign up the user
-    const { data: authData, error: authError } = await supabase.auth.signUp({
+    const { data: authData, error: authError } = await supabaseAdmin.auth.admin.createUser({
       email: data.email,
       password: data.password,
-      options: {
-        data: {
-          full_name: data.full_name,
-          image_url:  `https://api.dicebear.com/9.x/initials/png?seed=${data.full_name}`,
-          username: data.full_name.toLowerCase().replace(" ", ""),
-          user_type: "vendor"
-        },
+      user_metadata: {
+        full_name: data.full_name,
+        image_url:  `https://api.dicebear.com/9.x/initials/png?seed=${data.full_name}`,
+        username: data.full_name.toLowerCase().replace(" ", ""),
+        user_type: "vendor",
+        phone_number: data.phone_number
       },
     });
 
@@ -60,7 +68,7 @@ export default function useRestaurantStaff() {
       .select(`
         staff_id,
         position,
-        profiles:staff_id (id, email, full_name)
+        profiles:staff_id (id, email, full_name, image_url)
       `)
       .eq('restaurant_id', resturant?.id);
 
@@ -74,21 +82,42 @@ export default function useRestaurantStaff() {
     })) as StaffMember[];
   }
 
-  async function updateStaffMember(staffMember: StaffMember) {
+  async function updateStaffMember(staffMember: UpdateStaffMember) {
+    const { id, position, ...rest } = staffMember;
+
     const { error: profileError } = await supabase
       .from('profiles')
-      .update({ full_name: staffMember.full_name })
-      .eq('id', staffMember.id);
+      .update({ ...rest })
+      .eq('id', id);
 
     if (profileError) throw new Error(profileError.message);
 
     const { error: staffError } = await supabase
       .from('restaurant-staff')
-      .update({ position: staffMember.position })
+      .update({ position: position })
       .eq('staff_id', staffMember.id)
       .eq('restaurant_id', resturant?.id);
 
     if (staffError) throw new Error(staffError.message);
+
+    return id;
+  }
+
+  async function deleteStaffMember(id: string) {
+    const res = await supabaseAdmin.auth.admin.deleteUser(id);
+    if (res.error) throw new Error(res.error.message);
+
+    await Promise.all([
+      supabase
+        .from('restaurant-staff')
+        .delete()
+        .eq('staff_id', id)
+        .eq('restaurant_id', resturant?.id),
+      supabase
+        .from('profiles')
+        .delete()
+        .eq('id', id)
+    ])
   }
 
   const { isLoading, data: staff, error } = useQuery({
@@ -118,8 +147,10 @@ export default function useRestaurantStaff() {
 
   const { mutateAsync: updateStaff } = useMutation({
     mutationFn: updateStaffMember,
-    onSuccess: () => {
+    onSuccess: (id) => {
       queryClient.invalidateQueries({ queryKey: ["restaurant-staff"] });
+      queryClient.invalidateQueries({ queryKey: ["profile", id] });
+
       Toast.show({
         text1: "Staff member updated successfully",
         type: "success"
@@ -134,6 +165,24 @@ export default function useRestaurantStaff() {
     }
   });
 
+  const { mutateAsync: deleteStaff } = useMutation({
+    mutationFn: deleteStaffMember,
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["restaurant-staff"] });
+      Toast.show({
+        text1: "Staff member deleted successfully",
+        type: "success"
+      });
+    },
+    onError: (error: Error) => {
+      Toast.show({
+        text1: "Failed to delete staff member",
+        text2: error.message,
+        type: "error"
+      });
+    }
+  })
+
   return {
     staff,
     isLoading,
@@ -141,5 +190,6 @@ export default function useRestaurantStaff() {
     addStaffMember,
     updateStaff,
     signUpError,
+    deleteStaff
   };
 }

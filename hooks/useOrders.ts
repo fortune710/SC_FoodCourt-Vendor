@@ -23,12 +23,23 @@ export default function useOrders() {
     async function getOrders() {
         const { data, error } = await supabase
             .from('orders')
-            .select('*')
+            .select(`
+                id,
+                status,
+                total_amount,
+                order_date,
+                customer_name,
+                items:order_items (
+                    id,
+                    quantity,
+                    menu_item:menu_item_id (name, price)
+                )
+            `)
             .eq('resturant_id', resturant?.id)
             .order('order_date', { ascending: false });
 
         if (error) throw new Error(error.message);
-        return data as Order[];
+        return data;
     }
 
     async function updateOrderInSupabase(order: Partial<Order>) {

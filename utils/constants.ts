@@ -17,3 +17,9 @@ export const PREPARATION_TIMES = [
     "25 mins",
     "30 mins",
 ]
+
+export const STAFF_POSITIONS = [
+    "Front Desk",
+    "Kitchen",
+    "Manager"
+]
