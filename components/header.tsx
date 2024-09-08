@@ -56,7 +56,7 @@ export default function Header({ style = "dark", headerTitle, rightIcon }: Heade
     }
 
     const moveToAdmin = () => {
-        router.replace("/admin/wallet")
+        router.replace("/admin/dashboard")
         return setMenuOpen(false)
     }
 
