@@ -20,6 +20,14 @@ export interface CreateMenuItemData {
     quantity: number
 }
 
+export interface ResturantData {
+    admin_id: string,
+    name: string,
+    phone_number?: string,
+    website_link?: string,
+    is_closed?: boolean
+}
+
 export interface MenuItem extends CreateMenuItemData {
     id: number
 }

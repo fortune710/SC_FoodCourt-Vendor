@@ -2,15 +2,9 @@ import Toast from "react-native-toast-message"
 import { supabase } from "~/utils/supabase"
 import useCurrentUser from "./useCurrentUser"
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { SupabaseTables } from "~/utils/types";
+import { ResturantData, SupabaseTables } from "~/utils/types";
 
-interface ResturantData {
-    admin_id: string,
-    name: string,
-    phone_number?: string,
-    website_link?: string,
-    is_closed?: boolean
-}
+
 
 export default function useResturant() {
     const { currentUser } = useCurrentUser();
