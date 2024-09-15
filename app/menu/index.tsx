@@ -15,12 +15,13 @@ export default function MenuPage(){
     const { menuItems, isLoading, menuItemsRaw } = useMenuItems();
     const [mode, setMode] = useState<"search"|"list">("list");
     const availableCategories = Object.keys(menuItems ?? {});
+    const [searchQuery, setSearchQuery] = useState('');
 
     if (mode === "search") {
         return (
             <Page>
                 <View className="flex flex-row items-center justify-between px-3">
-                    <Input/>
+                    <Input value={searchQuery} onChangeText={(text) => setSearchQuery(text)}/>
 
                     <TouchableOpacity onPress={() => setMode("list")}>
                         <Text>Cancel</Text>
@@ -28,7 +29,20 @@ export default function MenuPage(){
                 </View>
                 <View>
                     {
+                        !searchQuery ?
                         menuItemsRaw?.map((menuItem: MenuItem) => (
+                            <CategoryListItem
+                                foodName={menuItem.name}
+                                price={menuItem.price}
+                                addons={menuItem?.add_ons!}
+                                id={menuItem.id}
+                                category={menuItem.category}
+                                key={menuItem.id}
+                            />
+                        ))
+                        :
+                        menuItemsRaw?.filter((item) => item.name.toLowerCase().includes(searchQuery.toLowerCase()))
+                        .map((menuItem: MenuItem) => (
                             <CategoryListItem
                                 foodName={menuItem.name}
                                 price={menuItem.price}
