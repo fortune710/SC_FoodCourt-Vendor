@@ -1,7 +1,7 @@
 import React from 'react';
 import { View, StyleSheet, Text, TouchableOpacity } from 'react-native';
 import Page from 'components/page';
-import Header from '~/components/header';
+import Header from '~/components/page-header';
 import Accordion from '~/components/custom/accordion'; // Assuming you've moved the Accordion component to the components folder
 import useThemeColor from 'hooks/useThemeColor';
 import { Stack } from 'expo-router';
@@ -33,9 +33,7 @@ const LegalPage = () => {
                 ), 
             }}
         />
-      <Header>
-        <Text>Legal</Text>
-      </Header>
+      <Header headerTitle='Legal'/>
       <View style={styles.content}>
         <Accordion data={legalData} />
       </View>

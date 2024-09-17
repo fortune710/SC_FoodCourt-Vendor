@@ -9,10 +9,24 @@ import Input from "~/components/custom/input";
 import { Label } from "~/components/ui/label";
 import { ChevronRight } from "lucide-react-native"
 import useThemeColor from "~/hooks/useThemeColor"
+import useResturant from "~/hooks/useResturant";
 
 export default function EditRestaurant() {
     const [restaurantOpen, setRestaurantOpen] = useState(true);
-    const primary = useThemeColor({}, "primary")
+    const primary = useThemeColor({}, "primary");
+
+    const { updateResturant } = useResturant();
+
+    const setRestaurantStatus = async (checked: boolean) => {
+        try {
+            setRestaurantOpen(checked)
+            return await updateResturant({
+                is_closed: !checked
+            })
+        } catch {
+            return setRestaurantOpen(!checked)
+        }
+    }
 
     return (
         <Page>
@@ -22,7 +36,7 @@ export default function EditRestaurant() {
                 <Text>Restaurant Open</Text>
                 <Switch
                     checked={restaurantOpen}
-                    onCheckedChange={setRestaurantOpen}
+                    onCheckedChange={setRestaurantStatus}
                 />
             </View>
 
