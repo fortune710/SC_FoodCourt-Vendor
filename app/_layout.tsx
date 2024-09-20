@@ -15,6 +15,7 @@ import { AppState } from "react-native";
 import { supabase } from "~/utils/supabase";
 import Toast from "react-native-toast-message";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import { VendorViewProvider } from "~/providers/vendor-view";
 
 const LIGHT_THEME: Theme = {
     dark: false,
@@ -97,17 +98,19 @@ function RootLayoutNav() {
 
     
     return (
-        <ThemeProvider theme={theme}>
-            <QueryClientProvider client={queryClient}>
-                <StatusBar 
-                    backgroundColor="#fff" 
-                    style="dark"
-                />
-                <Stack screenOptions={{ headerShown: false }}/>
-                <Toast position="top" />
-                <PortalHost/>
-            </QueryClientProvider>
-        </ThemeProvider>
+        <VendorViewProvider>
+            <ThemeProvider theme={theme}>
+                <QueryClientProvider client={queryClient}>
+                    <StatusBar 
+                        backgroundColor="#fff" 
+                        style="dark"
+                    />
+                    <Stack screenOptions={{ headerShown: false }}/>
+                    <Toast position="top" />
+                    <PortalHost/>
+                </QueryClientProvider>
+            </ThemeProvider>
+        </VendorViewProvider>
     )
 }
 
