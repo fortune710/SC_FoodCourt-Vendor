@@ -12,6 +12,8 @@ import { LayoutGrid, UsersRound, Settings, X, Mail, Package, Home, Menu, Wallet,
 import { Text } from "./ui/text";
 import { Text as RNEText } from "@rneui/themed"
 import useCurrentUser from "~/hooks/useCurrentUser";
+import { useVendorView } from "~/hooks/useVendorView";
+import { canShowAdminMenu } from "~/utils/functions";
 
 
 const ICON_SIZE = 35;
@@ -40,6 +42,7 @@ export default function Header({ style = "dark", headerTitle, rightIcon }: Heade
 
     const primary = useThemeColor({}, "primary");
     const { currentUser } = useCurrentUser();
+    const { showVendorView } = useVendorView();
 
     const iconColor = {
         "light": "#fff",
@@ -68,7 +71,7 @@ export default function Header({ style = "dark", headerTitle, rightIcon }: Heade
                 !menuOpen ? null :
                 <>
                     {
-                        currentUser?.user_type === 'admin' ? 
+                        canShowAdminMenu(currentUser?.user_type, showVendorView) ? 
                         <AdminStaffMenu closeMenu={() => setMenuOpen(false)}/>
                         :
                         <VendorStaffMenu closeMenu={() => setMenuOpen(false)}/>
