@@ -1,19 +1,20 @@
 import { Dimensions, Platform, Pressable, View } from "react-native";
-import Page from "../../components/page";
+import Page from "~/components/page";
 import { StyleSheet } from "react-native";
 import { scale, verticalScale } from "react-native-size-matters";
-import Header from "../../components/header";
+import Header from "~/components/header";
 import { StatusBar } from "expo-status-bar";
 import { ListItem, Switch, Text } from "@rneui/themed";
-import useThemeColor from "../../hooks/useThemeColor";
-import { globalStyles } from "../../constants/Styles";
+import useThemeColor from "~/hooks/useThemeColor";
+import { globalStyles } from "~/constants/Styles";
 import { Image } from "expo-image";
-import { Link, useRouter } from "expo-router";
+import { useRouter } from "expo-router";
 import { LogOut } from "lucide-react-native";
 import useAuth from "~/hooks/useAuth";
 import useResturant from "~/hooks/useResturant";
 import useCurrentUser from "~/hooks/useCurrentUser";
 import { Avatar, AvatarFallback, AvatarImage } from "~/components/ui/avatar";
+import { useVendorView } from "~/hooks/useVendorView";
 
 const AccountContainer = View
 const AppContainer = View
@@ -22,12 +23,12 @@ const AppContainer = View
 const APP_OPTIONS = [
     {
         name: "Legal",
-        icon: require('../../assets/icons/legal-icon.svg'),
+        icon: require('~/assets/icons/legal-icon.svg'),
         href: "/settings/legal",
     },
     {
         name: "Support",
-        icon: require('../../assets/icons/support-icon.svg'),
+        icon: require('~/assets/icons/support-icon.svg'),
         href: "/settings/support"
     },
 
@@ -37,12 +38,73 @@ const APP_OPTIONS = [
 
 export default function SettingsPage() {
     const primary = useThemeColor({}, "primary");
-    const router = useRouter();
     const { signOut } = useAuth();
 
-    const { resturant } = useResturant();
     const { currentUser } = useCurrentUser();
 
+
+
+
+
+    return (
+        <Page 
+            style={{ backgroundColor: primary }} 
+            safeAreaBgColor={primary}
+        >
+            <View style={{ height: Dimensions.get("screen").height, width: Dimensions.get("screen").width }}>
+                <StatusBar style="light"/>
+                <Header headerTitle="Settings" style="light"/>
+                <View style={styles.background} />
+
+                <View style={[globalStyles.flexItemsCenter, { justifyContent: 'center', zIndex: 50, flexDirection: "column" }]}>
+                    <View style={styles.optionsContainer}>
+                        <ResturantOptions userType={currentUser?.user_type} />
+                        <AccountsOptions/>
+                        <AppOptions/>                        
+                    </View>
+
+                    <Pressable onPress={signOut} style={styles.signOut}>
+                        <LogOut stroke={primary} size={35} />
+                        <Text style={{ fontWeight: "600", marginLeft: 10 }}>Sign Out</Text>
+                    </Pressable>
+                </View>
+
+            </View>
+        </Page>
+    )
+}
+
+function ResturantOptions({ userType }: { userType: string }) {
+    const { resturant } = useResturant();
+    const { showVendorView, toggleVendorView } = useVendorView();
+
+    if (userType !== "admin") null
+
+    return (
+        <>
+            <View className="w-full flex flex-row items-center gap-2">
+                <Avatar alt="Zach Nugent's Avatar">
+                    <AvatarImage source={{ uri: resturant?.image_url }} />
+                    <AvatarFallback>
+                        <Text>{resturant?.name.at(0)}</Text>
+                    </AvatarFallback>
+                </Avatar>
+
+                <Text className="text-xl font-semibold">{resturant?.name}</Text>                 
+            </View>
+
+            <View className="w-full flex flex-row items-center justify-between gap-2 my-5">
+                <Text className="text-xl">Turn on Vendor View</Text>     
+
+                <Switch value={showVendorView} onValueChange={toggleVendorView} />            
+            </View>
+        </>
+    )
+
+}
+
+function AccountsOptions() {
+    const router = useRouter();
 
 
     const ACCOUNT_OPTIONS = [
@@ -73,105 +135,75 @@ export default function SettingsPage() {
     ]
 
     return (
-        <Page 
-            style={{ backgroundColor: primary }} 
-            safeAreaBgColor={primary}
-        >
-            <View style={{ height: Dimensions.get("screen").height, width: Dimensions.get("screen").width }}>
-                <StatusBar style="light"/>
-                <Header style="light"/>
-                <View style={styles.background} />
-
-                <View style={[globalStyles.flexItemsCenter, { justifyContent: 'center', zIndex: 50, flexDirection: "column" }]}>
-                    <View style={styles.optionsContainer}>
-                        {
-                            currentUser?.user_type === "admin" &&
-                            <View className="w-full flex flex-row items-center gap-2 mb-4">
-                                <Avatar alt="Zach Nugent's Avatar">
-                                    <AvatarImage source={{ uri: resturant?.image_url }} />
-                                    <AvatarFallback>
-                                        <Text>{resturant?.name.at(0)}</Text>
-                                    </AvatarFallback>
-                                </Avatar>
-
-                                <Text className="text-xl font-semibold">{resturant?.name}</Text>                 
+        <AccountContainer>
+            <Text className="font-semibold text-xl">Accounts</Text>
+            <View style={styles.optionCategory}>
+                {
+                    ACCOUNT_OPTIONS.map((option) => (
+                        <ListItem 
+                            key={option.name}
+                            containerStyle={styles.listItemStyle}
+                            onPress={!option.canToggle && option.onPress as any}
+                        >
+                            <View style={globalStyles.flexItemsCenter}>
+                                <Image 
+                                    source={option.icon} 
+                                    style={option.style}
+                                />
+                                <Text style={{ marginLeft: 10 }}>{option.name}</Text>
                             </View>
-                        }
-                         
-                        <AccountContainer>
-                            <Text>Accounts</Text>
-                            <View style={styles.optionCategory}>
-                                {
-                                    ACCOUNT_OPTIONS.map((option) => (
-                                        <ListItem 
-                                            key={option.name}
-                                            containerStyle={styles.listItemStyle}
-                                            onPress={!option.canToggle && option.onPress as any}
-                                        >
-                                            <View style={globalStyles.flexItemsCenter}>
-                                                <Image 
-                                                    source={option.icon} 
-                                                    style={option.style}
-                                                />
-                                                <Text style={{ marginLeft: 10 }}>{option.name}</Text>
-                                            </View>
 
-                                            {
-                                                !option.canToggle ? 
-                                                <Image 
-                                                    source={require('../../assets/icons/chevron-forward.svg')} 
-                                                    style={{ width: 30, height: 30 }}
-                                                />
-                                                : 
-                                                <Switch/>
-                                            }
+                            {
+                                !option.canToggle ? 
+                                <Image 
+                                    source={require('../../assets/icons/chevron-forward.svg')} 
+                                    style={{ width: 30, height: 30 }}
+                                />
+                                : 
+                                <Switch/>
+                            }
 
-                                        </ListItem>
-                                    ))
-                                }
-                            </View>
-                        </AccountContainer>
-
-                        <AppContainer style={styles.optionCategory}>
-                            <Text>App</Text>
-                            <View style={styles.optionCategory}>
-                                {
-                                    APP_OPTIONS.map((option) => (
-                                        <Link 
-                                            key={option.name}
-                                            
-                                            href={option.href}
-                                        >
-                                            <View style={[styles.listItemStyle, { marginVertical: 10 }]}>
-                                                <View style={globalStyles.flexItemsCenter}>
-                                                    <Image 
-                                                        source={option.icon} 
-                                                        style={{ width: 40, height: 40 }}
-                                                    />
-                                                    <Text style={{ marginLeft: 10 }}>{option.name}</Text>
-                                                </View>
-                
-                                                <Image 
-                                                    source={require('../../assets/icons/chevron-forward.svg')} 
-                                                    style={{ width: 30, height: 30 }}
-                                                />
-                                            </View>
-                                        </Link>
-                                    ))
-                                }
-                            </View>
-                        </AppContainer>
-                        
-                    </View>
-
-                    <Pressable onPress={signOut} style={styles.signOut}>
-                        <LogOut stroke={primary} size={35} />
-                        <Text style={{ fontWeight: "600", marginLeft: 10 }}>Sign Out</Text>
-                    </Pressable>
-                </View>
-
+                        </ListItem>
+                    ))
+                }
             </View>
-        </Page>
+        </AccountContainer>
+
+    )
+}
+
+function AppOptions() {    
+    const router = useRouter();
+
+    return (
+        <AppContainer style={styles.optionCategory}>
+            <Text className="font-semibold text-xl">App</Text>
+            <View style={styles.optionCategory}>
+                {
+                    APP_OPTIONS.map((option) => (
+                        <ListItem 
+                            key={option.name}
+                            containerStyle={styles.listItemStyle}
+                            onPress={() => router.push(option.href)}
+                        >
+                            <View style={globalStyles.flexItemsCenter}>
+                                <Image 
+                                    source={option.icon} 
+                                    style={{ width: 40, height: 40 }}
+                                />
+                                <Text style={{ marginLeft: 10 }}>{option.name}</Text>
+                            </View>
+
+                            <Image 
+                                source={require('~/assets/icons/chevron-forward.svg')} 
+                                style={{ width: 30, height: 30 }}
+                            />
+                        </ListItem>
+                    ))
+                }
+            </View>
+        </AppContainer>
+
     )
 }
 
@@ -216,5 +248,6 @@ const styles = StyleSheet.create({
         width: "100%", 
         display: "flex", 
         flexDirection: "row",
+        padding: 10
     }
 })

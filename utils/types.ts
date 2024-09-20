@@ -43,8 +43,9 @@ export enum SupabaseTables {
 
 export enum OrderStatus {
     New = 0,
-    Preparing = 1,
-    Completed = 2,
-    Cancelled = 3,
-    Collected = 4
+    Accepted = 1,
+    Preparing = 2,
+    Completed = 3,
+    Collected = 4,
+    Cancelled = 5,
 }
