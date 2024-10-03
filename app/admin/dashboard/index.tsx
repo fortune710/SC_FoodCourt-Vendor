@@ -1,10 +1,11 @@
 import { Link } from 'expo-router';
 import { ShoppingCart } from 'lucide-react-native';
-import { ActivityIndicator, View } from 'react-native'
+import { ActivityIndicator, View ,ScrollView, StyleSheet} from 'react-native'
 import { AnimatedCircularProgress } from 'react-native-circular-progress';
 import { LineChart } from 'react-native-gifted-charts';
 import Header from '~/components/header'
 import Page from '~/components/page'
+import {scale} from "react-native-size-matters"
 import {
     Card,
     CardContent,
@@ -20,7 +21,8 @@ import useResturant from '~/hooks/useResturant';
 export default function AdminDashboard() {
   return (
     <Page>
-        <Header headerTitle='Dashboard' />
+    <Header headerTitle='Dashboard' noRightIcon = {true} />
+        <ScrollView contentContainerStyle = {styles.container}>
         <DashboardMetricsContainer/>
 
         <View className='px-4 flex flex-col gap-7'>
@@ -28,7 +30,7 @@ export default function AdminDashboard() {
             <AnalyticsChart/>
             <ChartData/>
         </View>
-        
+        </ScrollView>
     </Page>
   )
 }
@@ -163,3 +165,12 @@ function ChartData() {
         </Card>
     )
 }
+
+const styles = StyleSheet.create({
+    container:{
+        
+        paddingBottom:scale(200)
+
+    }
+
+})
