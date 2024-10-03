@@ -17,11 +17,19 @@ export default function OrderCardName() {
                 </Text>
                 <Text style={styles.time}>13:25</Text>
             </View>
+            {/* <Text style={styles.dateTime}>Wed, November 13, 2023 13:25</Text> */}
         </>
     )
 }
 
 const styles = StyleSheet.create({
+
+  dateTime: {
+    fontFamily: 'Montserrat',
+    fontSize: 16,
+    fontWeight: '600',
+    marginBottom: 16,
+  },
     container: {
       alignItems: "stretch",
       borderRadius: 16,
@@ -43,14 +51,17 @@ const styles = StyleSheet.create({
       justifyContent: "space-between",
       alignItems: "stretch",
       display: "flex",
+      fontWeight: 'bold'
+    
     },
     orderNoValue: {
       flexGrow: 1,
+      
     },
     date: {
       fontFamily: "Montserrat",
       fontSize: 16,
-      fontWeight: "600",
+      fontWeight: "bold",
       color: '#000'
     },
     customer: {
@@ -62,6 +73,7 @@ const styles = StyleSheet.create({
     },
     customerLabel: {
       display: "flex",
+      fontWeight: "bold"
     },
     customerValue: {
       flexGrow: 1,
@@ -69,6 +81,7 @@ const styles = StyleSheet.create({
     time: {
       textAlign: "right",
       fontFamily: "Montserrat",
+      fontWeight: "bold"
     },
     status: {
       justifyContent: "center",
