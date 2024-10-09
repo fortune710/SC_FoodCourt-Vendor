@@ -5,43 +5,34 @@ import React from 'react';
 import { Text } from "~/components/ui/text";
 import Page from "~/components/page";
 import { scale } from 'react-native-size-matters';
-import { StatusBar,Pressable } from 'react-native';
+import { StatusBar,Pressable , Modal, TextInput} from 'react-native';
 import { useRouter } from 'expo-router';
-import Monnify from '~/services/monnify';
 import useResturant from '~/hooks/useResturant';
 import useOrderStatus from '~/hooks/useOrderStatus';
 import { OrderStatus } from '~/utils/types';
 import TransactionItem from '~/components/transaction-item';
 
-
-
-
   
 
   
+
+
 
 export default function walletPage() {
 
   const router = useRouter();
   const { resturant } = useResturant();
   const { orders, isLoading } = useOrderStatus(OrderStatus.Collected);
+  const [modalVisible, setModalVisible] = React.useState(false); // State for modal visibility
+  const [withdrawAmount, setWithdrawAmount] = React.useState(''); // State for input amount
 
   return (
     <Page>
-        <StatusBar backgroundColor="#FF3B30" barStyle="light-content" />
-        <SafeAreaView style={styles.container}>
-      <View style={styles.walletHeader}>
-        <Text style={styles.walletTitle}>Wallet</Text>
-        <View style={styles.balanceContainer}>
-          <Text style={styles.balanceLabel}>Attached Account Number</Text>
-          <View style={styles.balanceRow}>
-            <Text style={styles.balanceAmount}>{resturant?.account_number || "N/A"}</Text>
-            <TouchableOpacity style= {styles.eyeicon}>
-              <Ionicons name="eye-outline" size={24} color="white" />
-            </TouchableOpacity>
-          </View>
-          <Text style={styles.lastUpdated}>Last Updated on 26-8-2023 by 12:30pm</Text>
-        </View>
+      <StatusBar backgroundColor="#FF3B30" barStyle="light-content" />
+      <SafeAreaView style={styles.container}>
+
+        <View>
+        
 
         {
           /*
@@ -65,7 +56,53 @@ export default function walletPage() {
 
         }
 
+        <Pressable 
+            style={styles.withdrawButton} 
+            onPress={() => setModalVisible(true)} // Open modal on press
+          >
+            <Ionicons name="cash-outline" size={24} color="white" style={styles.withdrawIcon} />
+            <Text style={styles.withdrawText}>Withdraw</Text>
+          </Pressable>
+                  {/* Modal for withdrawal */}
+          <Modal
+          animationType="slide"
+          transparent={true}
+          visible={modalVisible}
+          onRequestClose={() => setModalVisible(false)} // Close modal
+        >
+          <View style={styles.modalContainer}>
+            <View style={styles.modalContent}>
+              <Text style={styles.modalTitle}>Enter Withdraw Amount</Text>
+              <TextInput
+                style={styles.input}
+                placeholder="Enter amount"
+                keyboardType="numeric"
+                value={withdrawAmount}
+                onChangeText={setWithdrawAmount} // Update state on input change
+                />
+                 <Pressable 
+                style={styles.submitButton} 
+                onPress={() => {
+                  // Handle withdrawal logic here
+                  setModalVisible(false); // Close modal after submission
+                }}
+              >
+                <Text style={styles.submitText}>Submit</Text>
+              </Pressable>
+              <Pressable 
+                style={styles.cancelButton} 
+                onPress={() => setModalVisible(false)} // Close modal
+              >
+                 <Text style={styles.cancelText}>Cancel</Text>
+              </Pressable>
+            </View>
+          </View>
+        </Modal>
+
+
       </View>
+
+
       
       <View style={styles.transactionContainer}>
         <View style = {styles.handle}/>
@@ -94,6 +131,9 @@ export default function walletPage() {
           </ScrollView>
         }
       </View>
+
+   
+
     </SafeAreaView>
     </Page>
   )
@@ -112,6 +152,7 @@ const styles = StyleSheet.create({
     },
     walletHeader: {
       padding: 20,
+      paddingLeft: 10,
     },
     walletTitle: {
       fontSize: 24,
@@ -121,6 +162,7 @@ const styles = StyleSheet.create({
     },
     balanceContainer: {
       marginBottom: 20,
+      marginTop: 15,
       
       alignItems: 'center',
     },
@@ -220,7 +262,67 @@ const styles = StyleSheet.create({
         marginVertical: scale(10),
         height: scale(1),
         backgroundColor: "#E0E0E0",
-        
-        
-    }
+    },
+    withdrawButton: {
+          flexDirection: 'row',
+          alignItems: 'center',
+          backgroundColor: '#FF3B30', // Adjust as needed
+          padding: 10,
+          borderRadius: 10,
+        borderWidth: 2,
+        borderColor: 'white',
+        marginTop: 20,
+          
+        },
+        withdrawIcon: {
+          marginRight: 5,
+        },
+        withdrawText: {
+          color: 'white',
+          fontSize: 16,
+        },
+    modalContainer: {
+      flex: 1,
+      justifyContent: 'center',
+      alignItems: 'center',
+      backgroundColor: 'rgba(0, 0, 0, 0.5)', // Semi-transparent background
+    },
+    modalContent: {
+      width: '80%',
+      backgroundColor: 'white',
+      borderRadius: 10,
+      padding: 20,
+      alignItems: 'center',
+    },
+    modalTitle: {
+      fontSize: 18,
+      fontWeight: 'bold',
+      marginBottom: 15,
+    },
+    input: {
+      width: '100%',
+      borderWidth: 1,
+      borderColor: '#ccc',
+      borderRadius: 5,
+      padding: 10,
+      marginBottom: 15,
+    },
+    submitButton: {
+      backgroundColor: '#FF3B30',
+      padding: 10,
+      borderRadius: 5,
+      width: '100%',
+      alignItems: 'center',
+    },
+    submitText: {
+      color: 'white',
+      fontWeight: 'bold',
+    },
+    cancelButton: {
+      marginTop: 10,
+      padding: 10,
+    },
+    cancelText: {
+      color: '#FF3B30',
+    },
   });

@@ -28,6 +28,7 @@ interface HeaderProps {
     style?: "light"|"dark",
     headerTitle?: string,
     rightIcon?: React.ReactNode
+    noRightIcon?: boolean
 }
 
 const MenuLight = require('../assets/icons/menu-icon-light.svg');
@@ -35,7 +36,7 @@ const MenuRed = require('../assets/icons/menu-icon-red.svg');
 const ShoppingBag = require('../assets/icons/shopping-bag.svg');
 
 
-export default function Header({ style = "dark", headerTitle, rightIcon }: HeaderProps) {
+export default function Header({ style = "dark", headerTitle, rightIcon ,noRightIcon }: HeaderProps) {
     const [menuOpen, setMenuOpen] = useState<boolean>(false);
     const route = useRootNavigation();
     const pageName = route?.getCurrentRoute()?.name! as string;
@@ -95,12 +96,12 @@ export default function Header({ style = "dark", headerTitle, rightIcon }: Heade
                 </View>
 
                 {
-                    !rightIcon ?
-                    pageName === 'settings/index' ?  null :
+                    noRightIcon ? 
+                    null : 
+                    rightIcon || (pageName === 'settings/index' ? null : // If rightIcon is provided, render it; otherwise check pageName
                     <Link href="/pickup">
                         <Image style={styles.headerIcon} source={ShoppingBag}/>
-                    </Link>
-                    : rightIcon
+                    </Link>)
                 }
 
             </View>
