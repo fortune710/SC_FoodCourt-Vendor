@@ -28,7 +28,8 @@ export interface ResturantData {
     website_link?: string,
     is_closed?: boolean,
     subaccount_code?: string,
-    account_number?: string
+    account_number?: string,
+    image_url?: string
 }
 
 export interface ICreateSubaccount {
