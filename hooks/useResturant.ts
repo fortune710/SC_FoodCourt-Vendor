@@ -27,7 +27,7 @@ export default function useResturant() {
         
         if(error) throw new Error(error.message)
 
-        return data
+        return data as ResturantData
     }
 
     const createResturantInSupabase = async (data: ResturantData) => {

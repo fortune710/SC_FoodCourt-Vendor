@@ -1,3 +1,4 @@
+import React from "react";
 import { Dimensions, Pressable, View } from "react-native";
 import { Link, SplashScreen, Stack, useRootNavigation, useRouter } from "expo-router";
 import { MaterialIcons } from "@expo/vector-icons";
@@ -118,12 +119,12 @@ const AdminStaffMenu = ({ closeMenu }: { closeMenu: () => void }) => {
     }
 
     const moveToMenu = () => {
-        router.push('/admin/menu')
+        router.push('/menu')
         return closeMenu()
     }
 
     const moveToOrders = () => {
-        router.push('/admin/orders')
+        router.push('/orders')
         return closeMenu()
     }
 
