@@ -1,5 +1,5 @@
 
-import { View, StyleSheet, SafeAreaView, ScrollView, TouchableOpacity } from 'react-native';
+import { View, StyleSheet, SafeAreaView, ScrollView, TouchableOpacity, ActivityIndicator } from 'react-native';
 import { Ionicons } from '@expo/vector-icons'; 
 import React from 'react';
 import { Text } from "~/components/ui/text";
@@ -7,42 +7,25 @@ import Page from "~/components/page";
 import { scale } from 'react-native-size-matters';
 import { StatusBar,Pressable } from 'react-native';
 import { useRouter } from 'expo-router';
+import Monnify from '~/services/monnify';
+import useResturant from '~/hooks/useResturant';
+import useOrderStatus from '~/hooks/useOrderStatus';
+import { OrderStatus } from '~/utils/types';
+import TransactionItem from '~/components/transaction-item';
 
 
 
-interface TransactionProps {
-    type: 'Payout' | 'Order Income';
-    amount: string;
-    date: string;
-    description: string;
-  }
+
   
-  const Transaction: React.FC<TransactionProps> = ({ type, amount, date, description }) => (
-    <View>
-    <View style={styles.transaction}>
-      <View style={styles.transactionIcon}>
-        <Ionicons 
-          name={type === 'Payout' ? 'arrow-up' : 'arrow-down'} 
-          size={24} 
-          color={type === 'Payout' ? '#FF3B30' : 'green'} 
-        />
-      </View>
-      <View style={styles.transactionDetails}>
-        <Text style={styles.transactionType}>{type}</Text>
-        <Text style={styles.transactionDate}>{date}</Text>
-        <Text style={styles.transactionDescription}>{description}</Text>
-      </View>
-      <Text style={styles.transactionAmount}>N {amount}</Text>
-      
-    </View>
-    <View style = {styles.seperator}></View>
-    </View>
-  );
+
   
 
 export default function walletPage() {
 
-const router = useRouter()
+  const router = useRouter();
+  const { resturant } = useResturant();
+  const { orders, isLoading } = useOrderStatus(OrderStatus.Collected);
+
   return (
     <Page>
         <StatusBar backgroundColor="#FF3B30" barStyle="light-content" />
@@ -50,58 +33,66 @@ const router = useRouter()
       <View style={styles.walletHeader}>
         <Text style={styles.walletTitle}>Wallet</Text>
         <View style={styles.balanceContainer}>
-          <Text style={styles.balanceLabel}>Current Balance</Text>
+          <Text style={styles.balanceLabel}>Attached Account Number</Text>
           <View style={styles.balanceRow}>
-            <Text style={styles.balanceAmount}>NGN 3,000,000</Text>
+            <Text style={styles.balanceAmount}>{resturant?.account_number || "N/A"}</Text>
             <TouchableOpacity style= {styles.eyeicon}>
               <Ionicons name="eye-outline" size={24} color="white" />
             </TouchableOpacity>
           </View>
           <Text style={styles.lastUpdated}>Last Updated on 26-8-2023 by 12:30pm</Text>
         </View>
-        <View style={styles.pagination}>
-          <View style={[styles.paginationDot, styles.activeDot]} />
-          <View style={styles.paginationDot} />
-        </View>
+
+        {
+          /*
+          <View style={styles.pagination}>
+            <View style={[styles.paginationDot, styles.activeDot]} />
+            <View style={styles.paginationDot} />
+          </View>
+          
+          */
+        }
+
+        {
+          !resturant?.subaccount_code ? 
+          <TouchableOpacity onPress={() => router.push('/admin/wallet/create')} className='bg-white rounded-[50px] p-4'>
+            <Text className='mx-auto'>Add Payment Details</Text>
+          </TouchableOpacity>
+          :
+          <TouchableOpacity className='bg-white rounded-[50px] p-4'>
+            <Text className='mx-auto'>Update Payment Details</Text>
+          </TouchableOpacity>
+
+        }
+
       </View>
       
       <View style={styles.transactionContainer}>
-        <View style = {styles.handle}></View>
+        <View style = {styles.handle}/>
+
         <Pressable onPress={() => router.push("/admin/wallet/transhistory")}>
-        <Text style={styles.transactionTitle}>Transaction History</Text>
-       </Pressable>
-        <ScrollView>
-          <Transaction 
-            type="Payout"
-            amount="3,000,000"
-            date="24 Aug 2023"
-            description="Earnings from 17 Aug 2023 to 23 Aug 2023"
-          />
-          <Transaction 
-            type="Order Income"
-            amount="3,000"
-            date="24 Aug 2023"
-            description="Received payment for order #12345"
-          />
-          <Transaction 
-            type="Order Income"
-            amount="3,000"
-            date="24 Aug 2023"
-            description="Received payment for order #12345"
-          />
-          <Transaction 
-            type="Order Income"
-            amount="3,000"
-            date="24 Aug 2023"
-            description="Received payment for order #12345"
-          />
-          <Transaction 
-            type="Payout"
-            amount="3,000,000"
-            date="24 Aug 2023"
-            description="Earnings from 17 Aug 2023 to 23 Aug 2023"
-          />
-        </ScrollView>
+          <Text style={styles.transactionTitle}>Transaction History</Text>
+        </Pressable>
+        {
+          isLoading ? <ActivityIndicator/> :
+          orders?.length === 0 ?
+          <View className='w-full items-center justify-center flex-row h-[200px]'>
+            <Text>There are no orders available</Text>
+          </View> 
+          :
+          <ScrollView>
+            {
+              orders?.slice(0, 5).map((order) => (
+                <TransactionItem 
+                  type="Order Income"
+                  amount={order.total_amount.toString()}
+                  date="24 Aug 2023" //change date format
+                  description={`Order Payment from ${order.customer_name}`}
+                />
+              ))
+            }
+          </ScrollView>
+        }
       </View>
     </SafeAreaView>
     </Page>
