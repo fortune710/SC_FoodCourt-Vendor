@@ -1,3 +1,4 @@
+import React from "react";
 import { Redirect } from "expo-router";
 import { ActivityIndicator } from "react-native";
 import Page from "~/components/page";
@@ -15,11 +16,14 @@ export default function IndexPage() {
 
     }
 
+    if (!currentUser?.id) return <Redirect href="/login"/>
+
     return (
         <>
             {
-                !currentUser ? <Redirect href="/login"/> :
-                <Redirect href="/admin/dashboard"/>
+                currentUser.user_type === "admin" ? 
+                <Redirect href="/admin/dashboard"/> : 
+                <Redirect href="/orders" />            
             }
         </>
     )
