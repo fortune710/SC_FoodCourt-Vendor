@@ -1,3 +1,4 @@
+import React from "react";
 import { Dimensions, Platform, Pressable, View } from "react-native";
 import Page from "~/components/page";
 import { StyleSheet } from "react-native";
