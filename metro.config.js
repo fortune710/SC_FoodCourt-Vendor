@@ -19,3 +19,4 @@ config.resolver = {
 */
 
 module.exports = withNativeWind(config, { input: './global.css' })
+//module.exports = config;
