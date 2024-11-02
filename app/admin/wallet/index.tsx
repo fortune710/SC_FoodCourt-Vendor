@@ -50,12 +50,15 @@ export default function walletPage() {
             <Text className='mx-auto'>Add Payment Details</Text>
           </TouchableOpacity>
           :
-          <TouchableOpacity className='bg-white rounded-[50px] p-4'>
+          <TouchableOpacity onPress={() => router.push('/admin/wallet/create')} className='bg-white rounded-[50px] p-4'>
             <Text className='mx-auto'>Update Payment Details</Text>
           </TouchableOpacity>
 
         }
 
+        {
+          /*
+          
         <Pressable 
             style={styles.withdrawButton} 
             onPress={() => setModalVisible(true)} // Open modal on press
@@ -63,7 +66,6 @@ export default function walletPage() {
             <Ionicons name="cash-outline" size={24} color="white" style={styles.withdrawIcon} />
             <Text style={styles.withdrawText}>Withdraw</Text>
           </Pressable>
-                  {/* Modal for withdrawal */}
           <Modal
           animationType="slide"
           transparent={true}
@@ -98,12 +100,15 @@ export default function walletPage() {
             </View>
           </View>
         </Modal>
+          
+          
+          */
+        }
 
 
       </View>
 
 
-      
       <View style={styles.transactionContainer}>
         <View style = {styles.handle}/>
 
@@ -204,11 +209,14 @@ const styles = StyleSheet.create({
       backgroundColor: 'white',
     },
     transactionContainer: {
-      flex: 1,
       backgroundColor: 'white',
       borderTopLeftRadius: 20,
       borderTopRightRadius: 20,
       padding: 20,
+      position: 'absolute',
+      bottom: 0,
+      left: 0,
+      right: 0,
     },
     handle:{
         marginTop: scale(-10),

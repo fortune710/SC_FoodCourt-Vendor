@@ -209,6 +209,12 @@ const VendorStaffMenu = ({ closeMenu }: { closeMenu: () => void }) => {
         return closeMenu()
     }
 
+    const moveToSettings = () => {
+        router.push('/settings')
+        return closeMenu()
+    }
+
+
     return (
     <View style={styles.menu}>
         <View className="">
@@ -217,9 +223,10 @@ const VendorStaffMenu = ({ closeMenu }: { closeMenu: () => void }) => {
             </Pressable>
         </View>
         
-        <View className="flex flex-col gap-4">
-            <Pressable onPress={moveToMenu}>
-                <LayoutGrid color='white' size={ICON_SIZE}/>                    
+        <View className="flex flex-col gap-8">
+            <Pressable className="flex flex-row items-center gap-2" onPress={moveToMenu}>
+                <LayoutGrid color='white' size={ICON_SIZE}/> 
+                <Text className="text-white text-xl font-semibold">Menu</Text>                                     
             </Pressable>
 
             <Pressable onPress={moveToOrders} className="flex flex-row items-center gap-2">
@@ -227,13 +234,11 @@ const VendorStaffMenu = ({ closeMenu }: { closeMenu: () => void }) => {
                 <Text className="text-white text-xl font-semibold">Orders</Text>
             </Pressable>
 
-            <Pressable>
-                <Mail color='white' size={ICON_SIZE}/>                    
-            </Pressable>
 
-            <Link href="/settings" onPressOut={closeMenu}>
-                <Settings color='white' size={ICON_SIZE}/>                    
-            </Link>
+            <Pressable onPress={moveToSettings} className="flex flex-row items-center gap-2">
+                <Settings color='white' size={ICON_SIZE}/>    
+                <Text className="text-white text-xl font-semibold">Settings</Text>                
+            </Pressable>
 
             <Pressable onPress={moveToAdmin} className="flex flex-row items-center gap-2">
                 <UsersRound size={ICON_SIZE} color='white'/>
