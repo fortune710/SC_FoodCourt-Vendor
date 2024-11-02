@@ -27,6 +27,7 @@ export default function useAuth() {
     }
 
     const signUpWithEmail = async (data: SignUpData) => {
+        console.log(data)
         const res = await supabase.auth.signUp({ 
             email: data.email, 
             password: data.password, 

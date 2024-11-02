@@ -26,7 +26,6 @@ export default function CreateResturant() {
     const handleCreateResturant = async () => {
 
         //const { data } = await getCurrentUser();
-
         if(!params.admin_id) return;
 
         try {

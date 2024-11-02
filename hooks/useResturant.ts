@@ -21,6 +21,17 @@ export default function useResturant() {
         return data
     }
 
+    const getExistingResturantByAdminId = async (admin_id: string) => {
+        const { data, error } = await supabase.from('restaurants').select('*').eq('admin_id', admin_id).limit(1)
+        
+        if(error) {
+            console.log(error.message)
+            throw new Error(error.message)
+        }
+
+        return data
+    }
+
     const getResturantByAdmin = async () => {
         const { data, error } = await supabase.
         from('restaurants').select('*').eq('admin_id', currentUser?.id).single()
@@ -30,13 +41,17 @@ export default function useResturant() {
         return data as ResturantData
     }
 
+
+
     const createResturantInSupabase = async (data: ResturantData) => {
-        const existingRestaurant = await getResturantByAdminId(data.admin_id)
+        const existingRestaurant = await getExistingResturantByAdminId(data.admin_id)
         if(existingRestaurant.length > 0) {
             return existingRestaurant[0]
         }
 
-        await supabase.from('restaurants').insert([data])
+        const { data: restaurant, error } = await supabase.from(SupabaseTables.Restaurants).insert([data]).select('*')
+        console.log(error, restaurant)
+        return restaurant
     }
 
     const updateResturantInSupabase = async (data: Partial<ResturantData>) => {

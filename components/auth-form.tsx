@@ -54,6 +54,7 @@ export default function AuthForm({ type }: AuthFormProps) {
                         name: name,
                     })
                     .then((user) => {
+                        console.log(user)
                         Toast.show({
                             text1: "Sign Up Successful",
                             type: "success"
