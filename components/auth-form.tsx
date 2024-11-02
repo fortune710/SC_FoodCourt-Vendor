@@ -59,7 +59,7 @@ export default function AuthForm({ type }: AuthFormProps) {
                             type: "success"
                         })
                         return router.push({
-                            pathname: '/create-resturant',
+                            pathname: '/restaurant/create',
                             params: {
                                 admin_id: user?.id
                             }
