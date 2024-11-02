@@ -148,7 +148,7 @@ const AdminStaffMenu = ({ closeMenu }: { closeMenu: () => void }) => {
 
     return (
         <View style={styles.menu}>
-            <View className="flex flex-col gap-4">
+            <View className="flex flex-col gap-8 mt-14">
                 <Pressable onPress={moveToDashboard} className="flex flex-row items-center gap-2">
                     <Home size={ICON_SIZE} color='white'/>
                     <Text className="text-white text-xl font-semibold">Dashboard</Text>
@@ -257,7 +257,8 @@ const styles = StyleSheet.create({
         display: "flex",
         flexDirection: "row",
         justifyContent: "center",
-        gap: 50
+        gap: 50,
+        paddingTop: verticalScale(30)
     },
     headerIcon: { width: 24, height: 24 },
     menuButons: {
@@ -276,8 +277,8 @@ const styles = StyleSheet.create({
     },
     headerTitle: {
         fontSize: scale(22),
-        fontWeight: "700",
-        marginLeft: 20,
+        fontWeight: "500",
+        marginLeft: 24,
         textTransform: "capitalize"
     }
 })
