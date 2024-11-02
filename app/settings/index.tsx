@@ -87,7 +87,7 @@ function ResturantOptions({ userType }: { userType: string }) {
                 <Avatar alt="Zach Nugent's Avatar">
                     <AvatarImage source={{ uri: resturant?.image_url }} />
                     <AvatarFallback>
-                        <Text>{resturant?.name.at(0)}</Text>
+                        <Text>{resturant?.name?.at(0)}</Text>
                     </AvatarFallback>
                 </Avatar>
 

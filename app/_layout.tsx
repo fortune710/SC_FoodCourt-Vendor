@@ -49,6 +49,19 @@ const theme = createTheme({
             containerStyle: {
                 paddingHorizontal: 0
             }
+        },
+        Input: {
+            labelStyle: {
+                fontWeight: "400",
+                color: "#000"
+            },
+            inputStyle: {
+                paddingHorizontal: 8,
+                fontSize: 16
+            },
+            placeholderTextColor: "#000",
+            
+            
         }
     }
 

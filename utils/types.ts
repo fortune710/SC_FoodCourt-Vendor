@@ -8,7 +8,8 @@ export interface CategoryListItemProps {
     addons: Addon[],
     price: number,
     id: number,
-    category: string
+    category: string,
+    quantity: number,
 }
 
 export interface CreateMenuItemData {
@@ -17,7 +18,10 @@ export interface CreateMenuItemData {
     price: number,
     preparation_time: string,
     add_ons?: Addon[],
-    quantity: number
+    quantity: number,
+    opening_stock_value: number,
+    restocking_value: number,
+    warning_stock_value: number,
 }
 
 export interface ResturantData {
