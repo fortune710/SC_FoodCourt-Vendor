@@ -191,11 +191,9 @@ export default function OrderCardDetails({ showTime } : OrderCardDetailsProps ) 
 
   const renderOrderItem = (item : OrderItem) => (
     <View key={item.name} style={styles.orderItem}>
-    <Text style={styles.itemName}>{item.name}</Text>
-    
-    <Text style={styles.itemQuantity}>{item.quantity}</Text>
-    <Text style={styles.itemPrice}>N{item.price.toFixed(2)}</Text>
+      <Text style={styles.itemName}>{item.name}</Text>
       
+      <Text style={styles.itemQuantity}>{item.quantity}</Text>
     </View>
   );
 
@@ -203,24 +201,24 @@ export default function OrderCardDetails({ showTime } : OrderCardDetailsProps ) 
     <View style={styles.container}>
       <OrderCardName />
       
-      
-
-      <AccordionItem title="Food">
+      <View className='py-3'>
         {foodItems.map(renderOrderItem)}
-      </AccordionItem>
-
-      <AccordionItem title="Drinks">
-        {drinkItems.map(renderOrderItem)}
-      </AccordionItem>
-
-      <AccordionItem title="Order Notes">
-        <Text>Nb additional notes for this order.</Text>
-      </AccordionItem>
-
-      <View style={styles.totalContainer}>
-        <Text style={styles.totalLabel}>Total</Text>
-        <Text style={styles.totalAmount}>N8700.34</Text>
       </View>
+
+      {
+        /*
+        
+        <AccordionItem title="Drinks">
+          {drinkItems.map(renderOrderItem)}
+        </AccordionItem>
+        
+        <AccordionItem title="Order Notes">
+          <Text>Nb additional notes for this order.</Text>
+        </AccordionItem>
+        
+        */
+      }
+
 
       {showTime && (
         <Text style={styles.orderCompletedTime}>
@@ -233,11 +231,8 @@ export default function OrderCardDetails({ showTime } : OrderCardDetailsProps ) 
 
 const styles = StyleSheet.create({
   container: {
-    borderRadius: 16,
-    borderWidth: 1,
     borderColor: '#7E7E7E',
     backgroundColor: '#FFF5F5',
-    padding: 16,
   },
  
   label: {
@@ -284,6 +279,7 @@ const styles = StyleSheet.create({
     paddingTop: 8,
   },
   orderItem: {
+    width: "100%",
     flexDirection: 'row',
     justifyContent: 'space-between',
     marginBottom: 8,
@@ -300,10 +296,8 @@ const styles = StyleSheet.create({
   // },
  
   itemQuantity: {
-    flex: 1,
     fontFamily: 'Montserrat',
     fontSize: 14,
-    marginRight: 50,
     textAlign: 'center',
    
   },
@@ -335,8 +329,9 @@ const styles = StyleSheet.create({
     fontWeight: '600',
   },
   orderCompletedTime: {
-    marginTop: 16,
-    borderRadius: 5,
+    marginTop: 0,
+    marginBottom: 10,
+    borderRadius: 10,
     paddingVertical: 8,
     paddingHorizontal: 15,
     textAlign: 'center',

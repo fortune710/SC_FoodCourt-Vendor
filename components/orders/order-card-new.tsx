@@ -11,7 +11,7 @@ export default function OrderCardNew() {
   return (
     <OrderCard>
       <OrderCardDetails/>
-      <View style={styles.view21}>
+      <View className="w-full flex flex-col gap-3">
         <Button>
           Accept
         </Button>

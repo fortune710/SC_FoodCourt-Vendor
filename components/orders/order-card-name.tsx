@@ -1,25 +1,30 @@
 import { View, StyleSheet, Text, Image } from "react-native";
+import { scale } from "react-native-size-matters";
 
+interface Props {
+  orderNumber: number | string;
+  customerName: string;
+  orderDate: Date;
+}
 
 export default function OrderCardName() {
-    return(
-        <>
-            <View style={styles.row}>
-                <Text style={styles.orderNo}>
-                    Order No: 12345
-                </Text>
-                <Text style={styles.date}>13-11-2023</Text>
-            </View>
+  return(
+    <View className="border-b px-1 py-1">
+      <View style={styles.row}>
+          <Text style={styles.orderNo}>
+              Order No: 12345
+          </Text>
+          <Text style={styles.date}>13-11-2023</Text>
+      </View>
 
-            <View style={styles.row}>
-                <Text style={styles.customerLabel}>
-                    Customer: Susan Sharon
-                </Text>
-                <Text style={styles.time}>13:25</Text>
-            </View>
-            {/* <Text style={styles.dateTime}>Wed, November 13, 2023 13:25</Text> */}
-        </>
-    )
+      <View style={styles.row}>
+          <Text style={styles.customerLabel}>
+              Customer: Susan Sharon
+          </Text>
+          <Text style={styles.time}>13:25</Text>
+      </View>
+    </View>
+  )
 }
 
 const styles = StyleSheet.create({
@@ -45,13 +50,14 @@ const styles = StyleSheet.create({
       justifyContent: "space-between",
       display: "flex",
       flexDirection: "row",
-      marginBottom: 10
+      marginBottom: 5
     },
     orderNo: {
       justifyContent: "space-between",
       alignItems: "stretch",
       display: "flex",
-      fontWeight: 'bold'
+      fontWeight: 'semibold',
+      fontSize: scale(16)
     
     },
     orderNoValue: {
@@ -70,10 +76,12 @@ const styles = StyleSheet.create({
       display: "flex",
       marginTop: 5,
       marginBottom: 20,
+      
     },
     customerLabel: {
       display: "flex",
-      fontWeight: "bold"
+      fontWeight: 'regular',
+      fontSize: scale(12)
     },
     customerValue: {
       flexGrow: 1,
