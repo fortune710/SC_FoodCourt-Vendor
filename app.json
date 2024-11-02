@@ -31,6 +31,12 @@
     },
     "plugins": [
       "expo-router"
-    ]
+    ],
+    "extra": {
+      "eas": {
+        "projectId": "df672553-fdea-479a-bd5f-7826fd8c1a9e"
+      }
+    },
+    "owner": "team-fortune"
   }
 }

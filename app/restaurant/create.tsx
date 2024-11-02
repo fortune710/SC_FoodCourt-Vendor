@@ -20,6 +20,8 @@ export default function CreateResturant() {
 
     const [resturantName, setResturantName] = useState("");
     const [phoneNumber, setPhoneNumber] = useState("");
+    const [link, setLink] = useState("");
+
 
     const handleCreateResturant = async () => {
 
@@ -31,7 +33,8 @@ export default function CreateResturant() {
             await createResturant({
                 admin_id: params.admin_id as string,
                 name: resturantName,
-                phone_number: phoneNumber
+                phone_number: phoneNumber,
+                website_link: link
             })
             return router.push('/orders');
         } catch (error) {
@@ -69,8 +72,8 @@ export default function CreateResturant() {
                     inputContainerStyle={styles.inputContainer}
                     placeholder='Website Link'
                     leftIcon={<Link stroke={primary} />}    
-                    value={resturantName}
-                    onChangeText={(text) => setResturantName(text)}    
+                    value={link}
+                    onChangeText={(text) => setLink(text)}    
                 />
 
                 <Button onPress={handleCreateResturant}>
