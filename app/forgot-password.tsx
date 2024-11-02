@@ -19,16 +19,13 @@ export default function LoginPage() {
             <KeyboardAvoidingView behavior="position">
                 <View style={[globalStyles.flexItemsCenter, { width: "100%", marginVertical: 20, justifyContent: "center" }]}>
                     <Image
-                        source={require('../assets/images/login-image.png')}
-                        style={{ height: 233, width: 286 }}
+                        source={{ uri: require('../assets/images/forgot-password.png') }}
+                        style={{ height: 220, width: 250 }}
                     />
                 </View>
 
-                <Text style={styles.loginText}>
-                    Login
-                </Text>
 
-                <AuthForm type="login"/>
+                <AuthForm type="forgot-password"/>
             </KeyboardAvoidingView>
         </Page>
     )
