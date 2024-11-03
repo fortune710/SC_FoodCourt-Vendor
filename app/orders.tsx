@@ -17,7 +17,7 @@ export default function OrdersPage() {
 
     return (
         <Page>
-            <Header style="dark"/>
+            <Header style="dark" headerTitle='Orders'/>
             <Tabs
                 value={activeTab}
                 onValueChange={(value) => setActiveTab(value as any)}

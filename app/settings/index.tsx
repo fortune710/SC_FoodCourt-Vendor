@@ -95,10 +95,17 @@ function ResturantOptions({ userType }: { userType: string }) {
             </View>
 
             <View className="w-full flex flex-row items-center justify-between gap-2 my-5">
-                <Text className="text-xl">Turn on Vendor View</Text>     
+                <Text className="text-xl">Turn on Staff View</Text>     
 
                 <Switch value={showVendorView} onValueChange={toggleVendorView} />            
             </View>
+
+            <View className="w-full flex flex-row items-center justify-between gap-2 my-5">
+                <Text className="text-xl">Accepting Orders</Text>     
+
+                <Switch value={showVendorView} onValueChange={toggleVendorView} />            
+            </View>
+            
         </>
     )
 

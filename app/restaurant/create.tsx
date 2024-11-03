@@ -35,7 +35,7 @@ export default function CreateResturant() {
                 phone_number: phoneNumber,
                 website_link: link
             })
-            return router.push('/orders');
+            return router.push('/admin/dashboard');
         } catch (error) {
             console.log(error);
         }
