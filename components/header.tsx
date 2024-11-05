@@ -165,8 +165,8 @@ const AdminStaffMenu = ({ closeMenu }: { closeMenu: () => void }) => {
                 </Pressable>
 
 
-                <Pressable className="flex flex-row items-center gap-2">
-                    <Mail color='white' size={ICON_SIZE}/>  
+                <Pressable onPress={moveToOrders} className="flex flex-row items-center gap-2">
+                    <Mail  color='white' size={ICON_SIZE}/>  
                     <Text className="text-white text-xl font-semibold">Orders</Text>                  
                 </Pressable>
 
