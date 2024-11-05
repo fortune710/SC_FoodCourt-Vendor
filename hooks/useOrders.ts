@@ -2,6 +2,7 @@ import { supabase } from "~/utils/supabase";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import Toast from "react-native-toast-message";
 import useResturant from "./useResturant";
+import { InteractionManagerStatic } from "react-native";
 
 interface Order {
     id: string;
@@ -12,14 +13,15 @@ interface Order {
     order_items: number[];
     user_paid: boolean;
     customer_name: string;
+    start_time: number
+    preparation_time: number
 }
 
 export default function useOrders() {
     const queryClient = useQueryClient();
     const { resturant } = useResturant();
 
-
-
+   
     async function getOrders() {
         const { data, error } = await supabase
             .from('orders')
@@ -29,6 +31,8 @@ export default function useOrders() {
                 total_amount,
                 order_date,
                 customer_name,
+                preparation_time,
+                start_time,
                 items:order_items (
                     id,
                     quantity,
