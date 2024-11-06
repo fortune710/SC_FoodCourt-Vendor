@@ -21,7 +21,7 @@ import useResturant from '~/hooks/useResturant';
 export default function AdminDashboard() {
   return (
     <Page>
-    <Header headerTitle='Dashboard' noRightIcon = {true} />
+        <Header headerTitle='Dashboard' noRightIcon = {true} />
         <ScrollView contentContainerStyle = {styles.container}>
         <DashboardMetricsContainer/>
 
@@ -44,15 +44,15 @@ interface DashboardMetricCardProps {
 
 function DashboardMetricsCard({ title, value, icon }: DashboardMetricCardProps) {
     return (
-    <Card className='w-full bg-primary rounded-3xl'>
+    <Card className='bg-primary rounded-3xl' style={{paddingLeft: 16, paddingRight: 16, paddingTop: 16, paddingBottom: 24}}>
         <CardHeader className='flex flex-row items-center justify-between'>
           <CardTitle className='text-4xl text-white'>{value}</CardTitle>
           <View className='bg-white rounded-full p-4'>
             {icon}
           </View>
         </CardHeader>
-        <CardFooter>
-          <Text className='text-white font-semibold text-sm'>{title}</Text>
+        <CardFooter style={{marginTop: 24}}>
+          <Text className='text-white font-semibold text-xl' >{title}</Text>
         </CardFooter>
     </Card>
     )
@@ -87,7 +87,7 @@ function DashboardMetricsContainer() {
     ]
 
     return (
-        <View className='flex flex-row w-full flex-wrap'>
+        <View className='flex flex-row w-full flex-wrap'  style={{marginBottom: 16}}>
             {
                 metrics.map((metric, index) => (
                     <View key={index}  className='w-1/2 py-2 px-2'>
@@ -103,7 +103,7 @@ function DashboardMetricsContainer() {
 function StockAlertBanner() {
     return (
         <View className='border border-black rounded-lg p-4'>
-            <Text>Low Stock Alert</Text>
+            <Text style={{fontSize: 16, fontWeight: 600}}>Low Stock Alert</Text>
             <Text>
                 You have 8 low stock items. <Link className='text-primary' href="/admin/stock">See them</Link>
             </Text>
@@ -116,27 +116,26 @@ function AnalyticsChart() {
     //const { orderCounts, isLoading } = useAnalytics(resturant?.id);
 
     const testData = [
-        { label: "19-Sep", value: 72 },
-        { label: "16-Sep", value: 89 },
-        { label: "13-Sep", value: 61 },
-        { label: "10-Sep", value: 95 },
-        { label: "07-Sep", value: 79 },
-        { label: "04-Sep", value: 67 },
-        { label: "01-Sep", value: 84 },
-        { label: "29-Aug", value: 56 },
-        { label: "26-Aug", value: 93 },
-        { label: "23-Aug", value: 64 }
+        { label: "23/8", value: 64 },
+        { label: "26/8", value: 93 },
+        { label: "29/8", value: 56 },
+        { label: "01/9", value: 84 },
+        { label: "04/9", value: 67 },
+        { label: "07/9", value: 79 },
+        { label: "10/9", value: 95 },
+        { label: "13/9", value: 61 },
+        { label: "16/9", value: 89 },
+        { label: "19/9", value: 72 },
     ];
 
     
 
     return (
         <View className='bg-primary-tint p-4 rounded-3xl border border-input'>
-            <View className='bg-accent'>
+            <View >
                 {
-                    //isLoading ? <ActivityIndicator/> :
+                    // isLoading ? <ActivityIndicator/> :
                     <LineChart data={testData} color="#177AD5" dataPointsColor='#177AD5' />
-
                 }
 
             </View>
@@ -147,7 +146,7 @@ function AnalyticsChart() {
 function ChartData() {
     return (
         <Card>
-            <CardHeader>
+            <CardHeader className='p-6'>
                 <CardTitle>Order Fulfillment Rate</CardTitle>
             </CardHeader>
             <CardContent className='flex flex-row items-center justify-between'>
@@ -168,9 +167,7 @@ function ChartData() {
 
 const styles = StyleSheet.create({
     container:{
-        
         paddingBottom:scale(200)
-
     }
 
 })
