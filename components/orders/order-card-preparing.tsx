@@ -3,23 +3,44 @@ import OrderCard from "./order-card";
 import OrderCardDetails from "./order-card-details";
 import { Switch, Text } from "@rneui/themed";
 import { FontAwesome } from '@expo/vector-icons';
+import { useState } from "react";
+import useOrders from "~/hooks/useOrders";
+import { NfcIcon } from "lucide-react-native";
 import useThemeColor from "~/hooks/useThemeColor";
-import { Order, OrderStatus } from "~/utils/types";
-import useOrderStatus from "~/hooks/useOrderStatus";
+import { Order } from "~/utils/types";
+
 
 export default function OrderCardPreparing({ order }: { order: Order }) {
+    const [isPreparing, setIsPreparing] = useState(false);
+    const { updateOrder } = useOrders();
     const primary = useThemeColor({}, "primary");
-    const { updateStatus } = useOrderStatus(order?.status);
+    
+
+    const togglePreparing = async () => {
+        if (!isPreparing) {
+          const startTime = Date.now();
+          await updateOrder({ id: order?.id!, start_time: startTime }) 
+            // in minutes
+          
+        }
+        
+        setIsPreparing(!isPreparing);
+      };
 
     return (
         <OrderCard>
-            <OrderCardDetails showTime/>
-            <View style={{ borderTopWidth: 1 }} className="flex flex-row w-full items-center justify-between py-3 px-3">
+            <OrderCardDetails 
+                order={order} 
+                showTime={true} 
+                isPreparing={isPreparing} 
+            />
+            <View style={[style.status, style.itemsBetween]}>
                 <View style={style.status}>
                     <Switch 
-                        value={order?.status === OrderStatus.Preparing}
+                        value={isPreparing}
+                        onValueChange={togglePreparing}
                         style={{ marginRight: 7 }}
-                        onValueChange={(value) => updateStatus({ id: order?.id, status: value ? OrderStatus.Preparing : OrderStatus.Accepted })}
+                        //onValueChange={(value) => updateStatus({ id: order?.id, status: value ? OrderStatus.Preparing : OrderStatus.Accepted })}
                     />
                     <Text>Preparing</Text>
                 </View>
