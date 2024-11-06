@@ -17,7 +17,7 @@ import { useVendorView } from "~/hooks/useVendorView";
 import { canShowAdminMenu } from "~/utils/functions";
 
 
-const ICON_SIZE = 35;
+const ICON_SIZE = 32;
 
 const toolbarColorPerPage: Record<string, string> = {
     "index": "white",
@@ -148,15 +148,21 @@ const AdminStaffMenu = ({ closeMenu }: { closeMenu: () => void }) => {
 
     return (
         <View style={styles.menu}>
-            <View className="flex flex-col gap-4">
+            <View className="mt-64">
+                <Pressable onPress={closeMenu}>
+                    <X size={ICON_SIZE} color="red"/>
+                </Pressable>
+            </View>
+
+            <View className="flex flex-col gap-12 mt-16">
                 <Pressable onPress={moveToDashboard} className="flex flex-row items-center gap-2">
                     <Home size={ICON_SIZE} color='white'/>
                     <Text className="text-white text-xl font-semibold">Dashboard</Text>
                 </Pressable>
 
-                <Pressable className="flex flex-row items-center gap-2" onPress={moveToDashboard}>
-                    <ChartPie color='white' size={ICON_SIZE}/>    
-                    <Text className="text-white text-xl font-semibold">Analytics</Text>                                                     
+                <Pressable className="flex flex-row items-center gap-2">
+                    <ChartPie color='grey' size={ICON_SIZE}/>    
+                    <Text className="text-[grey] text-xl font-semibold" >Analytics</Text>                                                     
                 </Pressable>
 
                 <Pressable className="flex flex-row items-center gap-2" onPress={moveToMenu}>
@@ -166,13 +172,13 @@ const AdminStaffMenu = ({ closeMenu }: { closeMenu: () => void }) => {
 
 
                 <Pressable onPress={moveToOrders} className="flex flex-row items-center gap-2">
-                    <Mail  color='white' size={ICON_SIZE}/>  
+                    <Mail color='white' size={ICON_SIZE}/>  
                     <Text className="text-white text-xl font-semibold">Orders</Text>                  
                 </Pressable>
 
                 <Pressable onPress={moveToWallet} className="flex flex-row items-center gap-2">
                     <Wallet color='white' size={ICON_SIZE}/>  
-                    <Text className="text-white text-xl font-semibold">Wallet</Text>                  
+                    <Text className="text-white text-xl font-semibold">Transactions</Text>                  
                 </Pressable>
 
                 <Pressable onPress={moveToStaff} className="flex flex-row items-center gap-2">
@@ -209,17 +215,24 @@ const VendorStaffMenu = ({ closeMenu }: { closeMenu: () => void }) => {
         return closeMenu()
     }
 
+    const moveToSettings = () => {
+        router.push('/settings')
+        return closeMenu()
+    }
+
+
     return (
     <View style={styles.menu}>
-        <View className="">
+        <View className="mt-48">
             <Pressable onPress={closeMenu}>
                 <X size={ICON_SIZE} color="red"/>
             </Pressable>
         </View>
         
-        <View className="flex flex-col gap-4">
-            <Pressable onPress={moveToMenu}>
-                <LayoutGrid color='white' size={ICON_SIZE}/>                    
+        <View className="flex flex-col gap-12 mt-16">
+            <Pressable className="flex flex-row items-center gap-2" onPress={moveToMenu}>
+                <LayoutGrid color='white' size={ICON_SIZE}/> 
+                <Text className="text-white text-xl font-semibold">Menu</Text>                                     
             </Pressable>
 
             <Pressable onPress={moveToOrders} className="flex flex-row items-center gap-2">
@@ -227,13 +240,11 @@ const VendorStaffMenu = ({ closeMenu }: { closeMenu: () => void }) => {
                 <Text className="text-white text-xl font-semibold">Orders</Text>
             </Pressable>
 
-            <Pressable>
-                <Mail color='white' size={ICON_SIZE}/>                    
-            </Pressable>
 
-            <Link href="/settings" onPressOut={closeMenu}>
-                <Settings color='white' size={ICON_SIZE}/>                    
-            </Link>
+            <Pressable onPress={moveToSettings} className="flex flex-row items-center gap-2">
+                <Settings color='white' size={ICON_SIZE}/>    
+                <Text className="text-white text-xl font-semibold">Settings</Text>                
+            </Pressable>
 
             <Pressable onPress={moveToAdmin} className="flex flex-row items-center gap-2">
                 <UsersRound size={ICON_SIZE} color='white'/>
@@ -257,7 +268,8 @@ const styles = StyleSheet.create({
         display: "flex",
         flexDirection: "row",
         justifyContent: "center",
-        gap: 50
+        gap: 60,
+        paddingTop: verticalScale(30)
     },
     headerIcon: { width: 24, height: 24 },
     menuButons: {
@@ -276,8 +288,8 @@ const styles = StyleSheet.create({
     },
     headerTitle: {
         fontSize: scale(22),
-        fontWeight: "700",
-        marginLeft: 20,
+        fontWeight: "500",
+        marginLeft: 24,
         textTransform: "capitalize"
     }
 })

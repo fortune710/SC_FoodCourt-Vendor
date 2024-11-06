@@ -2,8 +2,8 @@ import { Input } from "@rneui/themed";
 import Page from "~/components/page";
 import useAuth from "~/hooks/useAuth";
 
-import { StyleSheet, View } from "react-native";
-import { UserRound } from "lucide-react-native";
+import { KeyboardAvoidingView, StyleSheet, View } from "react-native";
+import { Link, Phone, UserRound } from "lucide-react-native";
 import { useState } from "react";
 import useThemeColor from "~/hooks/useThemeColor";
 import { Text } from "~/components/ui/text";
@@ -20,20 +20,22 @@ export default function CreateResturant() {
 
     const [resturantName, setResturantName] = useState("");
     const [phoneNumber, setPhoneNumber] = useState("");
+    const [link, setLink] = useState("");
+
 
     const handleCreateResturant = async () => {
 
         //const { data } = await getCurrentUser();
-
         if(!params.admin_id) return;
 
         try {
             await createResturant({
                 admin_id: params.admin_id as string,
                 name: resturantName,
-                phone_number: phoneNumber
+                phone_number: phoneNumber,
+                website_link: link
             })
-            return router.push('/orders');
+            return router.push('/admin/dashboard');
         } catch (error) {
             console.log(error);
         }
@@ -45,38 +47,38 @@ export default function CreateResturant() {
 
     return (
         <Page>
-            <View>
-                <Text>Create New Resturant</Text>
-            </View>
+            <KeyboardAvoidingView className="px-3 pt-3">
 
-            <Input
-                inputContainerStyle={styles.inputContainer}
-                placeholder='Resturant Name'
-                leftIcon={<UserRound stroke={primary} />}    
-                value={resturantName}
-                onChangeText={(text) => setResturantName(text)}    
-            />
 
-            
-            <Input
-                inputContainerStyle={styles.inputContainer}
-                placeholder='Phone Number'
-                leftIcon={<UserRound stroke={primary} />}    
-                value={phoneNumber}
-                onChangeText={(text) => setPhoneNumber(text)}  
-            />
+                <Input
+                    inputContainerStyle={styles.inputContainer}
+                    placeholder='Resturant Name'
+                    leftIcon={<UserRound stroke={primary} />}    
+                    value={resturantName}
+                    onChangeText={(text) => setResturantName(text)}    
+                />
 
-            <Input
-                inputContainerStyle={styles.inputContainer}
-                placeholder='Website Link'
-                leftIcon={<UserRound stroke={primary} />}    
-                value={resturantName}
-                onChangeText={(text) => setResturantName(text)}    
-            />
+                
+                <Input
+                    inputContainerStyle={styles.inputContainer}
+                    placeholder='Phone Number'
+                    leftIcon={<Phone stroke={primary} />}    
+                    value={phoneNumber}
+                    onChangeText={(text) => setPhoneNumber(text)}  
+                />
 
-            <Button onPress={handleCreateResturant}>
-                <Text>Create Resturant</Text>
-            </Button>
+                <Input
+                    inputContainerStyle={styles.inputContainer}
+                    placeholder='Website Link'
+                    leftIcon={<Link stroke={primary} />}    
+                    value={link}
+                    onChangeText={(text) => setLink(text)}    
+                />
+
+                <Button onPress={handleCreateResturant}>
+                    <Text>Create Resturant</Text>
+                </Button>
+            </KeyboardAvoidingView>
 
         </Page>
     )

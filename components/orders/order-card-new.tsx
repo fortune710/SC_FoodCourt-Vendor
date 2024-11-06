@@ -6,16 +6,27 @@ import {
 import OrderCardDetails from "./order-card-details";
 import { Button } from "@rneui/themed";
 import OrderCard from "./order-card";
+import { Order, OrderStatus } from "~/utils/types";
+import useOrderStatus from "~/hooks/useOrderStatus";
+import useOrders from "~/hooks/useOrders";
 
-export default function OrderCardNew() {
+export default function OrderCardNew({ order }: { order: Order }) {
+  const { updateStatus } = useOrderStatus(order.status);
+  const { updateOrder } = useOrders();
+
   return (
     <OrderCard>
-      <OrderCardDetails/>
-      <View style={styles.view21}>
-        <Button>
+      <OrderCardDetails order={order}/>
+      <View className="w-full flex flex-col gap-3">
+        <Button 
+          onPress={() => updateOrder({ id: order.id, status: OrderStatus.Preparing })}
+        >
           Accept
         </Button>
-        <Button type="outline">
+        <Button 
+          type="outline"
+          onPress={() => updateOrder({ id: order.id, status: OrderStatus.Cancelled })}
+        >
           Decline
         </Button>
       </View>

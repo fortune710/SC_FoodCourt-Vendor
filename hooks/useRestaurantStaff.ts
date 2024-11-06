@@ -3,6 +3,7 @@ import { supabase, supabaseAdmin } from "~/utils/supabase";
 import useRestaurant from "./useResturant";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import Toast from "react-native-toast-message";
+import useCurrentUser from './useCurrentUser';
 
 interface StaffMember {
   id: string;
@@ -29,6 +30,7 @@ interface UpdateStaffMember {
 
 export default function useRestaurantStaff() {
   const { resturant } = useRestaurant();
+  const { currentUser } = useCurrentUser();
   const queryClient = useQueryClient();
   const [signUpError, setSignUpError] = useState<string | null>(null);
 
@@ -68,6 +70,7 @@ export default function useRestaurantStaff() {
       .select(`
         staff_id,
         position,
+        is_online,
         profiles:staff_id (id, email, full_name, image_url)
       `)
       .eq('restaurant_id', resturant?.id);
@@ -120,6 +123,34 @@ export default function useRestaurantStaff() {
     ])
   }
 
+  async function setStaffOnlineStatus({ staffId, online } : { staffId: string, online: boolean }) {
+    const { error: staffError } = await supabase
+    .from('restaurant-staff')
+    .update({ is_online: online })
+    .eq('staff_id', staffId)
+    .eq('restaurant_id', resturant?.id);
+
+    if (staffError) throw new Error(staffError.message);
+  }
+
+  async function getOnlineStatus() {
+    const { error: staffError, data } = await supabase
+    .from('restaurant-staff')
+    .select('is_online')
+    .eq('staff_id', currentUser?.id!)
+    .eq('restaurant_id', resturant?.id)
+    .single();
+
+    if (staffError) throw new Error(staffError.message);
+    return data.is_online;
+  }
+
+  const { data: isOnline } = useQuery({
+    queryKey: ["is-online"],
+    queryFn: getOnlineStatus,
+    enabled: currentUser?.user_type !== "admin"
+  })
+
   const { isLoading, data: staff, error } = useQuery({
     queryKey: ["restaurant-staff", resturant?.id],
     queryFn: getRestaurantStaff,
@@ -165,6 +196,25 @@ export default function useRestaurantStaff() {
     }
   });
 
+  const { mutateAsync: setStaffOnline } = useMutation({
+    mutationFn: setStaffOnlineStatus,
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["restaurant-staff"] });
+
+      Toast.show({
+        text1: "Changed Online Status Sucessfully",
+        type: "success"
+      });
+    },
+    onError: (error: Error) => {
+      Toast.show({
+        text1: "Failed to change Online Status",
+        text2: error.message,
+        type: "error"
+      });
+    }
+  });
+
   const { mutateAsync: deleteStaff } = useMutation({
     mutationFn: deleteStaffMember,
     onSuccess: () => {
@@ -190,6 +240,8 @@ export default function useRestaurantStaff() {
     addStaffMember,
     updateStaff,
     signUpError,
-    deleteStaff
+    deleteStaff,
+    setStaffOnline,
+    isOnline,
   };
 }

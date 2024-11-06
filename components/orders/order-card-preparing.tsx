@@ -6,39 +6,58 @@ import { FontAwesome } from '@expo/vector-icons';
 import { useState } from "react";
 import useOrders from "~/hooks/useOrders";
 import { NfcIcon } from "lucide-react-native";
+import useThemeColor from "~/hooks/useThemeColor";
+import { Order, OrderStatus } from "~/utils/types";
 
 
-export default function OrderCardPreparing() {
-    const [isPreparing, setIsPreparing] = useState(false);
-    const {updateOrder} = useOrders()
+export default function OrderCardPreparing({ order }: { order: Order }) {
+    const [isPreparing, setIsPreparing] = useState(order?.status === OrderStatus.Completed);
+    const { updateOrder } = useOrders();
+    const primary = useThemeColor({}, "primary");
     
 
-    const togglePreparing = async () => {
-        if (!isPreparing) {
-          const startTime = Date.now();
-          await updateOrder({ id: orderId, start_time: startTime,}) 
-            // in minutes
-          
+    const togglePreparing = async (checked: boolean) => {
+        const startTime = Date.now();
+
+        try {
+            if (!checked) {
+                setIsPreparing(true);
+              await updateOrder({ id: order?.id!, status: OrderStatus.Completed }) 
+                // in minutes
+              
+            } else {
+                await updateOrder({ id: order?.id!, start_time: startTime, status: OrderStatus.Preparing }) 
+            }
+        } catch {
+            if (!checked) {
+                setIsPreparing(false);
+            } else {
+                setIsPreparing(true);
+            }
         }
         
-        setIsPreparing(!isPreparing);
-      };
+    };
 
     return (
         <OrderCard>
-            <OrderCardDetails showTime = {true} isPreparing = {isPreparing} />
+            <OrderCardDetails 
+                order={order} 
+                showTime={true} 
+                isPreparing={isPreparing} 
+            />
             <View style={[style.status, style.itemsBetween]}>
                 <View style={style.status}>
                     <Switch 
                         value={isPreparing}
                         onValueChange={togglePreparing}
                         style={{ marginRight: 7 }}
+                        //onValueChange={(value) => updateStatus({ id: order?.id, status: value ? OrderStatus.Preparing : OrderStatus.Accepted })}
                     />
-                    <Text>Preparing</Text>
+                    <Text>{isPreparing ? "Completed" : "Preparing"}</Text>
                 </View>
 
                 <Pressable>
-                    <FontAwesome name="phone" size={24} color="black" />
+                    <FontAwesome name="phone" size={24} color={primary} />
                 </Pressable>
             </View>
         </OrderCard>

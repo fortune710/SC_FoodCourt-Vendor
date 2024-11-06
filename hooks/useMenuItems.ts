@@ -15,6 +15,7 @@ export default function useMenuItems() {
     async function createMenuItemInSupabase(data: CreateMenuItemData) {
         const menuItem = {
             ...data,
+            quantity: data.opening_stock_value,
             resturant_id: resturant?.id
         }
         const { error } = await supabase.from('menu_items').insert([menuItem]);

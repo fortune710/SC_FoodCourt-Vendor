@@ -2,7 +2,7 @@ import Page from "../components/page";
 import { Text } from "@rneui/themed"; 
 import { Image } from "expo-image";
 import useThemeColor from "../hooks/useThemeColor";
-import { StyleSheet, View } from "react-native";
+import { KeyboardAvoidingView, StyleSheet, View } from "react-native";
 import AuthForm from "../components/auth-form";
 import { useRouter } from "expo-router";
 import { globalStyles } from "../constants/Styles";
@@ -13,19 +13,20 @@ export default function SignUpPage() {
 
     return (
         <Page>
-            <View style={[globalStyles.flexItemsCenter, { width: "100%", marginVertical: 20, justifyContent: "center" }]}>
-                <Image
-                    source={require('../assets/images/login-image.png')}
-                    style={{ height: scale(200), width: verticalScale(210) }}
-                />
-            </View>
+            <KeyboardAvoidingView behavior="position">
+                <View style={[globalStyles.flexItemsCenter, { width: "100%", marginVertical: 20, justifyContent: "center" }]}>
+                    <Image
+                        source={require('../assets/images/login-image.png')}
+                        style={{ height: scale(200), width: verticalScale(210) }}
+                    />
+                </View>
 
-            <Text style={styles.loginText}>
-                Sign Up
-            </Text>
+                <Text style={styles.loginText}>
+                    Sign Up
+                </Text>
 
-            <AuthForm type="sign-up"/>
-            
+                <AuthForm type="sign-up"/>
+            </KeyboardAvoidingView>
         </Page>
     )
 }

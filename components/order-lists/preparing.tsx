@@ -1,17 +1,25 @@
-import { ScrollView ,StyleSheet} from "react-native";
+import { ScrollView ,StyleSheet, View} from "react-native";
 import OrderCardPreparing from "../orders/order-card-preparing";
 import {scale} from "react-native-size-matters"
+import { Order } from "~/utils/types";
+import { Text } from "../ui/text";
 
-export default function PreparingOrders(){
+export default function PreparingOrders({ orders }: { orders: Order[] }) {
     return (
-        <ScrollView contentContainerStyle = {styles.container}
-        showsVerticalScrollIndicator={false}
+        <ScrollView 
+            contentContainerStyle = {styles.container}
+            showsVerticalScrollIndicator={false}
         >
-            <OrderCardPreparing/>
-            <OrderCardPreparing/>
-            <OrderCardPreparing/>
-            <OrderCardPreparing/>
-            <OrderCardPreparing/>
+            {
+                orders?.length === 0 ? 
+                <View className="py-16 px-4">
+                   <Text>There are no new orders for you to look at.</Text> 
+                </View>
+                :
+                orders?.map((order) => (
+                    <OrderCardPreparing order={order}/>
+                ))
+            }   
         </ScrollView>
     )
 }

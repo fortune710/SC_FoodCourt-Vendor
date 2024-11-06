@@ -1,6 +1,6 @@
 import { Image } from "expo-image";
 import React, { useState } from "react";
-import { Pressable, StyleSheet, View } from "react-native";
+import { Pressable, StyleSheet, TouchableOpacity, View } from "react-native";
 import { scale } from "react-native-size-matters";
 import { CategoryListItemProps } from "../utils/types";
 import { ChevronDown } from "lucide-react-native";
@@ -9,7 +9,7 @@ import { Text } from "~/components/ui/text"
 import { useRouter } from "expo-router";
 
 
-export default function CategoryListItem({ foodName, addons, price, id, category }: CategoryListItemProps) {
+export default function CategoryListItem({ foodName, addons, price, id, category, quantity }: CategoryListItemProps) {
     const [showAddons, setShowAddons] = useState(false);
     const primary = useThemeColor({}, "primary");
     const router = useRouter();
@@ -21,25 +21,30 @@ export default function CategoryListItem({ foodName, addons, price, id, category
             style={styles.listItem}
         >
             <View style={styles.header}>
-                <Text className="text-xl font-medium">{foodName}</Text>
-                <Text className="text-xl font-medium">N{price}</Text>
+                <Text className="text-lg font-medium">{foodName}</Text>
+                <Text className="text-lg font-medium">NGN {price}</Text>
             </View>
-            <Pressable  
-                onPress={() => setShowAddons(!showAddons)}
-                style={[styles.header, { width: scale(75) }]}
-            >
-                <Text className="text-lg">Add ons</Text>
-                <ChevronDown stroke={primary}/>
-            </Pressable>
+
+            <View className="flex flex-row gap-2 items-center">
+                <Text className="text-base font-light">Stock {quantity};</Text>
+
+                <TouchableOpacity  
+                    onPress={() => setShowAddons(!showAddons)}
+                    style={[styles.header, { width: scale(80) }]}
+                >
+                    <Text className="text-base font-light">Add ons</Text>
+                    <ChevronDown stroke={primary}/>
+                </TouchableOpacity>
+            </View>
 
             {
                 !showAddons ? null :
                 <View className="py-2 space-y-1" style={{ width: '100%' }}>
                     {
                         addons.map((addon) => (
-                            <View style={styles.header}>
+                            <View key={addon.foodName} className="py-0.5 flex flex-row items-center justify-between">
                                 <Text className="font-medium">{addon.foodName}</Text>
-                                <Text className="font-medium">{addon.price}</Text>
+                                <Text className="font-medium">NGN {addon.price}</Text>
                             </View>
                         ))
                     }

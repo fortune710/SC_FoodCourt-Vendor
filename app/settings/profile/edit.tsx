@@ -1,7 +1,7 @@
 import { Input, Text } from "@rneui/themed";
 import { Image } from "expo-image";
 import Page from "components/page";
-import { View, StyleSheet, SafeAreaView, TouchableOpacity, TextInput } from 'react-native';
+import { View, StyleSheet, SafeAreaView, TouchableOpacity, TextInput, KeyboardAvoidingView } from 'react-native';
 import useThemeColor from "hooks/useThemeColor";
 import Ionicons from "@expo/vector-icons/Ionicons";
 
@@ -12,11 +12,15 @@ import Button from "~/components/custom/button";
 import { StatusBar } from "react-native";
 import { useState } from "react";
 import { scale } from "react-native-size-matters";
+import useCurrentUser from "~/hooks/useCurrentUser";
+import useAuth from "~/hooks/useAuth";
 
 export default function EditProfile() {
     const primary = useThemeColor({}, "primary");
-    const router = useRouter()
-    const [phoneNumber, setPhoneNumber] = useState('+234 809 579 4943');
+    const router = useRouter();
+    const  { currentUser } = useCurrentUser();
+    const { updateUser } = useAuth();
+    const [phoneNumber, setPhoneNumber] = useState(currentUser?.phone_number);
     const [password, setPassword] = useState('');
     const [confirmPassword, setConfirmPassword] = useState('');
     const [showPassword, setShowPassword] = useState(false);
@@ -24,71 +28,71 @@ export default function EditProfile() {
 
     return (
         <Page>
-            <StatusBar backgroundColor="white" barStyle="dark-content" />
+          <StatusBar backgroundColor="white" barStyle="dark-content" />
 
             
-    <SafeAreaView style={styles.container}>
-      <View style={styles.header}>
-        <TouchableOpacity onPress={() => router.back()}>
-          <Ionicons name="arrow-back" size={24} color="black" />
-        </TouchableOpacity>
-        <Text style={styles.headerTitle}>Edit Profile</Text>
-        <View style={styles.placeholder} />
-      </View>
+          <KeyboardAvoidingView behavior="position" style={styles.container}>
+            <View style={styles.header}>
+              <TouchableOpacity onPress={() => router.back()}>
+                <Ionicons name="arrow-back" size={24} color="black" />
+              </TouchableOpacity>
+              <Text style={styles.headerTitle}>Edit Profile</Text>
+              <View style={styles.placeholder} />
+            </View>
 
-      <View style={styles.profileSection}>
-        <Image
-          source={require("../../../assets/images/food-court-avatar.png")} // Replace with actual image URL
-          style={styles.profileImage}
-        />
-        <View style={styles.cameraIconContainer}>
-          <Ionicons name="camera" size={20} color="white" />
-        </View>
-        <Text style={styles.name}>Naomi Andrews</Text>
-        <Text style={styles.subName}>Uvuvwevwevwe</Text>
-      </View>
+            <View style={styles.profileSection}>
+              <Image
+                source={{ uri: currentUser?.image_url }} // Replace with actual image URL
+                style={styles.profileImage}
+              />
+              <View style={styles.cameraIconContainer}>
+                <Ionicons name="camera" size={20} color="white" />
+              </View>
+              <Text style={styles.name}>{currentUser?.full_name}</Text>
+              <Text style={styles.subName}>@{currentUser?.username}</Text>
+            </View>
 
-      <View style={styles.inputSection}>
-        <Text style={styles.label}>Phone Number</Text>
-        <TextInput
-          style={styles.input}
-          value={phoneNumber}
-          onChangeText={setPhoneNumber}
-          keyboardType="phone-pad"
-        />
+            <View style={styles.inputSection}>
+              <Text style={styles.label}>Phone Number</Text>
+              <TextInput
+                style={styles.input}
+                value={phoneNumber}
+                onChangeText={setPhoneNumber}
+                keyboardType="default"
+              />
 
-        <Text style={styles.label}>Password</Text>
-        <View style={styles.passwordContainer}>
-          <TextInput
-            style={styles.passwordInput}
-            value={password}
-            onChangeText={setPassword}
-            secureTextEntry={!showPassword}
-          />
-          <TouchableOpacity onPress={() => setShowPassword(!showPassword)}>
-            <Ionicons name={showPassword ? "eye-off" : "eye"} size={24} color="gray" />
-          </TouchableOpacity>
-        </View>
+              <Text style={styles.label}>Password</Text>
+              <View style={styles.passwordContainer}>
+                <TextInput
+                  style={styles.passwordInput}
+                  value={password}
+                  onChangeText={setPassword}
+                  secureTextEntry={!showPassword}
+                />
+                <TouchableOpacity onPress={() => setShowPassword(!showPassword)}>
+                  <Ionicons name={showPassword ? "eye-off" : "eye"} size={24} color="gray" />
+                </TouchableOpacity>
+              </View>
 
-        <Text style={styles.label}>Confirm Password</Text>
-        <View style={styles.passwordContainer}>
-          <TextInput
-            style={styles.passwordInput}
-            value={confirmPassword}
-            onChangeText={setConfirmPassword}
-            secureTextEntry={!showConfirmPassword}
-          />
-          <TouchableOpacity onPress={() => setShowConfirmPassword(!showConfirmPassword)}>
-            <Ionicons name={showConfirmPassword ? "eye-off" : "eye"} size={24} color="gray" />
-          </TouchableOpacity>
-        </View>
-      </View>
-      <View style={styles.updateButtonContainer}>
-      <TouchableOpacity style={styles.updateButton}>
-        <Text style={styles.updateButtonText}>Update Profile</Text>
-      </TouchableOpacity>
-      </View>
-    </SafeAreaView>
+              <Text style={styles.label}>Confirm Password</Text>
+              <View style={styles.passwordContainer}>
+                <TextInput
+                  style={styles.passwordInput}
+                  value={confirmPassword}
+                  onChangeText={setConfirmPassword}
+                  secureTextEntry={!showConfirmPassword}
+                />
+                <TouchableOpacity onPress={() => setShowConfirmPassword(!showConfirmPassword)}>
+                  <Ionicons name={showConfirmPassword ? "eye-off" : "eye"} size={24} color="gray" />
+                </TouchableOpacity>
+              </View>
+            </View>
+            <View style={styles.updateButtonContainer}>
+            <TouchableOpacity style={styles.updateButton} onPress={() => updateUser({ phone_number: phoneNumber })}>
+              <Text style={styles.updateButtonText}>Update Profile</Text>
+            </TouchableOpacity>
+            </View>
+          </KeyboardAvoidingView>
 
 
         </Page>

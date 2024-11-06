@@ -1,25 +1,51 @@
 import { View, StyleSheet, Text, Image } from "react-native";
+import { scale } from "react-native-size-matters";
+import { Order } from "~/utils/types";
 
+interface Props {
+  orderNumber: number | string;
+  customerName: string;
+  orderDate: Date;
+}
 
-export default function OrderCardName() {
-    return(
-        <>
-            <View style={styles.row}>
-                <Text style={styles.orderNo}>
-                    Order No: 12345
-                </Text>
-                <Text style={styles.date}>13-11-2023</Text>
-            </View>
+function formatDateTime(dateInput: Date | string) {
+  const date = dateInput ? new Date(dateInput) : new Date();
+  
+  // Format date as DD-MM-YYYY
+  const day = date.getDate().toString().padStart(2, '0');
+  const month = (date.getMonth() + 1).toString().padStart(2, '0');
+  const year = date.getFullYear();
+  
+  // Format time as HH:MM
+  const hours = date.getHours().toString().padStart(2, '0');
+  const minutes = date.getMinutes().toString().padStart(2, '0');
+  
+  return {
+      date: `${day}-${month}-${year}`,
+      time: `${hours}:${minutes}`
+  };
+}
 
-            <View style={styles.row}>
-                <Text style={styles.customerLabel}>
-                    Customer: Susan Sharon
-                </Text>
-                <Text style={styles.time}>13:25</Text>
-            </View>
-            {/* <Text style={styles.dateTime}>Wed, November 13, 2023 13:25</Text> */}
-        </>
-    )
+export default function OrderCardName({ order }: { order: Order }) {
+  const { date, time } = formatDateTime(order.order_date);
+
+  return(
+    <View className="border-b px-1 py-1">
+      <View style={styles.row}>
+          <Text style={styles.orderNo}>
+            Order No: {order?.id!}
+          </Text>
+          <Text style={styles.date}>{date}</Text>
+      </View>
+
+      <View style={styles.row}>
+          <Text style={styles.customerLabel}>
+              Customer: {order?.customer_name}
+          </Text>
+          <Text style={styles.time}>{time}</Text>
+      </View>
+    </View>
+  )
 }
 
 const styles = StyleSheet.create({
@@ -45,13 +71,14 @@ const styles = StyleSheet.create({
       justifyContent: "space-between",
       display: "flex",
       flexDirection: "row",
-      marginBottom: 10
+      marginBottom: 5
     },
     orderNo: {
       justifyContent: "space-between",
       alignItems: "stretch",
       display: "flex",
-      fontWeight: 'bold'
+      fontWeight: 'semibold',
+      fontSize: scale(16)
     
     },
     orderNoValue: {
@@ -70,10 +97,12 @@ const styles = StyleSheet.create({
       display: "flex",
       marginTop: 5,
       marginBottom: 20,
+      
     },
     customerLabel: {
       display: "flex",
-      fontWeight: "bold"
+      fontWeight: 'regular',
+      fontSize: scale(12)
     },
     customerValue: {
       flexGrow: 1,

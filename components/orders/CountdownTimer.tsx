@@ -1,34 +1,40 @@
 import React, { useState, useEffect } from 'react';
 import {Text,View} from "react-native"
 import useOrders from '~/hooks/useOrders';
+import { cn } from '~/lib/utils';
 
 interface CountdownTimerProps {
   initialPreparationTime: number; // Initial time in seconds
   isPreparing: boolean | undefined;
-  orderId: string;
+  orderId: number;
   
 }
 
 export const CountdownTimer: React.FC<CountdownTimerProps> = ({ orderId, initialPreparationTime, isPreparing }) => {
   
   const [remainingTime, setRemainingTime] = useState(initialPreparationTime);
- const {getOrderById} = useOrders()
+  const {getOrderById} = useOrders();
+  const startTime = getOrderById(orderId)?.start_time
 
   useEffect(() => {
     let timerInterval: string | number | NodeJS.Timeout | undefined;
 
-    if (isPreparing) {
-       
-      const fetchTimerData = async   () => {
-        try {
+    if (remainingTime === 0 || !isPreparing) return setRemainingTime(0);
+    
+    const fetchTimerData = async   () => {
+      
+      try {
         // Fetch start time from the database
-        const startTime =  await getOrderById(orderId)?.start_time
+        
         const duration = initialPreparationTime
 
+        
         // Calculate remaining time based on current time
         const endTime = new Date(startTime).getTime() + duration * 1000;
         const currentTime = Date.now();
+        console.log(startTime, endTime)
         let timeLeft = Math.floor((endTime - currentTime) / 1000);
+        if (timeLeft < 0) return;
 
         setRemainingTime(timeLeft);
 
@@ -40,14 +46,12 @@ export const CountdownTimer: React.FC<CountdownTimerProps> = ({ orderId, initial
       }
       catch (error) {
         console.error("Error fetching timer data:", error);
-    }
       }
-
-      fetchTimerData();
     }
+    fetchTimerData();
 
     return () => clearInterval(timerInterval); // Clean up on component unmount
-  }, [isPreparing, orderId]);
+  }, [isPreparing, orderId, startTime]);
 
 
   const formatTime = (seconds: number) => {
@@ -59,7 +63,9 @@ export const CountdownTimer: React.FC<CountdownTimerProps> = ({ orderId, initial
   return (
     <View>
       
-      <View><Text className='self-end text-right py-2 px-2 bg-[grey] text-white rounded-md mt-2'>{formatTime(remainingTime)}</Text></View>
+      <View>
+        <Text className={cn('self-end text-right py-2 px-2 text-white rounded-md mt-2', remainingTime > 300 ? "bg-[grey]" : "bg-red-600")}>{formatTime(remainingTime)}</Text>
+      </View>
     </View>
   );
 };

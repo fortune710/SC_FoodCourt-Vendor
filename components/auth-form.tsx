@@ -1,13 +1,12 @@
 import { Button, Input } from '@rneui/themed';
-import { Image } from 'expo-image';
 import React, { useState } from 'react';
-import { KeyboardAvoidingView, Pressable, StyleSheet, Text } from 'react-native';
+import { Pressable, StyleSheet, Text, TouchableOpacity } from 'react-native';
 import { View } from 'react-native';
 import { Link, useRouter } from 'expo-router'
 import styleUtility from '../utils/styles';
 import { verticalScale } from 'react-native-size-matters';
 import useAuth from '../hooks/useAuth';
-import { Eye, Lock, Mail, UserRound } from 'lucide-react-native';
+import { Eye, EyeOff, Lock, Mail, UserRound } from 'lucide-react-native';
 import useThemeColor from '~/hooks/useThemeColor';
 import { Checkbox } from './ui/checkbox';
 import Toast from 'react-native-toast-message';
@@ -26,6 +25,7 @@ export default function AuthForm({ type }: AuthFormProps) {
     const [email, setEmail] = useState("");
     const [name, setName] = useState("");
     const [password, setPassword] = useState("");
+    const [showPassword, setShowPassword] = useState(false);
 
 
     const { signIn, signUpWithEmail } = useAuth();
@@ -54,12 +54,13 @@ export default function AuthForm({ type }: AuthFormProps) {
                         name: name,
                     })
                     .then((user) => {
+                        console.log(user)
                         Toast.show({
                             text1: "Sign Up Successful",
                             type: "success"
                         })
                         return router.push({
-                            pathname: '/create-resturant',
+                            pathname: '/restaurant/create',
                             params: {
                                 admin_id: user?.id
                             }
@@ -82,7 +83,9 @@ export default function AuthForm({ type }: AuthFormProps) {
 
     if (type !== 'forgot-password') {
         return (
-            <KeyboardAvoidingView behavior='padding' style={styles.formContainer}>
+            <View 
+                style={styles.formContainer}
+            >
                 {
                     type === 'sign-up' && 
                     <>
@@ -114,12 +117,15 @@ export default function AuthForm({ type }: AuthFormProps) {
                 <Input
                     leftIcon={<Lock stroke={primary}/>}
                     rightIcon={
-                        <Pressable>
-                            <Eye stroke={primary}/>
-                        </Pressable>
+                        <TouchableOpacity 
+                            onPress={() => setShowPassword(!showPassword)}
+                        >
+                            { !showPassword ? <EyeOff stroke={primary} /> : <Eye stroke={primary}/> }
+                        </TouchableOpacity>
                     }
                     inputContainerStyle={styles.inputContainer}
                     placeholder='Password'
+                    secureTextEntry={!showPassword}
                     value={password}
                     onChangeText={(text) => setPassword(text)}
                 />
@@ -129,13 +135,14 @@ export default function AuthForm({ type }: AuthFormProps) {
                     <View style={[styleUtility.flexJustifyBetween, { width: '100%', paddingHorizontal: 20 }]}>
                         <RememberMeContainer 
                             style={styles.checkboxContainer}
+                            className='gap-2'
                         >
                             <Checkbox checked={checkboxClicked} onCheckedChange={setCheckbox}/>
                             <Text>Remember Me</Text>
                         </RememberMeContainer>
 
                         <Link href={'/forgot-password'}>
-                            Forgot Password
+                            Forgot Password?
                         </Link>
                     </View>
                     :
@@ -143,7 +150,7 @@ export default function AuthForm({ type }: AuthFormProps) {
                         <Checkbox checked={checkboxClicked} onCheckedChange={setCheckbox}/>
 
                         <Text>
-                            I have read and accepted the <Link href={'/terms'}>Terms and Conditions</Link>
+                            I have read and accepted the <Link className='text-primary' href={'/terms'}>Terms and Conditions</Link>
                         </Text>
                     </TermsAndConditionsContainer>
                 }
@@ -166,25 +173,16 @@ export default function AuthForm({ type }: AuthFormProps) {
                 </View>
 
 
-            </KeyboardAvoidingView>
+            </View>
         )
     }
 
     return (
-        <View>
-            {
-                /*
-                
-                <Image
-                    source={{ uri: require('../assets/forgot-password.svg') }}
-                    style={{ height: 220, width: '100%' }}
-                />
-                
-                */
-            }
+        <View className='px-3 flex flex-col gap-10'>
+
 
             <View>
-                <Text>Forgot Password</Text>
+                <Text className='text-4xl text-primary font-bold'>Forgot Password</Text>
                 <Text>
                     Enter the email associated aith this account and we'll send you a link to 
                     reset your password
@@ -192,12 +190,11 @@ export default function AuthForm({ type }: AuthFormProps) {
             </View>
 
             <Input
-                /*
-                leftIcon={
-                    <Icon iconFile={require('../assets/icons/mail.svg')}/>
-                }*/
                 inputContainerStyle={styles.inputContainer}
                 placeholder='Email'
+                leftIcon={<Mail stroke={primary} />}
+                value={email}
+                onChangeText={(text) => setEmail(text)}
             />
 
 

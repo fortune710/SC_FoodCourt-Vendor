@@ -1,7 +1,6 @@
 import React from 'react';
 import { View, Text, StyleSheet } from 'react-native';
 import { Image } from 'expo-image';
-import BackButton from '~/components/custom/back-button';
 import ContactOption from 'components/support/contact';
 import { Mail } from 'lucide-react-native';
 import { useRouter } from 'expo-router';
@@ -16,14 +15,11 @@ const SupportPage = () => {
 
   return (
     <Page>
-      <Header>
-        <BackButton onPress={() => router.back()} />
-        <Text style={styles.title}>Support</Text>
-      </Header>
+      <Header headerTitle='Support'/>
       
       <View style={styles.content}>
         <Image
-          source={require('../../assets/contact-us.svg')}
+          source={require('~/assets/contact-us.svg')}
           style={styles.illustration}
         />
         

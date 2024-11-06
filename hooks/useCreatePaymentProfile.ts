@@ -9,7 +9,6 @@ export default function useCreatePaymentProfile() {
 
     const { mutateAsync: createPaymentProfile, isPending: loading } = useMutation({
         mutationFn: async (data: ICreateSubaccount) => {
-            console.log(data)
             return await Paystack.createSubaccount(data)
         },
         onSuccess: (data) => {

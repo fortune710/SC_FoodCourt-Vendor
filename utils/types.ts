@@ -8,7 +8,8 @@ export interface CategoryListItemProps {
     addons: Addon[],
     price: number,
     id: number,
-    category: string
+    category: string,
+    quantity: number,
 }
 
 export interface CreateMenuItemData {
@@ -17,7 +18,10 @@ export interface CreateMenuItemData {
     price: number,
     preparation_time: string,
     add_ons?: Addon[],
-    quantity: number
+    quantity: number,
+    opening_stock_value: number,
+    restocking_value: number,
+    warning_stock_value: number,
 }
 
 export interface ResturantData {
@@ -41,6 +45,25 @@ export interface ICreateSubaccount {
 
 export interface MenuItem extends CreateMenuItemData {
     id: number
+}
+
+export interface Order {
+    id: number,
+    status: number,
+    total_amount: number,
+    order_date: Date | string,
+    customer_name: string,
+    preparation_time: number,
+    items: {
+        id: number,
+        quantity: number,
+        addon_price?: number,
+        addon_name?: string,
+        menu_item: {
+            name: string,
+            price: number,
+        }
+    }[]
 }
 
 export enum SupabaseTables {
