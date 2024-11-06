@@ -2,9 +2,10 @@ import { supabase } from "~/utils/supabase";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import Toast from "react-native-toast-message";
 import useResturant from "./useResturant";
+import useCurrentUser from "./useCurrentUser";
 
 interface Order {
-    id: string;
+    id: number;
     total_amount: number;
     order_date: string;
     status: number;
@@ -12,15 +13,43 @@ interface Order {
     order_items: number[];
     user_paid: boolean;
     customer_name: string;
+    start_time: Date | number | string
+    preparation_time: number
 }
 
 export default function useOrders() {
     const queryClient = useQueryClient();
     const { resturant } = useResturant();
+    const { currentUser } = useCurrentUser();
 
-
-
+   
     async function getOrders() {
+        if (currentUser?.user_type === "admin") {
+            const { data, error } = await supabase
+                .from('orders')
+                .select(`
+                    id,
+                    status,
+                    total_amount,
+                    order_date,
+                    customer_name,
+                    preparation_time,
+                    start_time,
+                    items:order_items (
+                        id,
+                        quantity,
+                        addon_name,
+                        addon_price,
+                        menu_item:menu_item_id (name, price)
+                    )
+                `)
+                .eq('restaurant_id', resturant?.id)
+                .order('order_date', { ascending: false });
+            if (error) throw new Error(error.message);
+            return data;
+
+        }
+
         const { data, error } = await supabase
             .from('orders')
             .select(`
@@ -29,13 +58,18 @@ export default function useOrders() {
                 total_amount,
                 order_date,
                 customer_name,
+                preparation_time,
+                start_time,
                 items:order_items (
                     id,
                     quantity,
+                    addon_name,
+                    addon_price,
                     menu_item:menu_item_id (name, price)
                 )
             `)
-            .eq('resturant_id', resturant?.id)
+            .eq('restaurant_id', resturant?.id)
+            .in('assigned_staff', [currentUser?.id, null])
             .order('order_date', { ascending: false });
 
         if (error) throw new Error(error.message);
@@ -50,6 +84,7 @@ export default function useOrders() {
             .eq('id', id)
             .select();
 
+        console.log(error)
         if (error) throw new Error(error.message);
     }
 
@@ -76,7 +111,7 @@ export default function useOrders() {
         }
     });
 
-    function getOrderById(id: string) {
+    function getOrderById(id: number) {
         return orders?.find(order => order.id === id);
     }
 

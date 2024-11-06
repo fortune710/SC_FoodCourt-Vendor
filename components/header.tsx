@@ -148,7 +148,7 @@ const AdminStaffMenu = ({ closeMenu }: { closeMenu: () => void }) => {
 
     return (
         <View style={styles.menu}>
-            <View className="mt-84" style={{marginTop: 268}}>
+            <View className="mt-84" style={{marginTop: verticalScale(200)}}>
                 <Pressable onPress={closeMenu}>
                     <X size={ICON_SIZE} color="red"/>
                 </Pressable>
@@ -160,28 +160,28 @@ const AdminStaffMenu = ({ closeMenu }: { closeMenu: () => void }) => {
                     <Text className="text-white text-xl font-semibold">Dashboard</Text>
                 </Pressable>
 
-                <Pressable className="flex flex-row items-center gap-3 p-2" style={{marginLeft: 48}}>
+                <Pressable className="flex flex-row items-center gap-3 p-2" style={{marginLeft: scale(48)}}>
                     <ChartPie color='#7e7e7e' size={ICON_SIZE}/>    
                     <Text className="text-xl text-gray-500 font-semibold" >Analytics</Text>                                                     
                 </Pressable>
 
-                <Pressable className="flex flex-row items-center gap-3 p-2" onPress={moveToMenu} style={{marginLeft: 96}}>
+                <Pressable className="flex flex-row items-center gap-3 p-2" onPress={moveToMenu} style={{marginLeft: scale(96)}}>
                     <LayoutGrid color='white' size={ICON_SIZE}/> 
                     <Text className="text-white text-xl font-semibold">Menu</Text>                                     
                 </Pressable>
 
 
-                <Pressable onPress={moveToOrders} className="flex flex-row items-center gap-3 p-2" style={{marginLeft: 144}}>
+                <Pressable onPress={moveToOrders} className="flex flex-row items-center gap-3 p-2" style={{marginLeft: scale(144)}}>
                     <Mail color='white' size={ICON_SIZE}/>  
                     <Text className="text-white text-xl font-semibold">Orders</Text>                  
                 </Pressable>
 
-                <Pressable onPress={moveToWallet} className="flex flex-row items-center gap-3 p-2" style={{marginLeft: 96}}>
+                <Pressable onPress={moveToWallet} className="flex flex-row items-center gap-3 p-2" style={{marginLeft: scale(96)}}>
                     <Wallet color='white' size={ICON_SIZE}/>  
                     <Text className="text-white text-xl font-semibold">Transactions</Text>                  
                 </Pressable>
 
-                <Pressable onPress={moveToStaff} className="flex flex-row items-center gap-3 p-2" style={{marginLeft: 48}}>
+                <Pressable onPress={moveToStaff} className="flex flex-row items-center gap-3 p-2" style={{marginLeft: scale(48)}}>
                     <UsersRound size={ICON_SIZE} color='white'/>
                     <Text className="text-white text-xl font-semibold">Staff</Text>
                 </Pressable>
@@ -223,19 +223,19 @@ const VendorStaffMenu = ({ closeMenu }: { closeMenu: () => void }) => {
 
     return (
     <View style={styles.menu}>
-        <View className="mt-24" style={{marginTop: 128}}>
+        <View className="mt-24" style={{marginTop: verticalScale(128)}}>
             <Pressable onPress={closeMenu}>
                 <X size={ICON_SIZE} color="red"/>
             </Pressable>
         </View>
         
-        <View className="flex flex-col gap-12 mt-16" style={{marginLeft: 48}}>
+        <View className="flex flex-col gap-12 mt-16" style={{marginLeft: scale(48)}}>
             <Pressable className="flex flex-row items-center gap-3" onPress={moveToMenu}>
                 <LayoutGrid color='white' size={ICON_SIZE}/> 
                 <Text className="text-white text-xl font-semibold">Menu</Text>                                     
             </Pressable>
 
-            <Pressable onPress={moveToOrders} className="flex flex-row items-center gap-3" style={{marginLeft: 64}}>
+            <Pressable onPress={moveToOrders} className="flex flex-row items-center gap-3" style={{marginLeft: scale(64)}}>
                 <Package size={ICON_SIZE} color='white'/>
                 <Text className="text-white text-xl font-semibold">Orders</Text>
             </Pressable>

@@ -14,6 +14,7 @@ import { scale } from "react-native-size-matters";
 
 import { Text } from "@rneui/themed";
 import { globalStyles } from "constants/Styles";
+import useCurrentUser from "~/hooks/useCurrentUser";
 
 interface ProfileItemProps {
     icon: React.ComponentProps<typeof Ionicons>['name'];
@@ -37,16 +38,13 @@ const ProfileItem: React.FC<ProfileItemProps> = ({ icon, label, value }) => (
 
 export default function ProfilePage() {
   const primary = useThemeColor({}, "primary");
-  const router = useRouter()
+  const router = useRouter();
+  const { currentUser } = useCurrentUser();
 
   return (
     <View style={styles.container}>
       <StatusBar backgroundColor="#F72F2F" barStyle="light-content" />
-      {/* <View style={[globalStyles.flexItemsCenter, globalStyles.justifyBetween]}>
-            <BackArrowButton onPress={() => router.back()} color="#fff"/>              <TouchableOpacity onPress={() => router.push("/settings/profile/edit")}>
-            <Edit stroke="#fff"/>
-            </TouchableOpacity>
-        </View> */}
+      
       <View style={styles.header}>
         <TouchableOpacity onPress={() => router.back()}>
           <Ionicons name="arrow-back" size={24} color="white" />
@@ -55,26 +53,27 @@ export default function ProfilePage() {
           <Ionicons name="pencil" size={24} color="white" />
         </TouchableOpacity>
       </View>
-      
+    
       <View style={styles.profileInfo}>
         <View style={styles.profileInfoText}>
-        <Text style={styles.name}>Naomi Andrews</Text>
-        <Text style={styles.subName}>Uvuvwevwevwe</Text>
+        <Text style={styles.name}>{currentUser?.full_name}</Text>
+        <Text style={styles.subName}>@{currentUser?.username}</Text>
         </View>
       
       </View> 
       <Image
-          source={require("../../../assets/images/food-court-avatar.png") } // Replace with actual image URL
+          source={{ uri: currentUser?.image_url! }} // Replace with actual image URL
           style={styles.profileImage}
         />
-      
+    
       <View style={styles.diagonal} />
       
       <View style={styles.detailsContainer}>
-        <ProfileItem icon="mail" label="Email" value="naomi.andrew@gmail.com"/>
-        <ProfileItem icon="call" label="Phone Number" value="+234 804 225 8973" />
-        <ProfileItem icon="lock-closed" label="Password" value="••••••••••" />
+        <ProfileItem icon="mail" label="Email" value={currentUser?.email!} />
+        <ProfileItem icon="call" label="Phone Number" value={currentUser?.phone_number! || "N/A"} />
+        {/* <ProfileItem icon="lock-closed" label="Password" value="••••••••••" /> */}
       </View>
+
     </View>
   )
 }
@@ -121,21 +120,22 @@ const styles = StyleSheet.create({
       borderWidth: 3,
       borderColor: 'white',
       position: 'absolute',
-      top: scale(120),
+      top: scale(110),
       right: scale(20),
       zIndex: 100,
     
     },
     diagonal: {
       height: 150,
-      width: '200%',
+      width: '170%',
       backgroundColor: 'white',
-    transform: [{ skewY: '-20deg' }],
+      transform: [{ skewY: '-20deg' }],
       
     },
     detailsContainer: {
       flex: 1,
       backgroundColor: 'white',
+      marginTop: -22,
       paddingTop: 30,
       paddingHorizontal: 16,
     },

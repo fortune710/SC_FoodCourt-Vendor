@@ -17,7 +17,8 @@ export default function useCurrentUser() {
             full_name: data.user?.user_metadata.full_name,
             image_url: data.user?.user_metadata.image_url,
             username: data.user?.user_metadata.username,
-            email: data.user?.email
+            email: data.user?.email,
+            phone_number: data.user?.user_metadata.phone_number
         };
     }
 

@@ -22,7 +22,7 @@ export default function walletPage() {
 
   const router = useRouter();
   const { resturant } = useResturant();
-  const { orders, isLoading } = useOrderStatus(OrderStatus.Collected);
+  const { orders, isLoading } = useOrderStatus(OrderStatus.Completed);
   const [modalVisible, setModalVisible] = React.useState(false); // State for modal visibility
   const [withdrawAmount, setWithdrawAmount] = React.useState(''); // State for input amount
 
@@ -33,7 +33,18 @@ export default function walletPage() {
         <Header headerTitle='Transactions' noRightIcon = {true} style='light'/>     
       </View>
 
-      <View style={{marginTop: verticalScale(50)}}>
+      <View className='pt-10 px-3'>
+        <Text className='text-center text-white text-xl'>Payment Details</Text>
+
+        <View className='my-8'>
+          <Text className='text-white text-center'>Account Number</Text>
+          <Text className='text-4xl text-white text-center'>{resturant?.account_number || "N/A"}</Text>
+          {
+            !resturant?.account_number && 
+            <Text className='text-xs text-white text-center'>You must add payment details to start receiving orders</Text>
+          }
+        </View>
+
         {
           /*
           <View style={styles.pagination}>
@@ -44,66 +55,19 @@ export default function walletPage() {
           */
         }
 
-        {
-          !resturant?.subaccount_code ? 
-          <TouchableOpacity onPress={() => router.push('/admin/wallet/create')} className='bg-white rounded-[50px] p-6 mx-16'>
-            <Text className='mx-auto'>Add Payment Details</Text>
-          </TouchableOpacity>
-          :
-          <TouchableOpacity onPress={() => router.push('/admin/wallet/create')} className='bg-white rounded-[50px] p-6 mx-16'>
-            <Text className='mx-auto'>Update Payment Details</Text>
-          </TouchableOpacity>
+        <View style={{marginTop: 50}}>
+          {
+            !resturant?.subaccount_code ? 
+            <TouchableOpacity onPress={() => router.push('/admin/wallet/create')} className='bg-white rounded-[50px] p-6 mx-16'>
+              <Text className='mx-auto'>Add Payment Details</Text>
+            </TouchableOpacity>
+            :
+            <TouchableOpacity onPress={() => router.push('/admin/wallet/create')} className='bg-white rounded-[50px] p-6 mx-16'>
+              <Text className='mx-auto'>Update Payment Details</Text>
+            </TouchableOpacity>
 
-        }
-
-        {
-          /*
-          
-        <Pressable 
-            style={styles.withdrawButton} 
-            onPress={() => setModalVisible(true)} // Open modal on press
-          >
-            <Ionicons name="cash-outline" size={24} color="white" style={styles.withdrawIcon} />
-            <Text style={styles.withdrawText}>Withdraw</Text>
-          </Pressable>
-          <Modal
-          animationType="slide"
-          transparent={true}
-          visible={modalVisible}
-          onRequestClose={() => setModalVisible(false)} // Close modal
-        >
-          <View style={styles.modalContainer}>
-            <View style={styles.modalContent}>
-              <Text style={styles.modalTitle}>Enter Withdraw Amount</Text>
-              <TextInput
-                style={styles.input}
-                placeholder="Enter amount"
-                keyboardType="numeric"
-                value={withdrawAmount}
-                onChangeText={setWithdrawAmount} // Update state on input change
-                />
-                 <Pressable 
-                style={styles.submitButton} 
-                onPress={() => {
-                  // Handle withdrawal logic here
-                  setModalVisible(false); // Close modal after submission
-                }}
-              >
-                <Text style={styles.submitText}>Submit</Text>
-              </Pressable>
-              <Pressable 
-                style={styles.cancelButton} 
-                onPress={() => setModalVisible(false)} // Close modal
-              >
-                 <Text style={styles.cancelText}>Cancel</Text>
-              </Pressable>
-            </View>
-          </View>
-        </Modal>      
-          
-          */
-        }
-
+          }
+        </View>
       </View>
 
 
@@ -116,7 +80,7 @@ export default function walletPage() {
         {
           isLoading ? <ActivityIndicator/> :
           orders?.length === 0 ?
-          <View className='w-full items-center justify-center flex-row h-[200px]'>
+          <View className='w-full items-center justify-center flex-row h-[300px]'>
             <Text>There are no orders available</Text>
           </View> 
           :
@@ -128,6 +92,7 @@ export default function walletPage() {
                   amount={order.total_amount.toString()}
                   date="24 Aug 2023" //change date format
                   description={`Order Payment from ${order.customer_name}`}
+                  key={order.id}
                 />
               ))
             }
@@ -207,12 +172,14 @@ const styles = StyleSheet.create({
       backgroundColor: 'white',
       borderTopLeftRadius: 20,
       borderTopRightRadius: 20,
+      height: "100%",
       padding: 20,
-      position: 'absolute',
-      top: verticalScale(250),
+      position: "absolute",
+      top: verticalScale(300),
       bottom: 0,
       left: 0,
       right: 0,
+      marginTop: verticalScale(16)
     },
     handle:{
         marginTop: scale(-10),

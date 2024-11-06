@@ -47,6 +47,25 @@ export interface MenuItem extends CreateMenuItemData {
     id: number
 }
 
+export interface Order {
+    id: number,
+    status: number,
+    total_amount: number,
+    order_date: Date | string,
+    customer_name: string,
+    preparation_time: number,
+    items: {
+        id: number,
+        quantity: number,
+        addon_price?: number,
+        addon_name?: string,
+        menu_item: {
+            name: string,
+            price: number,
+        }
+    }[]
+}
+
 export enum SupabaseTables {
     Profiles = "profiles",
     Restaurants = "restaurants",

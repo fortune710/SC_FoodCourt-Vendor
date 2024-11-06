@@ -2,16 +2,17 @@ import React from "react";
 import { View, StyleSheet, Text, Image } from "react-native";
 import OrderCard from "./order-card";
 import OrderCardName from "./order-card-name";
+import { Order, OrderStatus } from "~/utils/types";
 
-export default function OrderCardCompleted() {
+export default function OrderCardCompleted({ order }: { order: Order }) {
   return (
     <OrderCard>
-      <OrderCardName/>
+      <OrderCardName order={order}/>
       <View style={styles.status}>
         <View style={styles.statusLabel}>
           <Text>
             Status:{" "}
-            <Text style={styles.statusValue}>Collected</Text>
+            <Text style={styles.statusValue}>{OrderStatus[order?.status]}</Text>
           </Text>
         </View>
         <View style={styles.accepted}>

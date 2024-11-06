@@ -1,5 +1,6 @@
 import { View, StyleSheet, Text, Image } from "react-native";
 import { scale } from "react-native-size-matters";
+import { Order } from "~/utils/types";
 
 interface Props {
   orderNumber: number | string;
@@ -7,21 +8,41 @@ interface Props {
   orderDate: Date;
 }
 
-export default function OrderCardName() {
+function formatDateTime(dateInput: Date | string) {
+  const date = dateInput ? new Date(dateInput) : new Date();
+  
+  // Format date as DD-MM-YYYY
+  const day = date.getDate().toString().padStart(2, '0');
+  const month = (date.getMonth() + 1).toString().padStart(2, '0');
+  const year = date.getFullYear();
+  
+  // Format time as HH:MM
+  const hours = date.getHours().toString().padStart(2, '0');
+  const minutes = date.getMinutes().toString().padStart(2, '0');
+  
+  return {
+      date: `${day}-${month}-${year}`,
+      time: `${hours}:${minutes}`
+  };
+}
+
+export default function OrderCardName({ order }: { order: Order }) {
+  const { date, time } = formatDateTime(order.order_date);
+
   return(
     <View className="border-b px-1 py-1">
       <View style={styles.row}>
           <Text style={styles.orderNo}>
-              Order No: 12345
+            Order No: {order?.id!}
           </Text>
-          <Text style={styles.date}>13-11-2023</Text>
+          <Text style={styles.date}>{date}</Text>
       </View>
 
       <View style={styles.row}>
           <Text style={styles.customerLabel}>
-              Customer: Susan Sharon
+              Customer: {order?.customer_name}
           </Text>
-          <Text style={styles.time}>13:25</Text>
+          <Text style={styles.time}>{time}</Text>
       </View>
     </View>
   )

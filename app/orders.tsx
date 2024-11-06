@@ -10,10 +10,18 @@ import PreparingOrders from "../components/order-lists/preparing";
 import Header from "../components/header";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "~/components/ui/tabs";
 import { Text } from "~/components/ui/text";
+import useOrders from "~/hooks/useOrders";
+import { Order, OrderStatus } from "~/utils/types";
 
 export default function OrdersPage() {
     const [activeTab, setActiveTab] = useState<"new"|"preparing"|"completed">("new");
-    const theme = useThemeColor({}, "primary")
+    const theme = useThemeColor({}, "primary");
+
+    const { orders } = useOrders();
+
+    const newOrders = (orders?.filter((order) => order.status === OrderStatus.New) as unknown) as Order[];
+    const prepararingOrders = (orders?.filter((order) => order.status > OrderStatus.New && order.status < OrderStatus.Completed) as unknown) as Order[];
+    const completedOrders = (orders?.filter((order) => order.status > OrderStatus.Preparing && order.status < OrderStatus.Cancelled) as unknown) as Order[];
 
     return (
         <Page>
@@ -36,13 +44,13 @@ export default function OrdersPage() {
                 </TabsList>
 
                 <TabsContent className="px-5" value="new">
-                    <NewOrders/>
+                    <NewOrders orders={newOrders} />
                 </TabsContent>
                 <TabsContent className="px-5" value="preparing">
-                    <PreparingOrders/>
+                    <PreparingOrders orders={prepararingOrders} />
                 </TabsContent>
                 <TabsContent className="px-5" value="completed">
-                    <CompletedOrders/>
+                    <CompletedOrders orders={completedOrders} />
                 </TabsContent>
 
 

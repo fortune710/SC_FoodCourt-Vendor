@@ -2,30 +2,47 @@ import { useState } from 'react';
 import { supabase } from "~/utils/supabase";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import Toast from "react-native-toast-message";
+import useResturant from './useResturant';
+import useCurrentUser from './useCurrentUser';
+import { Order, OrderStatus } from '~/utils/types';
 
-interface Order {
-  id: string;
-  status: number;
-  total_amount: number;
-  order_date: string;
-  customer_name: string;
-  // Add any other relevant fields from your orders table
-}
 
 interface UpdateStatusData {
-  id: string;
+  id: number;
   status: number;
 }
 
 export default function useOrderStatus(status: number) {
   const queryClient = useQueryClient();
+  const { resturant } = useResturant();
+  const { currentUser } = useCurrentUser();
+
+  let statusIds = [0];
+
+  switch (status) {
+    case OrderStatus.New:
+      statusIds = [OrderStatus.New];
+      break;
+    case OrderStatus.Accepted:
+      statusIds = [OrderStatus.Accepted, OrderStatus.Preparing];
+      break;
+    case OrderStatus.Completed:
+      statusIds = [OrderStatus.Completed, OrderStatus.Collected];
+      break;
+    default:
+      statusIds = [OrderStatus.New];
+      break;
+  }
 
   async function getOrdersByStatus() {
     const { data, error } = await supabase
       .from('orders')
       .select('*')
-      .eq('status', status)
+      .in('status', statusIds)
+      .eq('restaurant_id', resturant?.id)
+      //.in('assigned_staff', [currentUser?.id, null])
       .order('order_date', { ascending: true });
+
 
     if (error) throw new Error(error.message);
     return data as Order[];

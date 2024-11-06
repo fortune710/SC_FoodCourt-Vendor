@@ -39,6 +39,12 @@
         "projectId": "df672553-fdea-479a-bd5f-7826fd8c1a9e"
       }
     },
-    "owner": "team-fortune"
+    "owner": "team-fortune",
+    "runtimeVersion": {
+      "policy": "appVersion"
+    },
+    "updates": {
+      "url": "https://u.expo.dev/df672553-fdea-479a-bd5f-7826fd8c1a9e"
+    }
   }
 }
