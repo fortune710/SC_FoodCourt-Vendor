@@ -83,28 +83,33 @@ function ResturantOptions({ userType }: { userType: string }) {
 
     return (
         <>
-            <View className="w-full flex flex-row items-center gap-2">
-                <Avatar alt="Zach Nugent's Avatar">
-                    <AvatarImage source={{ uri: resturant?.image_url }} />
-                    <AvatarFallback>
-                        <Text>{resturant?.name?.at(0)}</Text>
-                    </AvatarFallback>
-                </Avatar>
+            <View style={{marginBottom: 24}}>
+                <View className="w-full flex flex-row items-center gap-4" style={{marginBottom: 24}}>
 
-                <Text className="text-xl font-semibold">{resturant?.name}</Text>                 
+                    <Avatar alt="Zach Nugent's Avatar">
+                        <AvatarImage source={{ uri: resturant?.image_url }}/>
+                        <AvatarFallback>
+                            <Text>{resturant?.name?.at(0)}</Text>
+                        </AvatarFallback>
+                    </Avatar>
+
+                    <View>
+                        <Text style= {{fontSize: 24, fontWeight: 600}}>{resturant?.name}</Text>                 
+                    </View>
+
+                </View>
+                <View className="w-full flex flex-row items-center justify-between gap-2">
+                    <Text className="text-xl">Switch to Staff View</Text>     
+
+                    <Switch value={showVendorView} onValueChange={toggleVendorView} />            
+                </View>
             </View>
 
-            <View className="w-full flex flex-row items-center justify-between gap-2 my-5">
-                <Text className="text-xl">Turn on Staff View</Text>     
-
-                <Switch value={showVendorView} onValueChange={toggleVendorView} />            
-            </View>
-
-            <View className="w-full flex flex-row items-center justify-between gap-2 my-5">
+            {/* <View className="w-full flex flex-row items-center justify-between gap-2 my-5">
                 <Text className="text-xl">Accepting Orders</Text>     
 
                 <Switch value={showVendorView} onValueChange={toggleVendorView} />            
-            </View>
+            </View> */}
             
         </>
     )
@@ -143,9 +148,9 @@ function AccountsOptions() {
     ]
 
     return (
-        <AccountContainer>
-            <Text className="font-semibold text-xl">Accounts</Text>
-            <View style={styles.optionCategory}>
+        <AccountContainer style={styles.optionCategory}>
+            <Text className="font-semibold text-xl" style={styles.optionTitle}>Account</Text>
+            <View>
                 {
                     ACCOUNT_OPTIONS.map((option) => (
                         <ListItem 
@@ -185,8 +190,8 @@ function AppOptions() {
 
     return (
         <AppContainer style={styles.optionCategory}>
-            <Text className="font-semibold text-xl">App</Text>
-            <View style={styles.optionCategory}>
+            <Text className="font-semibold text-xl" style={styles.optionTitle}>App</Text>
+            <View>
                 {
                     APP_OPTIONS.map((option) => (
                         <ListItem 
@@ -226,17 +231,17 @@ const styles = StyleSheet.create({
     },
     optionsContainer: {
         backgroundColor: "#fff",
-        borderRadius: 12,
+        borderRadius: 24,
         shadowColor: "#9D9D9D",
         width: "90%",
         minHeight: verticalScale(300),
         padding: scale(25),
-        marginTop: verticalScale(20),
+        marginTop: verticalScale(16),
         shadowOffset: {
             width: 0,
-            height: 5,
+            height: 4,
         },
-        shadowOpacity: 0.34,
+        shadowOpacity: 0.24,
         shadowRadius: 6.27,
         
         elevation: 10,
@@ -250,12 +255,18 @@ const styles = StyleSheet.create({
         ...globalStyles.flexItemsCenter,
         paddingHorizontal: 25
     },
-    optionCategory: { width: "100%", marginTop: 15 },
+    optionCategory: { 
+        width: "100%", 
+        marginVertical: 8,
+    },
+    optionTitle: {
+        marginBottom: 4
+    },
     listItemStyle: { 
         justifyContent: "space-between", 
         width: "100%", 
         display: "flex", 
         flexDirection: "row",
-        padding: 10
+        padding: 16,
     }
 })

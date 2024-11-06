@@ -6,7 +6,7 @@ import BackButton from "~/components/custom/back-button";
 import { Image } from "expo-image";
 import { useRouter } from "expo-router";
 import useThemeColor from "hooks/useThemeColor";
-import { Edit, Lock, Mail, Phone } from "lucide-react-native";
+import { BrickWall, Edit, Lock, Mail, Phone } from "lucide-react-native";
 import { StyleSheet, TouchableOpacity, View ,  SafeAreaView} from "react-native";
 import { StatusBar } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
@@ -36,19 +36,17 @@ const ProfileItem: React.FC<ProfileItemProps> = ({ icon, label, value }) => (
 
 
 export default function ProfilePage() {
-    const primary = useThemeColor({}, "primary");
-    const router = useRouter()
+  const primary = useThemeColor({}, "primary");
+  const router = useRouter()
 
-    return (
-        <Page>
-             <StatusBar backgroundColor="#F72F2F" barStyle="light-content" />
-            {/* <View style={[globalStyles.flexItemsCenter, globalStyles.justifyBetween]}>
-                <BackArrowButton onPress={() => router.back()} color="#fff"/>
-                <TouchableOpacity onPress={() => router.push("/settings/profile/edit")}>
-                    <Edit stroke="#fff"/>
-                </TouchableOpacity>
-            </View> */}
-            <SafeAreaView style={styles.container}>
+  return (
+    <View style={styles.container}>
+      <StatusBar backgroundColor="#F72F2F" barStyle="light-content" />
+      {/* <View style={[globalStyles.flexItemsCenter, globalStyles.justifyBetween]}>
+            <BackArrowButton onPress={() => router.back()} color="#fff"/>              <TouchableOpacity onPress={() => router.push("/settings/profile/edit")}>
+            <Edit stroke="#fff"/>
+            </TouchableOpacity>
+        </View> */}
       <View style={styles.header}>
         <TouchableOpacity onPress={() => router.back()}>
           <Ionicons name="arrow-back" size={24} color="white" />
@@ -63,7 +61,7 @@ export default function ProfilePage() {
         <Text style={styles.name}>Naomi Andrews</Text>
         <Text style={styles.subName}>Uvuvwevwevwe</Text>
         </View>
-       
+      
       </View> 
       <Image
           source={require("../../../assets/images/food-court-avatar.png") } // Replace with actual image URL
@@ -73,17 +71,12 @@ export default function ProfilePage() {
       <View style={styles.diagonal} />
       
       <View style={styles.detailsContainer}>
-        <ProfileItem icon="mail" label="Email" value="naomi.andrew@gmail.com" />
+        <ProfileItem icon="mail" label="Email" value="naomi.andrew@gmail.com"/>
         <ProfileItem icon="call" label="Phone Number" value="+234 804 225 8973" />
         <ProfileItem icon="lock-closed" label="Password" value="••••••••••" />
       </View>
-    </SafeAreaView>
-            
-
-           
-
-        </Page>
-    )
+    </View>
+  )
 }
 
 const styles = StyleSheet.create({
@@ -95,6 +88,7 @@ const styles = StyleSheet.create({
       flexDirection: 'row',
       justifyContent: 'space-between',
       padding: 16,
+      marginTop: 36
     },
     editButton: {
       padding: 8,
@@ -127,7 +121,7 @@ const styles = StyleSheet.create({
       borderWidth: 3,
       borderColor: 'white',
       position: 'absolute',
-      top: scale(100),
+      top: scale(120),
       right: scale(20),
       zIndex: 100,
     
@@ -148,14 +142,17 @@ const styles = StyleSheet.create({
     profileItem: {
       flexDirection: 'row',
       alignItems: 'center',
-      marginBottom: 20,
+      marginVertical: 24,
     },
     iconContainer: {
-      width: 40,
-      height: 40,
-      borderRadius: 20,
-      borderWidth: 1,
+      width: 60,
+      height: 60,
+      borderRadius: 30,
+      borderWidth: 0.5,
       borderColor: '#FF3B30',
+      // shadowOffset: {width: 8, height: 8},
+      shadowRadius: 4, 
+      shadowColor: '#FE0000',
       justifyContent: 'center',
       alignItems: 'center',
       marginRight: 16,

@@ -1,10 +1,10 @@
 
-import { View, StyleSheet, SafeAreaView, ScrollView, TouchableOpacity, ActivityIndicator } from 'react-native';
+import { Dimensions, View, StyleSheet, SafeAreaView, ScrollView, TouchableOpacity, ActivityIndicator } from 'react-native';
 import { Ionicons } from '@expo/vector-icons'; 
 import React from 'react';
 import { Text } from "~/components/ui/text";
-import Page from "~/components/page";
-import { scale } from 'react-native-size-matters';
+import Header from '~/components/header'
+import { scale, verticalScale } from 'react-native-size-matters';
 import { StatusBar,Pressable , Modal, TextInput} from 'react-native';
 import { useRouter } from 'expo-router';
 import useResturant from '~/hooks/useResturant';
@@ -27,13 +27,13 @@ export default function walletPage() {
   const [withdrawAmount, setWithdrawAmount] = React.useState(''); // State for input amount
 
   return (
-    <Page>
+    <View style={styles.container}>
       <StatusBar backgroundColor="#FF3B30" barStyle="light-content" />
-      <SafeAreaView style={styles.container}>
+      <View style={{marginTop: 36}}>
+        <Header headerTitle='Transactions' noRightIcon = {true} style='light'/>     
+      </View>
 
-        <View>
-        
-
+      <View style={{marginTop: verticalScale(50)}}>
         {
           /*
           <View style={styles.pagination}>
@@ -46,11 +46,11 @@ export default function walletPage() {
 
         {
           !resturant?.subaccount_code ? 
-          <TouchableOpacity onPress={() => router.push('/admin/wallet/create')} className='bg-white rounded-[50px] p-4'>
+          <TouchableOpacity onPress={() => router.push('/admin/wallet/create')} className='bg-white rounded-[50px] p-6 mx-16'>
             <Text className='mx-auto'>Add Payment Details</Text>
           </TouchableOpacity>
           :
-          <TouchableOpacity onPress={() => router.push('/admin/wallet/create')} className='bg-white rounded-[50px] p-4'>
+          <TouchableOpacity onPress={() => router.push('/admin/wallet/create')} className='bg-white rounded-[50px] p-6 mx-16'>
             <Text className='mx-auto'>Update Payment Details</Text>
           </TouchableOpacity>
 
@@ -99,18 +99,16 @@ export default function walletPage() {
               </Pressable>
             </View>
           </View>
-        </Modal>
-          
+        </Modal>      
           
           */
         }
-
 
       </View>
 
 
       <View style={styles.transactionContainer}>
-        <View style = {styles.handle}/>
+        <View style= {styles.handle}/>
 
         <Pressable onPress={() => router.push("/admin/wallet/transhistory")}>
           <Text style={styles.transactionTitle}>Transaction History</Text>
@@ -137,10 +135,7 @@ export default function walletPage() {
         }
       </View>
 
-   
-
-    </SafeAreaView>
-    </Page>
+    </View>
   )
 }
 
@@ -214,6 +209,7 @@ const styles = StyleSheet.create({
       borderTopRightRadius: 20,
       padding: 20,
       position: 'absolute',
+      top: verticalScale(250),
       bottom: 0,
       left: 0,
       right: 0,
@@ -226,8 +222,6 @@ const styles = StyleSheet.create({
         alignSelf: "center",
         borderRadius : 30,
         marginBottom: scale(10)
-
-
     }, 
     transactionTitle: {
         alignSelf:"center",

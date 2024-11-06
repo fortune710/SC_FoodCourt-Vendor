@@ -148,45 +148,45 @@ const AdminStaffMenu = ({ closeMenu }: { closeMenu: () => void }) => {
 
     return (
         <View style={styles.menu}>
-            <View className="mt-64">
+            <View className="mt-84" style={{marginTop: 268}}>
                 <Pressable onPress={closeMenu}>
                     <X size={ICON_SIZE} color="red"/>
                 </Pressable>
             </View>
 
-            <View className="flex flex-col gap-12 mt-16">
-                <Pressable onPress={moveToDashboard} className="flex flex-row items-center gap-2">
+            <View className="flex flex-col gap-6 mt-16">
+                <Pressable onPress={moveToDashboard} className="flex flex-row items-center gap-3 p-2" >
                     <Home size={ICON_SIZE} color='white'/>
                     <Text className="text-white text-xl font-semibold">Dashboard</Text>
                 </Pressable>
 
-                <Pressable className="flex flex-row items-center gap-2">
-                    <ChartPie color='grey' size={ICON_SIZE}/>    
-                    <Text className="text-grey-500 text-xl font-semibold" >Analytics</Text>                                                     
+                <Pressable className="flex flex-row items-center gap-3 p-2" style={{marginLeft: 48}}>
+                    <ChartPie color='#7e7e7e' size={ICON_SIZE}/>    
+                    <Text className="text-xl text-gray-500 font-semibold" >Analytics</Text>                                                     
                 </Pressable>
 
-                <Pressable className="flex flex-row items-center gap-2" onPress={moveToMenu}>
+                <Pressable className="flex flex-row items-center gap-3 p-2" onPress={moveToMenu} style={{marginLeft: 96}}>
                     <LayoutGrid color='white' size={ICON_SIZE}/> 
                     <Text className="text-white text-xl font-semibold">Menu</Text>                                     
                 </Pressable>
 
 
-                <Pressable onPress={moveToOrders} className="flex flex-row items-center gap-2">
+                <Pressable onPress={moveToOrders} className="flex flex-row items-center gap-3 p-2" style={{marginLeft: 144}}>
                     <Mail color='white' size={ICON_SIZE}/>  
                     <Text className="text-white text-xl font-semibold">Orders</Text>                  
                 </Pressable>
 
-                <Pressable onPress={moveToWallet} className="flex flex-row items-center gap-2">
+                <Pressable onPress={moveToWallet} className="flex flex-row items-center gap-3 p-2" style={{marginLeft: 96}}>
                     <Wallet color='white' size={ICON_SIZE}/>  
                     <Text className="text-white text-xl font-semibold">Transactions</Text>                  
                 </Pressable>
 
-                <Pressable onPress={moveToStaff} className="flex flex-row items-center gap-2">
+                <Pressable onPress={moveToStaff} className="flex flex-row items-center gap-3 p-2" style={{marginLeft: 48}}>
                     <UsersRound size={ICON_SIZE} color='white'/>
                     <Text className="text-white text-xl font-semibold">Staff</Text>
                 </Pressable>
 
-                <Pressable onPress={moveToSettings} className="flex flex-row items-center gap-2">
+                <Pressable onPress={moveToSettings} className="flex flex-row items-center gap-3 p-2">
                     <Settings color='white' size={ICON_SIZE}/>    
                     <Text className="text-white text-xl font-semibold">Settings</Text>                
                 </Pressable>
@@ -223,33 +223,33 @@ const VendorStaffMenu = ({ closeMenu }: { closeMenu: () => void }) => {
 
     return (
     <View style={styles.menu}>
-        <View className="mt-48">
+        <View className="mt-24" style={{marginTop: 128}}>
             <Pressable onPress={closeMenu}>
                 <X size={ICON_SIZE} color="red"/>
             </Pressable>
         </View>
         
-        <View className="flex flex-col gap-12 mt-16">
-            <Pressable className="flex flex-row items-center gap-2" onPress={moveToMenu}>
+        <View className="flex flex-col gap-12 mt-16" style={{marginLeft: 48}}>
+            <Pressable className="flex flex-row items-center gap-3" onPress={moveToMenu}>
                 <LayoutGrid color='white' size={ICON_SIZE}/> 
                 <Text className="text-white text-xl font-semibold">Menu</Text>                                     
             </Pressable>
 
-            <Pressable onPress={moveToOrders} className="flex flex-row items-center gap-2">
+            <Pressable onPress={moveToOrders} className="flex flex-row items-center gap-3" style={{marginLeft: 64}}>
                 <Package size={ICON_SIZE} color='white'/>
                 <Text className="text-white text-xl font-semibold">Orders</Text>
             </Pressable>
 
 
-            <Pressable onPress={moveToSettings} className="flex flex-row items-center gap-2">
+            <Pressable onPress={moveToSettings} className="flex flex-row items-center gap-3">
                 <Settings color='white' size={ICON_SIZE}/>    
                 <Text className="text-white text-xl font-semibold">Settings</Text>                
             </Pressable>
 
-            <Pressable onPress={moveToAdmin} className="flex flex-row items-center gap-2">
+            {/* <Pressable onPress={moveToAdmin} className="flex flex-row items-center gap-2">
                 <UsersRound size={ICON_SIZE} color='white'/>
                 <Text className="text-white text-xl font-semibold">Admin</Text>
-            </Pressable>
+            </Pressable> */}
         </View>
     </View>
     )
@@ -268,10 +268,13 @@ const styles = StyleSheet.create({
         display: "flex",
         flexDirection: "row",
         justifyContent: "center",
-        gap: 60,
+        gap: 8,
         paddingTop: verticalScale(30)
     },
-    headerIcon: { width: 24, height: 24 },
+    headerIcon: { 
+        width: 24, 
+        height: 24
+    },
     menuButons: {
         position: "absolute",
         top: "25%",
@@ -284,7 +287,7 @@ const styles = StyleSheet.create({
         ...globalStyles.flexItemsCenter,
         justifyContent: "space-between",
         height: verticalScale(50),
-        paddingHorizontal: scale(18)
+        paddingHorizontal: scale(18),
     },
     headerTitle: {
         fontSize: scale(22),

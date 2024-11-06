@@ -12,6 +12,7 @@ import useResturant from "~/hooks/useResturant";
 import useThemeColor from "~/hooks/useThemeColor";
 import { Button } from "@rneui/themed";
 import useCreatePaymentProfile from "~/hooks/useCreatePaymentProfile";
+import Header from "~/components/header";
 
 export default function CreatePaymentProfile() {
     //const { getCurrentUser } = useAuth();
@@ -20,7 +21,7 @@ export default function CreatePaymentProfile() {
     const router = useRouter();
     const params = useLocalSearchParams();
 
-    const [businessName, setBusinessName] = useState("");
+    const [accountName, setAccountName] = useState("");
     const [accountNumber, setAccountNumber] = useState("");
     const [bankCode, setBankCode] = useState("");
 
@@ -42,7 +43,7 @@ export default function CreatePaymentProfile() {
     const handleCreatePaymentProfile = async () => {
         try {
             await createPaymentProfile({
-                business_name: businessName,
+                business_name: accountName,
                 bank_code: bankCode,
                 percentage_charge: 5,
                 account_number:  accountNumber
@@ -60,26 +61,9 @@ export default function CreatePaymentProfile() {
                 <Text className="text-2xl">Add Payment Details</Text>
             </View>
 
-            <Input
-                inputContainerStyle={styles.inputContainer}
-                placeholder='Business Name'
-                leftIcon={<UserRound stroke={primary} />}    
-                value={businessName}
-                onChangeText={(text) => setBusinessName(text)}  
-            />
-
-            <Input
-                inputContainerStyle={styles.inputContainer}
-                placeholder='Account Number'
-                leftIcon={<UserRound stroke={primary} />}    
-                value={accountNumber}
-                onChangeText={(text) => setAccountNumber(text)}    
-            />
-
-            <View className="flex flex-row gap-3 mx-3 px-3 py-2.5 items-center rounded-[35px] border border-primary">
-                <Banknote stroke={primary}/>
+            <View style={[styles.inputContainer, {marginHorizontal: 10, marginBottom: 24}]}>
                 <Select 
-                    className="w-5/6"
+                    className="w-6/6"
                     disabled={isLoading}
                     onValueChange={(option) => setBankCode(option?.value!)}
                 >
@@ -89,32 +73,56 @@ export default function CreatePaymentProfile() {
                             placeholder='Select a Bank'
                         />
                     </SelectTrigger>
+
                     <SelectContent insets={contentInsets} className='w-full'>
                         <ScrollView>
                             {
                                 banks?.map((bank) => (
                                 <SelectItem 
-                                    key={bank.name + bank.code} 
+                                key={bank.name + bank.code} 
                                     label={bank.name} 
                                     value={bank.code}
-                                >
+                                    >
                                     {bank.name}
                                 </SelectItem>
                                 ))
                             }
                         </ScrollView>
                     </SelectContent>
+
                 </Select>     
 
             </View>
+            
+            <Input
+                inputContainerStyle={styles.inputContainer}
+                placeholder='Account Number'
+                value={accountNumber}
+                onChangeText={(text) => setAccountNumber(text)}    
+            />
 
+            <Input
+                inputContainerStyle={styles.inputContainer}
+                placeholder='Account Name'
+                value={accountName}
+                readOnly
+                onChangeText={(text) => setAccountName(text)}  
+            />
 
             <Button 
                 disabled={loading} 
                 onPress={handleCreatePaymentProfile}
                 buttonStyle={{ marginHorizontal: 12, borderRadius: 32, marginTop: 50 }}
             >
-                <Text className="text-white">Confirm Payment Details</Text>
+                <Text className="text-white text-xl">Confirm Payment Details</Text>
+            </Button>
+
+            <Button 
+                disabled={loading} 
+                onPress={()=> console.log('ok')} //it should send back to transaction page
+                buttonStyle={{ marginHorizontal: 12, borderRadius: 32, marginTop: 20, borderWidth: 1, backgroundColor: '#fff' }}
+            >
+                <Text className="text-primary text-xl">Cancel</Text>
             </Button>
 
         </Page>
@@ -127,6 +135,6 @@ const styles = StyleSheet.create({
         paddingHorizontal: 20, 
         borderRadius: 32, 
         borderColor: '#f72f2f',
-        paddingVertical: 5
+        paddingVertical: 8
     },
 })
