@@ -7,25 +7,36 @@ import { useState } from "react";
 import useOrders from "~/hooks/useOrders";
 import { NfcIcon } from "lucide-react-native";
 import useThemeColor from "~/hooks/useThemeColor";
-import { Order } from "~/utils/types";
+import { Order, OrderStatus } from "~/utils/types";
 
 
 export default function OrderCardPreparing({ order }: { order: Order }) {
-    const [isPreparing, setIsPreparing] = useState(false);
+    const [isPreparing, setIsPreparing] = useState(order?.status === OrderStatus.Completed);
     const { updateOrder } = useOrders();
     const primary = useThemeColor({}, "primary");
     
 
-    const togglePreparing = async () => {
-        if (!isPreparing) {
-          const startTime = Date.now();
-          await updateOrder({ id: order?.id!, start_time: startTime }) 
-            // in minutes
-          
+    const togglePreparing = async (checked: boolean) => {
+        const startTime = Date.now();
+
+        try {
+            if (!checked) {
+                setIsPreparing(true);
+              await updateOrder({ id: order?.id!, status: OrderStatus.Completed }) 
+                // in minutes
+              
+            } else {
+                await updateOrder({ id: order?.id!, start_time: startTime, status: OrderStatus.Preparing }) 
+            }
+        } catch {
+            if (!checked) {
+                setIsPreparing(false);
+            } else {
+                setIsPreparing(true);
+            }
         }
         
-        setIsPreparing(!isPreparing);
-      };
+    };
 
     return (
         <OrderCard>
@@ -42,7 +53,7 @@ export default function OrderCardPreparing({ order }: { order: Order }) {
                         style={{ marginRight: 7 }}
                         //onValueChange={(value) => updateStatus({ id: order?.id, status: value ? OrderStatus.Preparing : OrderStatus.Accepted })}
                     />
-                    <Text>Preparing</Text>
+                    <Text>{isPreparing ? "Completed" : "Preparing"}</Text>
                 </View>
 
                 <Pressable>

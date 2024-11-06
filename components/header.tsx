@@ -162,7 +162,7 @@ const AdminStaffMenu = ({ closeMenu }: { closeMenu: () => void }) => {
 
                 <Pressable className="flex flex-row items-center gap-2">
                     <ChartPie color='grey' size={ICON_SIZE}/>    
-                    <Text className="text-grey-500 text-xl font-semibold" >Analytics</Text>                                                     
+                    <Text className="text-[grey] text-xl font-semibold" >Analytics</Text>                                                     
                 </Pressable>
 
                 <Pressable className="flex flex-row items-center gap-2" onPress={moveToMenu}>

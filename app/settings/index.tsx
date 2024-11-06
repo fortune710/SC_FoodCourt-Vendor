@@ -16,6 +16,7 @@ import useResturant from "~/hooks/useResturant";
 import useCurrentUser from "~/hooks/useCurrentUser";
 import { Avatar, AvatarFallback, AvatarImage } from "~/components/ui/avatar";
 import { useVendorView } from "~/hooks/useVendorView";
+import useRestaurantStaff from "~/hooks/useRestaurantStaff";
 
 const AccountContainer = View
 const AppContainer = View
@@ -77,14 +78,40 @@ export default function SettingsPage() {
 
 function ResturantOptions({ userType }: { userType: string }) {
     const { resturant } = useResturant();
+    const { currentUser } = useCurrentUser();
+    const { setStaffOnline, isOnline } = useRestaurantStaff();
     const { showVendorView, toggleVendorView } = useVendorView();
 
-    if (userType !== "admin") null
+    if (userType !== "admin") {
+        return (
+            <>
+                <View className="w-full flex flex-row items-center gap-2">
+                    <Avatar alt="User Avatar">
+                        <AvatarImage source={{ uri: currentUser?.image_url }} />
+                        <AvatarFallback>
+                            <Text>{currentUser?.full_name?.at(0)}</Text>
+                        </AvatarFallback>
+                    </Avatar>
+
+                    <Text className="text-xl font-semibold">{currentUser?.full_name}</Text>                 
+                </View>
+            
+                <View className="w-full flex flex-row items-center justify-between gap-2 my-5">
+                    <Text className="text-xl">Accepting Orders</Text>     
+
+                    <Switch 
+                        value={!!isOnline} 
+                        onValueChange={(value) => setStaffOnline({ staffId: currentUser?.id!, online: value })} 
+                    />            
+                </View>
+            </>
+        )
+    }
 
     return (
         <>
             <View className="w-full flex flex-row items-center gap-2">
-                <Avatar alt="Zach Nugent's Avatar">
+                <Avatar alt="Resturant Avatar">
                     <AvatarImage source={{ uri: resturant?.image_url }} />
                     <AvatarFallback>
                         <Text>{resturant?.name?.at(0)}</Text>
@@ -99,12 +126,6 @@ function ResturantOptions({ userType }: { userType: string }) {
 
                 <Switch value={showVendorView} onValueChange={toggleVendorView} />            
             </View>
-
-            <View className="w-full flex flex-row items-center justify-between gap-2 my-5">
-                <Text className="text-xl">Accepting Orders</Text>     
-
-                <Switch value={showVendorView} onValueChange={toggleVendorView} />            
-            </View>
             
         </>
     )
@@ -113,6 +134,7 @@ function ResturantOptions({ userType }: { userType: string }) {
 
 function AccountsOptions() {
     const router = useRouter();
+    const { updateResturant, resturant } = useResturant();
 
 
     const ACCOUNT_OPTIONS = [
@@ -128,7 +150,10 @@ function AccountsOptions() {
         {
             name: "Accepting Orders",
             icon: require('~/assets/icons/download-icon.svg'),
-            onPress: () => {},
+            onPress: (value?: boolean) => {
+                return updateResturant({ is_closed: value })
+            },
+            defaultToggleValue: !resturant?.is_closed,
             canToggle: true,
             style: { width: 32, height: 35 }
         },
@@ -168,7 +193,10 @@ function AccountsOptions() {
                                     style={{ width: 30, height: 30 }}
                                 />
                                 : 
-                                <Switch/>
+                                <Switch 
+                                    value={option?.defaultToggleValue} 
+                                    onValueChange={option.onPress} 
+                                />
                             }
 
                         </ListItem>

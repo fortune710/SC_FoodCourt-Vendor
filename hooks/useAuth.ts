@@ -8,6 +8,10 @@ interface SignUpData {
     name: string
 }
 
+interface UpdateUserData extends SignUpData {
+    phone_number: string;
+}
+
 export default function useAuth() {
     const queryClient = useQueryClient();
     const router = useRouter();
@@ -27,7 +31,6 @@ export default function useAuth() {
     }
 
     const signUpWithEmail = async (data: SignUpData) => {
-        console.log(data)
         const res = await supabase.auth.signUp({ 
             email: data.email, 
             password: data.password, 
@@ -45,6 +48,14 @@ export default function useAuth() {
         return res.data.user
     }
 
+    const updateUser = async (data: Partial<UpdateUserData>) => {
+        return await supabase.auth.updateUser({
+            data: {
+                phone_number: data?.phone_number || ""
+            }
+        })
+    }
+
     const signOut = async () => {
         await supabase.auth.signOut();
         queryClient.removeQueries({ queryKey: ["current-user"] })
@@ -56,6 +67,7 @@ export default function useAuth() {
         signIn,
         signUpWithEmail,
         getCurrentUser,
-        signOut
+        signOut,
+        updateUser,
     }
 }

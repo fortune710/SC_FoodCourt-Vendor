@@ -8,14 +8,14 @@ import OrderCardName from './order-card-name';
 import { globalStyles } from '../../constants/Styles';
  import utilityStyles from '../../utils/styles';
 import { CountdownTimer } from './CountdownTimer';
+import { Order, OrderStatus } from '~/utils/types';
  
 
 interface OrderCardDetailsProps {
-       showTime?: boolean
-       isPreparing?: boolean
-     
-      
-     }
+  showTime?: boolean
+  isPreparing?: boolean
+  order: Order
+}
 
 interface AccordionItemProps {
   title: string;
@@ -27,6 +27,7 @@ interface OrderItem {
   quantity: number;
   price: number;
   type: string;
+  addonName?: string
 }
 
 const AccordionItem = ({ title, children } : AccordionItemProps) => {
@@ -49,54 +50,45 @@ const AccordionItem = ({ title, children } : AccordionItemProps) => {
   );
 };
 
-export default function OrderCardDetails({ showTime, isPreparing , } : OrderCardDetailsProps ) {
-  const orderItems = [
-    { name: 'Sharwizzy', quantity: 1, price: 1600, type: 'food' },
-    { name: 'Jollof rice Jumbo', quantity: 1, price: 1800, type: 'food' },
-    { name: 'pasta', quantity: 2, price: 3000, type: 'food' },
-    { name: 'Classic Lemonade', quantity: 1, price: 1200, type: 'drink' },
-  ];
-
-  const foodItems = orderItems.filter(item => item.type === 'food');
-  const drinkItems = orderItems.filter(item => item.type === 'drink');
-
-  const renderOrderItem = (item : OrderItem) => (
-    <View key={item.name} style={styles.orderItem}>
-      <Text style={styles.itemName}>{item.name}</Text>
-      
-      <Text style={styles.itemQuantity}>{item.quantity}</Text>
-    </View>
-  );
+export default function OrderCardDetails({ showTime, order } : OrderCardDetailsProps ) {
 
   return (
     <View style={styles.container}>
-      <OrderCardName />
+      <OrderCardName order={order} />
       
       <View className='py-3'>
-        {foodItems.map(renderOrderItem)}
+        {
+          order.items.map(item => (
+            <OrderItem 
+              key={item.menu_item.name}
+              quantity={item.quantity} 
+              price={item.menu_item.price} 
+              name={item.menu_item.name}
+              type={item.menu_item.name}
+              addonName={item.addon_name}
+            />
+          ))
+        }
       </View>
 
-      {
-        /*
-        
-        <AccordionItem title="Drinks">
-          {drinkItems.map(renderOrderItem)}
-        </AccordionItem>
-        
-        <AccordionItem title="Order Notes">
-          <Text>Nb additional notes for this order.</Text>
-        </AccordionItem>
-        
-        */
-      }
-
-
       {showTime && (
-        <CountdownTimer  initialPreparationTime={360} orderId = "1" isPreparing ={isPreparing}  />
+        <CountdownTimer 
+          initialPreparationTime={order?.preparation_time * 60} 
+          orderId={order?.id!} 
+          isPreparing={order?.status === OrderStatus.Preparing}  
+        />
       )}
     </View>
   );
 }
+
+const OrderItem = (item : OrderItem) => (
+  <View key={item.name} style={styles.orderItem}>
+    <Text style={styles.itemName}>{`${item.name} ${item?.addonName ? ` with ${item?.addonName}` : ""}`}</Text>
+    
+    <Text style={styles.itemQuantity}>{item.quantity}</Text>
+  </View>
+);
 
 const styles = StyleSheet.create({
   container: {

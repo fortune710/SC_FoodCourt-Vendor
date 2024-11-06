@@ -13,7 +13,7 @@ interface Order {
     order_items: number[];
     user_paid: boolean;
     customer_name: string;
-    start_time: number
+    start_time: Date | number | string
     preparation_time: number
 }
 
@@ -111,7 +111,7 @@ export default function useOrders() {
         }
     });
 
-    function getOrderById(id: string) {
+    function getOrderById(id: number) {
         return orders?.find(order => order.id === id);
     }
 
