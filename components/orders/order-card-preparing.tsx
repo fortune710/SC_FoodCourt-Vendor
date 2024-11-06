@@ -4,17 +4,22 @@ import OrderCardDetails from "./order-card-details";
 import { Switch, Text } from "@rneui/themed";
 import { FontAwesome } from '@expo/vector-icons';
 import useThemeColor from "~/hooks/useThemeColor";
+import { Order, OrderStatus } from "~/utils/types";
+import useOrderStatus from "~/hooks/useOrderStatus";
 
-export default function OrderCardPreparing() {
+export default function OrderCardPreparing({ order }: { order: Order }) {
     const primary = useThemeColor({}, "primary");
+    const { updateStatus } = useOrderStatus(order?.status);
+
     return (
         <OrderCard>
             <OrderCardDetails showTime/>
             <View style={{ borderTopWidth: 1 }} className="flex flex-row w-full items-center justify-between py-3 px-3">
                 <View style={style.status}>
                     <Switch 
-                        value={true}
+                        value={order?.status === OrderStatus.Preparing}
                         style={{ marginRight: 7 }}
+                        onValueChange={(value) => updateStatus({ id: order?.id, status: value ? OrderStatus.Preparing : OrderStatus.Accepted })}
                     />
                     <Text>Preparing</Text>
                 </View>
