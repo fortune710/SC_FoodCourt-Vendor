@@ -39,7 +39,7 @@ export default function AuthForm({ type }: AuthFormProps) {
                 case "login":
                     const user = await signIn(email, password);
                     const resturant = await getResturantByAdminId(user?.id!);
-                    if (resturant) return router.push('/orders');
+                    if (resturant) return router.push('/admin/dashboard');
                     
                     return router.push({
                         pathname: '/restaurant/create',
@@ -109,6 +109,7 @@ export default function AuthForm({ type }: AuthFormProps) {
                 <Input
                     inputContainerStyle={styles.inputContainer}
                     placeholder='Email'
+                    placeholderTextColor='#7e7e7e'
                     leftIcon={<Mail stroke={primary} />}
                     value={email}
                     onChangeText={(text) => setEmail(text)}
@@ -120,11 +121,12 @@ export default function AuthForm({ type }: AuthFormProps) {
                         <TouchableOpacity 
                             onPress={() => setShowPassword(!showPassword)}
                         >
-                            { !showPassword ? <EyeOff stroke={primary} /> : <Eye stroke={primary}/> }
+                            { !showPassword ? <Eye stroke={primary} /> : <EyeOff stroke={primary}/> }
                         </TouchableOpacity>
                     }
                     inputContainerStyle={styles.inputContainer}
                     placeholder='Password'
+                    placeholderTextColor='#7e7e7e'
                     secureTextEntry={!showPassword}
                     value={password}
                     onChangeText={(text) => setPassword(text)}
@@ -246,7 +248,7 @@ const styles = StyleSheet.create({
         flexDirection: 'column',
         alignItems: 'center',
         width: '100%',
-        marginTop: verticalScale(25)
+        marginTop: verticalScale(50)
     },
     checkboxContainer: { 
         display: 'flex', 

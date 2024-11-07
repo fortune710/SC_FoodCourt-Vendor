@@ -24,9 +24,11 @@ export default function LoginPage() {
                     />
                 </View>
 
-                <Text style={styles.loginText}>
-                    Login
-                </Text>
+                <View style={{marginTop: 8, marginBottom: 24}}>
+                    <Text style={styles.loginText}>
+                        Login
+                    </Text>
+                </View>
 
                 <AuthForm type="login"/>
             </KeyboardAvoidingView>
