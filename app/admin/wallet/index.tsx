@@ -11,6 +11,7 @@ import useResturant from '~/hooks/useResturant';
 import useOrderStatus from '~/hooks/useOrderStatus';
 import { OrderStatus } from '~/utils/types';
 import TransactionItem from '~/components/transaction-item';
+import Page from '~/components/page';
 
   
 
@@ -27,21 +28,18 @@ export default function walletPage() {
   const [withdrawAmount, setWithdrawAmount] = React.useState(''); // State for input amount
 
   return (
-    <View style={styles.container}>
-      <StatusBar backgroundColor="#FF3B30" barStyle="light-content" />
-      <View style={{marginTop: 36}}>
-        <Header headerTitle='Transactions' noRightIcon = {true} style='light'/>     
-      </View>
+    <Page>
+      <Header headerTitle='Transactions' noRightIcon = {true} style='dark'/>     
 
       <View className='pt-10 px-3'>
-        <Text className='text-center text-white text-xl'>Payment Details</Text>
+        <Text className='text-center text-xl'>Payment Details</Text>
 
         <View className='my-4'>
-          <Text className='text-white text-center'>Account Number</Text>
-          <Text className='text-4xl text-white text-center'>{resturant?.account_number || "N/A"}</Text>
+          {/* <Text className='text-center'>Account Number</Text> */}
+          <Text className='text-4xl text-center'>{resturant?.account_number || "N/A"}</Text>
           {
             !resturant?.account_number && 
-            <Text className='text-xs text-white text-center'>You must add payment details to start receiving orders</Text>
+            <Text className='text-xs text-center'>You must add payment details to start receiving orders</Text>
           }
         </View>
 
@@ -58,12 +56,12 @@ export default function walletPage() {
         <View style={{marginTop: verticalScale(20)}}>
           {
             !resturant?.subaccount_code ? 
-            <TouchableOpacity onPress={() => router.push('/admin/wallet/create')} className='bg-white rounded-[50px] p-6 mx-16'>
-              <Text className='mx-auto'>Add Payment Details</Text>
+            <TouchableOpacity onPress={() => router.push('/admin/wallet/create')} className='rounded-[50px] p-6 mx-16' style={{backgroundColor: '#f72f2f'}}>
+              <Text className='mx-auto text-white text-lg'>Add Payment Details</Text>
             </TouchableOpacity>
             :
-            <TouchableOpacity onPress={() => router.push('/admin/wallet/create')} className='bg-white rounded-[50px] p-6 mx-16'>
-              <Text className='mx-auto'>Update Payment Details</Text>
+            <TouchableOpacity onPress={() => router.push('/admin/wallet/create')} className='rounded-[50px] p-6 mx-16'  style={{backgroundColor: '#f72f2f'}}>
+              <Text className='mx-auto text-white text-lg'>Update Payment Details</Text>
             </TouchableOpacity>
 
           }
@@ -100,20 +98,15 @@ export default function walletPage() {
         }
       </View>
 
-    </View>
+    </Page>
   )
 }
 
 const styles = StyleSheet.create({
-    container: {
-      flex: 1,
-      backgroundColor: '#FF3B30',
-    },
-    
     eyeicon: {
-        position: 'absolute',
-        right: scale(-70)
-        ,
+      position: 'absolute',
+      right: scale(-70),
+      color: 'black'
     },
     walletHeader: {
       padding: 20,
@@ -142,7 +135,6 @@ const styles = StyleSheet.create({
       alignItems: 'center',
     },
     balanceAmount: {
-       
       fontSize: 28,
       fontWeight: 'bold',
       color: 'white',
@@ -172,6 +164,7 @@ const styles = StyleSheet.create({
       backgroundColor: 'white',
       borderTopLeftRadius: 20,
       borderTopRightRadius: 20,
+      borderTopWidth: 1,
       height: "100%",
       padding: 20,
       position: "absolute",
@@ -179,7 +172,7 @@ const styles = StyleSheet.create({
       bottom: 0,
       left: 0,
       right: 0,
-      marginTop: verticalScale(16)
+      marginTop: verticalScale(16),
     },
     handle:{
         marginTop: scale(-10),

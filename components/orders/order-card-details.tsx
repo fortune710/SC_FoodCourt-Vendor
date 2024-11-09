@@ -70,23 +70,41 @@ export default function OrderCardDetails({ showTime, order } : OrderCardDetailsP
           ))
         }
       </View>
+      
+      <View style={{flexDirection:'row', justifyContent: 'space-between'}}>
+        <View style={[styles.itemsCatPresent, {gap: 16}]}>
+          <View style={styles.itemsCatPresent}>
+            <Image source={require("../../assets/icons/food-cat.svg")} style={{width: 40, height: 40}}/>
+            <Text style={{fontSize: 16, color: '#5c5c5c'}}>Food</Text>
+          </View>
 
-      {showTime && (
-        <CountdownTimer 
-          initialPreparationTime={order?.preparation_time * 60} 
-          orderId={order?.id!} 
-          isPreparing={order?.status === OrderStatus.Preparing}  
-        />
-      )}
+          <View style={styles.itemsCatPresent}>
+            <Image source={require("../../assets/icons/drinks-cat.svg")} style={{width: 40, height: 40}}/>
+            <Text style={{fontSize: 16, color: '#5c5c5c'}}>Drink</Text>
+          </View>
+        </View>
+
+
+        {showTime && (
+          <CountdownTimer 
+            initialPreparationTime={order?.preparation_time * 60} 
+            orderId={order?.id!} 
+            isPreparing={order?.status === OrderStatus.Preparing}  
+          />
+        )}
+      </View>
     </View>
   );
 }
 
 const OrderItem = (item : OrderItem) => (
   <View key={item.name} style={styles.orderItem}>
-    <Text style={styles.itemName}>{`${item.name} ${item?.addonName ? ` with ${item?.addonName}` : ""}`}</Text>
-    
-    <Text style={styles.itemQuantity}>{item.quantity}</Text>
+    <Text style={styles.itemQuantity}>{item.quantity}x</Text>
+
+    <View style={{rowGap: 8}}>
+      <Text style={styles.itemName}>{item.name}</Text>
+      {item?.addonName ? <Text style={styles.itemAddOns}>with {item?.addonName}</Text>: null}
+    </View>
   </View>
 );
 
@@ -142,13 +160,19 @@ const styles = StyleSheet.create({
   orderItem: {
     width: "100%",
     flexDirection: 'row',
-    justifyContent: 'space-between',
+    gap: 16,
     marginBottom: 8,
+  },
+  itemAddOns:{
+    fontSize: 16,
+    fontWeight: 400,
+    paddingLeft: 24
   },
   itemName: {
     flex: 2,
-    fontFamily: 'Montserrat',
-    fontSize: 14,
+    // fontFamily: 'Montserrat',
+    fontSize: 16,
+    fontWeight: 600,
     
   },
 
@@ -157,8 +181,8 @@ const styles = StyleSheet.create({
   // },
  
   itemQuantity: {
-    fontFamily: 'Montserrat',
-    fontSize: 14,
+    fontSize: 16,
+    fontWeight: 600,
     textAlign: 'center',
    
   },
@@ -168,8 +192,11 @@ const styles = StyleSheet.create({
     fontSize: 14,
     fontWeight: '600',
     textAlign: 'left',
-
-    
+  },
+  itemsCatPresent:{
+    flexDirection:'row', 
+    gap: 8, 
+    alignItems: 'center'
   },
   totalContainer: {
     flexDirection: 'row',

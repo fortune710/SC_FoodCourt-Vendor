@@ -121,7 +121,7 @@ function ResturantOptions({ userType }: { userType: string }) {
                     </Avatar>
 
                     <View>
-                        <Text style= {{fontSize: 24, fontWeight: 600}}>{resturant?.name}</Text>                 
+                        <Text style= {{fontSize: 20, fontWeight: 600}}>{resturant?.name}</Text>                 
                     </View>
 
                 </View>

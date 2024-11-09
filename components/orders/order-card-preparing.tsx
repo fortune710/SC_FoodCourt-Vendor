@@ -45,8 +45,8 @@ export default function OrderCardPreparing({ order }: { order: Order }) {
                 showTime={true} 
                 isPreparing={isPreparing} 
             />
-            <View style={[style.status, style.itemsBetween]}>
-                <View style={style.status}>
+            <View style={[style.status, style.itemsBetween]} className= 'pt-2 border-t'>
+                <View style={style.status} >
                     <Switch 
                         value={isPreparing}
                         onValueChange={togglePreparing}
@@ -68,7 +68,7 @@ const style = StyleSheet.create({
     status: {
         display: 'flex',
         alignItems: "center",
-        flexDirection: "row"
+        flexDirection: "row",
     },
     itemsBetween: {
         justifyContent: "space-between"

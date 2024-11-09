@@ -60,12 +60,7 @@ export const CountdownTimer: React.FC<CountdownTimerProps> = ({ orderId, initial
     return `${seconds < 0 ? '-' : ''}${String(min).padStart(2, '0')}:${String(sec).padStart(2, '0')}`;
   };
 
-  return (
-    <View>
-      
-      <View>
-        <Text className={cn('self-end text-right py-2 px-2 text-white rounded-md mt-2', remainingTime > 300 ? "bg-[grey]" : "bg-red-600")}>{formatTime(remainingTime)}</Text>
-      </View>
-    </View>
+  return ( 
+    <Text className={cn('self-end text-center py-2 px-5 text-white rounded my-4', remainingTime > 300 ? "bg-[grey]" : "bg-red-600")}>{formatTime(remainingTime)}</Text>    
   );
 };

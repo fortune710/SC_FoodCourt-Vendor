@@ -105,7 +105,7 @@ export default function CreatePaymentProfile() {
                 inputContainerStyle={styles.inputContainer}
                 placeholder='Account Name'
                 value={accountName}
-                readOnly
+                // readOnly
                 onChangeText={(text) => setAccountName(text)}  
             />
 
