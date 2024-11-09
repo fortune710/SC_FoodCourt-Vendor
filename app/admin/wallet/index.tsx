@@ -36,7 +36,7 @@ export default function walletPage() {
       <View className='pt-10 px-3'>
         <Text className='text-center text-white text-xl'>Payment Details</Text>
 
-        <View className='my-8'>
+        <View className='my-4'>
           <Text className='text-white text-center'>Account Number</Text>
           <Text className='text-4xl text-white text-center'>{resturant?.account_number || "N/A"}</Text>
           {
@@ -55,7 +55,7 @@ export default function walletPage() {
           */
         }
 
-        <View style={{marginTop: 50}}>
+        <View style={{marginTop: verticalScale(20)}}>
           {
             !resturant?.subaccount_code ? 
             <TouchableOpacity onPress={() => router.push('/admin/wallet/create')} className='bg-white rounded-[50px] p-6 mx-16'>

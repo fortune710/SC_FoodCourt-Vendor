@@ -113,6 +113,7 @@ export default function AuthForm({ type }: AuthFormProps) {
                     leftIcon={<Mail stroke={primary} />}
                     value={email}
                     onChangeText={(text) => setEmail(text)}
+                    keyboardType='email-address'
                 />
 
                 <Input
