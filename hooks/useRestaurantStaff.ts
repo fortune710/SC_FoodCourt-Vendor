@@ -82,6 +82,7 @@ export default function useRestaurantStaff() {
       email: item.profiles.email,
       full_name: item.profiles.full_name,
       position: item.position,
+      image_url: item.profiles.image_url,
     })) as StaffMember[];
   }
 
