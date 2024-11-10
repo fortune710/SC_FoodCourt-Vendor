@@ -38,15 +38,21 @@ export default function AuthForm({ type }: AuthFormProps) {
             switch (type) {
                 case "login":
                     const user = await signIn(email, password);
-                    const resturant = await getResturantByAdminId(user?.id!);
-                    if (resturant) return router.push('/admin/dashboard');
-                    
-                    return router.push({
-                        pathname: '/restaurant/create',
-                        params: {
-                            admin_id: user?.id
-                        }
-                    });
+                    if (user?.user_metadata.user_type === "admin") {
+
+                        const resturant = await getResturantByAdminId(user?.id!);
+                        if (resturant) return router.push('/admin/dashboard');
+                        
+                        return router.push({
+                            pathname: '/restaurant/create',
+                            params: {
+                                admin_id: user?.id
+                            }
+                        });
+                    }
+
+                    return router.push('/orders')
+                    break;
                 case "sign-up":
                     await signUpWithEmail({
                         email: email,
@@ -67,11 +73,13 @@ export default function AuthForm({ type }: AuthFormProps) {
                         });
                     })
                     .catch((error) =>  console.log(error))
+                    break;
                 case "forgot-password":
                     break;
                 default:
                     return;
             }
+
         } catch (error) {
             Toast.show({
                 text1: "Error: " +error,

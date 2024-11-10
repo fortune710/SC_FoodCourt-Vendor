@@ -50,6 +50,7 @@ export default function useOrders() {
 
         }
 
+        
         const { data, error } = await supabase
             .from('orders')
             .select(`
@@ -66,13 +67,14 @@ export default function useOrders() {
                     addon_name,
                     addon_price,
                     menu_item:menu_item_id (name, price)
-                )
+                    )
             `)
             .eq('restaurant_id', resturant?.id)
-            .in('assigned_staff', [currentUser?.id, null])
+            .eq('assigned_staff', currentUser?.id)
             .order('order_date', { ascending: false });
 
         if (error) throw new Error(error.message);
+        console.log(data, error, "i staff")
         return data;
     }
 

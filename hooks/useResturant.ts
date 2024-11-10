@@ -4,20 +4,39 @@ import useCurrentUser from "./useCurrentUser"
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { ResturantData, SupabaseTables } from "~/utils/types";
 
-
-
 export default function useResturant() {
     const { currentUser } = useCurrentUser();
     const queryClient = useQueryClient();
 
+    
+  async function getRestaurantIdWithStaff(staffId: string) {
+    const { data, error } = await supabase.from(SupabaseTables.RestaurantStaff)
+      .select("restaurant_id")
+      .eq("staff_id", staffId)
+      .single();
+    
+    if (error) return null;
+
+    return data.restaurant_id;
+  }
+
+    const getRestaurantByStaffId = async () => {
+        const restaurantId = await getRestaurantIdWithStaff(currentUser?.id!);
+        console.log(restaurantId, "in staff")
+        const { data, error } = await supabase.from(SupabaseTables.Restaurants)
+            .select("*")
+            .eq("id", restaurantId)
+            .single()
+
+        if (error) throw new Error(error.message)
+        console.log(data, "in staff")
+        return data as ResturantData
+    }
+
     const getResturantByAdminId = async (admin_id: string) => {
         const { data, error } = await supabase.from('restaurants').select('*').eq('admin_id', admin_id).single()
         
-        if(error) {
-            console.log(error.message)
-            throw new Error(error.message)
-        }
-
+        if(error) throw new Error(error.message)
         return data
     }
 
@@ -50,7 +69,6 @@ export default function useResturant() {
         }
 
         const { data: restaurant, error } = await supabase.from(SupabaseTables.Restaurants).insert([data]).select('*')
-        console.log(error, restaurant)
         return restaurant
     }
 
@@ -61,7 +79,12 @@ export default function useResturant() {
 
     const { isLoading, data: resturant, error } = useQuery({
         queryKey: ["resturant"],
-        queryFn: getResturantByAdmin,
+        queryFn: async () => {
+            if (currentUser?.user_type === "vendor") {
+                return await getRestaurantByStaffId()
+            }
+            return await getResturantByAdmin()
+        },
         enabled: !!currentUser?.id
     })
 

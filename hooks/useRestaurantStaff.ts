@@ -4,6 +4,7 @@ import useRestaurant from "./useResturant";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import Toast from "react-native-toast-message";
 import useCurrentUser from './useCurrentUser';
+import { SupabaseTables } from '~/utils/types';
 
 interface StaffMember {
   id: string;
@@ -33,6 +34,7 @@ export default function useRestaurantStaff() {
   const { currentUser } = useCurrentUser();
   const queryClient = useQueryClient();
   const [signUpError, setSignUpError] = useState<string | null>(null);
+
 
   async function signUpStaff(data: SignUpData) {
     // Sign up the user
@@ -244,5 +246,6 @@ export default function useRestaurantStaff() {
     deleteStaff,
     setStaffOnline,
     isOnline,
+    
   };
 }
