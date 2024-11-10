@@ -81,11 +81,11 @@ function ResturantOptions({ userType }: { userType: string }) {
     const { currentUser } = useCurrentUser();
     const { setStaffOnline, isOnline } = useRestaurantStaff();
     const { showVendorView, toggleVendorView } = useVendorView();
-
+    
     if (userType !== "admin") {
         return (
             <>
-                <View className="w-full flex flex-row items-center gap-2">
+                <View className="w-full flex flex-row items-center gap-4 py-3">
                     <Avatar alt="User Avatar">
                         <AvatarImage source={{ uri: currentUser?.image_url }} />
                         <AvatarFallback>
@@ -95,15 +95,15 @@ function ResturantOptions({ userType }: { userType: string }) {
 
                     <Text className="text-xl font-semibold">{currentUser?.full_name}</Text>                 
                 </View>
-            
-                <View className="w-full flex flex-row items-center justify-between gap-2 my-5">
+
+                {/* <View className="w-full flex flex-row items-center justify-between gap-2 my-5">
                     <Text className="text-xl">Accepting Orders</Text>     
 
                     <Switch 
                         value={!!isOnline} 
                         onValueChange={(value) => setStaffOnline({ staffId: currentUser?.id!, online: value })} 
                     />            
-                </View>
+                </View> */}
             </>
         )
     }
@@ -146,6 +146,9 @@ function ResturantOptions({ userType }: { userType: string }) {
 function AccountsOptions() {
     const router = useRouter();
     const { updateResturant, resturant } = useResturant();
+    const { currentUser } = useCurrentUser();
+    const { setStaffOnline } = useRestaurantStaff();
+
 
 
     const ACCOUNT_OPTIONS = [
@@ -162,7 +165,11 @@ function AccountsOptions() {
             name: "Accepting Orders",
             icon: require('~/assets/icons/download-icon.svg'),
             onPress: (value?: boolean) => {
-                return updateResturant({ is_closed: value })
+                if (currentUser?.user_type === "admin") {
+                    return updateResturant({ is_closed: value })
+                }
+
+                return setStaffOnline({ staffId: currentUser?.id!, online: value! })
             },
             defaultToggleValue: !resturant?.is_closed,
             canToggle: true,
