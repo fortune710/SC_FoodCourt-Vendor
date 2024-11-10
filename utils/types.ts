@@ -54,6 +54,7 @@ export interface Order {
     order_date: Date | string,
     customer_name: string,
     preparation_time: number,
+    start_time: Date | number,
     items: {
         id: number,
         quantity: number,

@@ -19,7 +19,7 @@ export default function OrderCardNew({ order }: { order: Order }) {
       <OrderCardDetails order={order}/>
       <View className="w-full flex flex-col gap-3 py-2 mt-2">
         <Button 
-          onPress={() => updateOrder({ id: order.id, status: OrderStatus.Preparing })}
+          onPress={() => updateOrder({ id: order.id, status: OrderStatus.Preparing, start_time: Date.now() })}
         >
           Accept
         </Button>

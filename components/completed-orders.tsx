@@ -19,7 +19,7 @@ export default function CompletedOrders({ orders }: { orders: Order[] }) {
                 </View>
                 :
                 orders?.map((order) => (
-                    <OrderCardCompleted order={order}/>
+                    <OrderCardCompleted key={order.id} order={order} />
                 ))
             }  
         </ScrollView>

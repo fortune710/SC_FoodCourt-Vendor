@@ -40,6 +40,8 @@ export const CountdownTimer: React.FC<CountdownTimerProps> = ({ orderId, initial
 
         // Timer countdown logic
         timerInterval = setInterval(() => {
+          if (timeLeft < 0) return;
+
           timeLeft -= 1;
           setRemainingTime(timeLeft);
         }, 1000);

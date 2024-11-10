@@ -3,7 +3,7 @@ import OrderCard from "./order-card";
 import OrderCardDetails from "./order-card-details";
 import { Switch, Text } from "@rneui/themed";
 import { FontAwesome } from '@expo/vector-icons';
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import useOrders from "~/hooks/useOrders";
 import { NfcIcon } from "lucide-react-native";
 import useThemeColor from "~/hooks/useThemeColor";
@@ -14,18 +14,25 @@ export default function OrderCardPreparing({ order }: { order: Order }) {
     const [isPreparing, setIsPreparing] = useState(order?.status === OrderStatus.Completed);
     const { updateOrder } = useOrders();
     const primary = useThemeColor({}, "primary");
+
+    useEffect(() => {
+        if (!order) return;
+
+        if (!order.start_time) updateOrder({ id: order.id, start_time: Date.now() });
+    }, [])
     
 
     const togglePreparing = async (checked: boolean) => {
         const startTime = Date.now();
 
         try {
-            if (!checked) {
+            if (checked) {
                 setIsPreparing(true);
-              await updateOrder({ id: order?.id!, status: OrderStatus.Completed }) 
+                await updateOrder({ id: order?.id!, status: OrderStatus.Completed }) 
                 // in minutes
               
             } else {
+                setIsPreparing(false);
                 await updateOrder({ id: order?.id!, start_time: startTime, status: OrderStatus.Preparing }) 
             }
         } catch {

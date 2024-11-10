@@ -17,7 +17,7 @@ export default function PreparingOrders({ orders }: { orders: Order[] }) {
                 </View>
                 :
                 orders?.map((order) => (
-                    <OrderCardPreparing order={order}/>
+                    <OrderCardPreparing key={order.id} order={order}/>
                 ))
             }   
         </ScrollView>
