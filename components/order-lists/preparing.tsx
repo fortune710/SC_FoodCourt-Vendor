@@ -13,7 +13,7 @@ export default function PreparingOrders({ orders }: { orders: Order[] }) {
             {
                 orders?.length === 0 ? 
                 <View className="py-16 px-4">
-                   <Text>There are no new orders for you to look at.</Text> 
+                   <Text>There are no orders being prepared for you to look at.</Text> 
                 </View>
                 :
                 orders?.map((order) => (
