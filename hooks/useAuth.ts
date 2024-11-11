@@ -1,6 +1,7 @@
 import { useRouter } from 'expo-router';
 import { supabase } from '../utils/supabase';
 import { useQueryClient } from '@tanstack/react-query';
+import { SupabaseTables } from '~/utils/types';
 
 interface SignUpData {
     email: string;
@@ -55,6 +56,18 @@ export default function useAuth() {
             }
         })
     }
+    
+    const changePassword = async (newPassword: string) => {
+        return await Promise.all([
+            await supabase.auth.updateUser({
+                password: newPassword
+            }),
+            await supabase.from(SupabaseTables.Profiles).update({
+                change_passsword: false
+            })
+        ])
+    }
+
 
     const signOut = async () => {
         await supabase.auth.signOut();
@@ -69,5 +82,6 @@ export default function useAuth() {
         getCurrentUser,
         signOut,
         updateUser,
+        changePassword
     }
 }

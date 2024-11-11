@@ -1,5 +1,5 @@
 import { Link } from 'expo-router';
-import { ShoppingCart } from 'lucide-react-native';
+import { ArrowsUpFromLine, ShoppingBag, ShoppingCart, Truck } from 'lucide-react-native';
 import { ActivityIndicator, View ,ScrollView, StyleSheet} from 'react-native'
 import { AnimatedCircularProgress } from 'react-native-circular-progress';
 import { LineChart } from 'react-native-gifted-charts';
@@ -17,6 +17,7 @@ import {
 import { Text } from '~/components/ui/text';
 import useAnalytics from '~/hooks/useAnalytics';
 import useResturant from '~/hooks/useResturant';
+import ChangePasswordDialog from '~/components/change-password-dialog';
 
 export default function AdminDashboard() {
   return (
@@ -24,6 +25,8 @@ export default function AdminDashboard() {
         <Header headerTitle='Dashboard' noRightIcon = {true} />
         <ScrollView contentContainerStyle = {styles.container}>
         <DashboardMetricsContainer/>
+
+        <ChangePasswordDialog/>
 
         <View className='px-4 flex flex-col gap-7'>
             <StockAlertBanner/>
@@ -52,7 +55,7 @@ function DashboardMetricsCard({ title, value, icon }: DashboardMetricCardProps) 
           </View>
         </CardHeader>
         <CardFooter style={{marginTop: 24}}>
-          <Text className='text-white font-semibold text-xl' >{title}</Text>
+          <Text className='text-white font-semibold text-lg' >{title}</Text>
         </CardFooter>
     </Card>
     )
@@ -72,17 +75,17 @@ function DashboardMetricsContainer() {
         {
             title: "Orders Accepted Today",
             value: dashboardMetrics?.ordersAcceptedToday || 0,
-            icon: <ShoppingCart size="16px" stroke="#F72F2F"/>
+            icon: <ArrowsUpFromLine size="16px" stroke="#F72F2F"/>
         },
         {
             title: "Orders Ready",
             value: dashboardMetrics?.ordersReady || 0,
-            icon: <ShoppingCart size="16px" stroke="#F72F2F"/>
+            icon: <ShoppingBag size="16px" stroke="#F72F2F"/>
         },
         {
             title: "Orders Delivered",
             value: dashboardMetrics?.ordersDelivered || 0,
-            icon: <ShoppingCart size="16px" stroke="#F72F2F"/>
+            icon: <Truck size="16px" stroke="#F72F2F"/>
         },
     ]
 
