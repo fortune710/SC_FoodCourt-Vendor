@@ -66,15 +66,14 @@ export default function useOrders() {
                     quantity,
                     addon_name,
                     addon_price,
-                    menu_item:menu_item_id (name, price)
-                    )
+                    menu_item:menu_item_id (name, price, category)
+                )
             `)
             .eq('restaurant_id', resturant?.id)
             .eq('assigned_staff', currentUser?.id)
             .order('order_date', { ascending: false });
 
         if (error) throw new Error(error.message);
-        console.log(data, error, "i staff")
         return data;
     }
 

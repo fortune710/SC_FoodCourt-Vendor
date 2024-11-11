@@ -63,6 +63,7 @@ export interface Order {
         menu_item: {
             name: string,
             price: number,
+            category: string
         }
     }[]
 }

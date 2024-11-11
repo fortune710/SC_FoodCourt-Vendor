@@ -73,15 +73,21 @@ export default function OrderCardDetails({ showTime, order } : OrderCardDetailsP
       
       <View style={{flexDirection:'row', justifyContent: 'space-between'}}>
         <View style={[styles.itemsCatPresent, {gap: 16}]}>
-          <View style={styles.itemsCatPresent}>
-            <Image source={require("../../assets/icons/food-cat.svg")} style={{width: 40, height: 40}}/>
-            <Text style={{fontSize: 16, color: '#5c5c5c'}}>Food</Text>
-          </View>
+          {
+            order.items.filter(({ menu_item }) => menu_item.category !== "Drinks").length > 0 &&
+            <View style={styles.itemsCatPresent}>
+              <Image source={require("../../assets/icons/food-cat.svg")} style={{width: 40, height: 40}}/>
+              <Text style={{fontSize: 16, color: '#5c5c5c'}}>Food</Text>
+            </View>
+          }
 
-          <View style={styles.itemsCatPresent}>
-            <Image source={require("../../assets/icons/drinks-cat.svg")} style={{width: 40, height: 40}}/>
-            <Text style={{fontSize: 16, color: '#5c5c5c'}}>Drink</Text>
-          </View>
+          {
+            order.items.filter(({ menu_item }) => menu_item.category === "Drinks").length > 0 &&
+            <View style={styles.itemsCatPresent}>
+              <Image source={require("../../assets/icons/drinks-cat.svg")} style={{width: 40, height: 40}}/>
+              <Text style={{fontSize: 16, color: '#5c5c5c'}}>Drink</Text>
+            </View>
+          }
         </View>
 
 
