@@ -13,6 +13,7 @@ import useThemeColor from "~/hooks/useThemeColor";
 import { Button } from "@rneui/themed";
 import useCreatePaymentProfile from "~/hooks/useCreatePaymentProfile";
 import Header from "~/components/header";
+import useAccountNumber from "~/hooks/useAccountNumber";
 
 export default function CreatePaymentProfile() {
     //const { getCurrentUser } = useAuth();
@@ -29,7 +30,10 @@ export default function CreatePaymentProfile() {
     const { isLoading, data: banks } = useBanks();
     const { createPaymentProfile, loading } = useCreatePaymentProfile();
 
+    const { data: account } = useAccountNumber(accountNumber, bankCode);
 
+    const [bankSearchQuery, setBankSearchQuery] = useState('');
+    const bankSearchResults = !bankSearchQuery ? banks : banks?.filter((bank) => bank?.name.toLowerCase().includes(bankSearchQuery.toLowerCase())).slice(0, 5);
 
     const contentInsets = {
       top: insets.top,
@@ -76,13 +80,14 @@ export default function CreatePaymentProfile() {
 
                     <SelectContent insets={contentInsets} className='w-full'>
                         <ScrollView>
+                            <Input value={bankSearchQuery} onChangeText={setBankSearchQuery} />
                             {
-                                banks?.map((bank) => (
+                                bankSearchResults?.map((bank, index) => (
                                 <SelectItem 
-                                key={bank.name + bank.code} 
+                                    key={bank.name + index} 
                                     label={bank.name} 
                                     value={bank.code}
-                                    >
+                                >
                                     {bank.name}
                                 </SelectItem>
                                 ))
@@ -92,18 +97,21 @@ export default function CreatePaymentProfile() {
 
                 </Select>     
 
-            </View>
-            
-            <Input
-                inputContainerStyle={styles.inputContainer}
-                placeholder='Account Number'
-                value={accountNumber}
-                onChangeText={(text) => setAccountNumber(text)}    
-            />
+            </View>        
 
+            <View>
+                <Input
+                    inputContainerStyle={styles.inputContainer}
+                    placeholder='Account Number'
+                    value={accountNumber}
+                    onChangeText={(text) => setAccountNumber(text)} 
+                    errorMessage={account?.account_name}
+                />
+            </View>
+        
             <Input
                 inputContainerStyle={styles.inputContainer}
-                placeholder='Account Name'
+                placeholder='Business Name'
                 value={accountName}
                 // readOnly
                 onChangeText={(text) => setAccountName(text)}  
@@ -119,7 +127,7 @@ export default function CreatePaymentProfile() {
 
             <Button 
                 disabled={loading} 
-                onPress={()=> console.log('ok')} //it should send back to transaction page
+                onPress={()=> router.back()} //it should send back to transaction page
                 buttonStyle={{ marginHorizontal: 12, borderRadius: 32, marginTop: 20, borderWidth: 1, backgroundColor: '#fff' }}
             >
                 <Text className="text-primary text-xl">Cancel</Text>

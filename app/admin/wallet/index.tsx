@@ -1,5 +1,5 @@
 
-import { Dimensions, View, StyleSheet, SafeAreaView, ScrollView, TouchableOpacity, ActivityIndicator } from 'react-native';
+import { Dimensions, View, StyleSheet, SafeAreaView, ScrollView, TouchableOpacity, ActivityIndicator, FlatList } from 'react-native';
 import { Ionicons } from '@expo/vector-icons'; 
 import React from 'react';
 import { Text } from "~/components/ui/text";
@@ -24,8 +24,8 @@ export default function walletPage() {
   const router = useRouter();
   const { resturant } = useResturant();
   const { orders, isLoading } = useOrderStatus(OrderStatus.Completed);
-  const [modalVisible, setModalVisible] = React.useState(false); // State for modal visibility
-  const [withdrawAmount, setWithdrawAmount] = React.useState(''); // State for input amount
+  //const [modalVisible, setModalVisible] = React.useState(false); // State for modal visibility
+  //const [withdrawAmount, setWithdrawAmount] = React.useState(''); // State for input amount
 
   return (
     <Page>
@@ -82,19 +82,20 @@ export default function walletPage() {
             <Text>There are no orders available</Text>
           </View> 
           :
-          <ScrollView>
-            {
-              orders?.slice(0, 5).map((order) => (
-                <TransactionItem 
-                  type="Order Income"
-                  amount={order.total_amount.toString()}
-                  date="24 Aug 2023" //change date format
-                  description={`Order Payment from ${order.customer_name}`}
-                  key={order.id}
-                />
-              ))
-            }
-          </ScrollView>
+          <FlatList
+            data={orders}
+            renderItem={({ item: order }) => (
+              <TransactionItem 
+                type="Order Income"
+                amount={order.total_amount.toString()}
+                date="24 Aug 2023" //change date format
+                description={`Order Payment from ${order.customer_name}`}
+                key={order.id}
+              />
+            )}
+            showsVerticalScrollIndicator={false}
+            style={{ marginBottom: 400 }}
+          />
         }
       </View>
 
@@ -168,7 +169,7 @@ const styles = StyleSheet.create({
       height: "100%",
       padding: 20,
       position: "absolute",
-      top: verticalScale(300),
+      top: verticalScale(240),
       bottom: 0,
       left: 0,
       right: 0,

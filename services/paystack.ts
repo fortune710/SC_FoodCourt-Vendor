@@ -31,6 +31,16 @@ const Paystack = {
             name: string,
             code: string
         }[]
+    },
+    verifyAccountNumber: async function (accountNumber: string, bankCode: string) {
+        const response = await this.api.get("/bank/resolve", {
+            params: { account_number: accountNumber, bank_code: bankCode }
+        })
+
+        return response.data.data as {
+            account_name: string,
+            bank_id: number
+        }
     }
 }
 
