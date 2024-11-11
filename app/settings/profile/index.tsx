@@ -6,7 +6,7 @@ import BackButton from "~/components/custom/back-button";
 import { Image } from "expo-image";
 import { useRouter } from "expo-router";
 import useThemeColor from "hooks/useThemeColor";
-import { Edit, Lock, Mail, Phone } from "lucide-react-native";
+import { BrickWall, Edit, Lock, Mail, Phone } from "lucide-react-native";
 import { StyleSheet, TouchableOpacity, View ,  SafeAreaView} from "react-native";
 import { StatusBar } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
@@ -42,41 +42,39 @@ export default function ProfilePage() {
   const { currentUser } = useCurrentUser();
 
   return (
-    <Page>
-      <StatusBar backgroundColor="#F72F2F" barStyle="dark-content" />
-
-      <SafeAreaView style={styles.container}>
-        <View style={styles.header}>
-          <TouchableOpacity onPress={() => router.back()}>
-            <Ionicons name="arrow-back" size={24} color="white" />
-          </TouchableOpacity>
-          <TouchableOpacity style={styles.editButton} onPress={() => router.push("/settings/profile/edit")}>
-            <Ionicons name="pencil" size={24} color="white" />
-          </TouchableOpacity>
-        </View>
-
-        <View style={styles.profileInfo}>
-          <View style={styles.profileInfoText}>
-            <Text style={styles.name}>{currentUser?.full_name}</Text>
-            <Text style={styles.subName}>@{currentUser?.username}</Text>
-          </View>
+    <View style={styles.container}>
+      <StatusBar backgroundColor="#F72F2F" barStyle="light-content" />
       
-        </View> 
-
-        <Image
+      <View style={styles.header}>
+        <TouchableOpacity onPress={() => router.back()}>
+          <Ionicons name="arrow-back" size={24} color="white" />
+        </TouchableOpacity>
+        <TouchableOpacity style={styles.editButton} onPress={() => router.push("/settings/profile/edit")}>
+          <Ionicons name="pencil" size={24} color="white" />
+        </TouchableOpacity>
+      </View>
+    
+      <View style={styles.profileInfo}>
+        <View style={styles.profileInfoText}>
+        <Text style={styles.name}>{currentUser?.full_name}</Text>
+        <Text style={styles.subName}>@{currentUser?.username}</Text>
+        </View>
+      
+      </View> 
+      <Image
           source={{ uri: currentUser?.image_url! }} // Replace with actual image URL
           style={styles.profileImage}
         />
-  
-        <View style={styles.diagonal} />
-        
-        <View style={styles.detailsContainer}>
-          <ProfileItem icon="mail" label="Email" value={currentUser?.email!} />
-          <ProfileItem icon="call" label="Phone Number" value={currentUser?.phone_number! || "N/A"} />
-          {/* <ProfileItem icon="lock-closed" label="Password" value="••••••••••" /> */}
-        </View>
-      </SafeAreaView>
-    </Page>
+    
+      <View style={styles.diagonal} />
+      
+      <View style={styles.detailsContainer}>
+        <ProfileItem icon="mail" label="Email" value={currentUser?.email!} />
+        <ProfileItem icon="call" label="Phone Number" value={currentUser?.phone_number! || "N/A"} />
+        {/* <ProfileItem icon="lock-closed" label="Password" value="••••••••••" /> */}
+      </View>
+
+    </View>
   )
 }
 
@@ -89,6 +87,7 @@ const styles = StyleSheet.create({
       flexDirection: 'row',
       justifyContent: 'space-between',
       padding: 16,
+      marginTop: 36
     },
     editButton: {
       padding: 8,
@@ -121,35 +120,39 @@ const styles = StyleSheet.create({
       borderWidth: 3,
       borderColor: 'white',
       position: 'absolute',
-      top: scale(100),
+      top: scale(110),
       right: scale(20),
       zIndex: 100,
     
     },
     diagonal: {
       height: 150,
-      width: '200%',
+      width: '170%',
       backgroundColor: 'white',
-    transform: [{ skewY: '-20deg' }],
+      transform: [{ skewY: '-20deg' }],
       
     },
     detailsContainer: {
       flex: 1,
       backgroundColor: 'white',
+      marginTop: -22,
       paddingTop: 30,
       paddingHorizontal: 16,
     },
     profileItem: {
       flexDirection: 'row',
       alignItems: 'center',
-      marginBottom: 20,
+      marginVertical: 24,
     },
     iconContainer: {
-      width: 40,
-      height: 40,
-      borderRadius: 20,
-      borderWidth: 1,
+      width: 60,
+      height: 60,
+      borderRadius: 30,
+      borderWidth: 0.5,
       borderColor: '#FF3B30',
+      // shadowOffset: {width: 8, height: 8},
+      shadowRadius: 4, 
+      shadowColor: '#FE0000',
       justifyContent: 'center',
       alignItems: 'center',
       marginRight: 16,

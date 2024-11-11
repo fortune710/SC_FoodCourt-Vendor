@@ -18,18 +18,14 @@ export default function PickupPage() {
         router.push({
             pathname: "/pickup/orders",
             params: {
-                order_nums: orderNumbers.split(","),
+                order_nums: orderNumbers.split(",").map((id) => id.trim()),
             }
         })
     }
     return (
-        <Page >
+        <Page>
             <Header headerTitle="Pickup" /> 
-            {/*  */}
-            <Image
-                source={{ uri: require('~/assets/pickup-design.png') }}
-                style={{ width: 185, height: 200, }}
-            />
+
             <View
                 style={styles.inputcontainer}
             >
@@ -50,7 +46,6 @@ export default function PickupPage() {
 const styles = StyleSheet.create({
    
     inputcontainer: {
-        flex: 1,
         justifyContent: 'center',
         paddingHorizontal: 30,
         width: '100%',

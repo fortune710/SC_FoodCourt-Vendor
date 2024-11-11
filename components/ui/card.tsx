@@ -9,7 +9,7 @@ const Card = React.forwardRef<ViewRef, React.ComponentPropsWithoutRef<typeof Vie
     <View
       ref={ref}
       className={cn(
-        'rounded-lg border border-border bg-card shadow-sm shadow-foreground/10',
+        'rounded-lg border border-border bg-card shadow-sm shadow-foreground/10 ',
         className
       )}
       {...props}
@@ -20,7 +20,7 @@ Card.displayName = 'Card';
 
 const CardHeader = React.forwardRef<ViewRef, React.ComponentPropsWithoutRef<typeof View>>(
   ({ className, ...props }, ref) => (
-    <View ref={ref} className={cn('flex flex-col space-y-1.5 p-6', className)} {...props} />
+    <View ref={ref} className={cn('flex flex-col space-y-1.5', className)} {...props} />
   )
 );
 CardHeader.displayName = 'CardHeader';
@@ -59,7 +59,7 @@ CardContent.displayName = 'CardContent';
 
 const CardFooter = React.forwardRef<ViewRef, React.ComponentPropsWithoutRef<typeof View>>(
   ({ className, ...props }, ref) => (
-    <View ref={ref} className={cn('flex flex-row items-center p-6 pt-0', className)} {...props} />
+    <View ref={ref} className={cn('flex flex-row items-center pt-0', className)} {...props} />
   )
 );
 CardFooter.displayName = 'CardFooter';

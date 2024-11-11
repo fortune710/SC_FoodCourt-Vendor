@@ -130,7 +130,7 @@ const styles = StyleSheet.create({
       position: 'absolute',
       right: '40%',
       bottom: 45,
-      backgroundColor: '#FF3B30',
+      backgroundColor: '#ffc7c7',
       borderRadius: 15,
       padding: 5,
     },
@@ -138,11 +138,10 @@ const styles = StyleSheet.create({
       fontSize: 20,
       fontWeight: 'bold',
       marginTop: 10,
-      color: '#FF3B30',
     },
     subName: {
       fontSize: 16,
-      color: '#FF3B30',
+      color: '#7e7e7e',
     },
     inputSection: {
       paddingHorizontal: 16,
@@ -150,7 +149,7 @@ const styles = StyleSheet.create({
     },
     label: {
       fontSize: 14,
-      color: '#FF3B30',
+      color: '#7e7e7e',
       marginTop: 16,
     },
     input: {

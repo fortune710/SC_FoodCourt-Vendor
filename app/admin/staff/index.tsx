@@ -7,6 +7,7 @@ import useRestaurantStaff from "~/hooks/useRestaurantStaff";
 import { Image } from "react-native";
 import { Plus } from "lucide-react-native";
 import useThemeColor from "~/hooks/useThemeColor";
+import { Avatar, AvatarFallback, AvatarImage } from "~/components/ui/avatar";
 
 export default function StaffPage() {
     const router = useRouter();	
@@ -33,15 +34,21 @@ export default function StaffPage() {
                     renderItem={({ item }) => (
                         <TouchableOpacity 
                             onPress={() => router.push(`/admin/staff/${item.id}`)} 
-                            className="flex flex-row items-center gap-4"
+                            className="flex flex-row items-center gap-4 mb-3"
                         >
-                            <Image source={{ uri: item.image_url }} style={{ width: 100, height: 100, borderRadius: 999 }} />
+                            <Avatar className="w-16 h-16" alt={`${item.full_name}'s Avatar`}>
+                                <AvatarFallback>
+                                    <Text>{item.full_name.at(0)}</Text>
+                                </AvatarFallback>
+                                <AvatarImage source={{ uri: item.image_url }} />
+                            </Avatar>
                             <View>
                                 <Text>{item.full_name}</Text>
                                 <Text>{item.position}</Text>
                             </View>
                         </TouchableOpacity>
                     )}
+                    style={{ paddingHorizontal: 12 }}
                 />
                 
             }

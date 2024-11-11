@@ -15,8 +15,8 @@ export default function LoginPage() {
     
 
     return (
-        <Page>
-            <KeyboardAvoidingView behavior="position">
+        // <Page>
+            <KeyboardAvoidingView behavior="position" style={{marginTop: 50}}>
                 <View style={[globalStyles.flexItemsCenter, { width: "100%", marginVertical: 20, justifyContent: "center" }]}>
                     <Image
                         source={require('../assets/images/login-image.png')}
@@ -24,13 +24,14 @@ export default function LoginPage() {
                     />
                 </View>
 
-                <Text style={styles.loginText}>
-                    Login
-                </Text>
+                <View style={{marginTop: 8, marginBottom: 24}}>
+                    <Text style={styles.loginText}>
+                        Login
+                    </Text>
+                </View>
 
                 <AuthForm type="login"/>
             </KeyboardAvoidingView>
-        </Page>
     )
 }
 

@@ -15,11 +15,11 @@ export default function CompletedOrders({ orders }: { orders: Order[] }) {
             {
                 orders?.length === 0 ? 
                 <View className="py-16 px-4">
-                   <Text>There are no new orders for you to look at.</Text> 
+                   <Text>There are no completed orders at the moment.</Text> 
                 </View>
                 :
                 orders?.map((order) => (
-                    <OrderCardCompleted order={order}/>
+                    <OrderCardCompleted key={order.id} order={order} />
                 ))
             }  
         </ScrollView>

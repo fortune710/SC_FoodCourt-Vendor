@@ -1,9 +1,9 @@
 
-import { View, StyleSheet, SafeAreaView, ScrollView, TouchableOpacity, ActivityIndicator } from 'react-native';
+import { Dimensions, View, StyleSheet, SafeAreaView, ScrollView, TouchableOpacity, ActivityIndicator, FlatList } from 'react-native';
 import { Ionicons } from '@expo/vector-icons'; 
 import React from 'react';
 import { Text } from "~/components/ui/text";
-import Page from "~/components/page";
+import Header from '~/components/header'
 import { scale, verticalScale } from 'react-native-size-matters';
 import { StatusBar,Pressable , Modal, TextInput} from 'react-native';
 import { useRouter } from 'expo-router';
@@ -11,6 +11,7 @@ import useResturant from '~/hooks/useResturant';
 import useOrderStatus from '~/hooks/useOrderStatus';
 import { OrderStatus } from '~/utils/types';
 import TransactionItem from '~/components/transaction-item';
+import Page from '~/components/page';
 
   
 
@@ -23,25 +24,24 @@ export default function walletPage() {
   const router = useRouter();
   const { resturant } = useResturant();
   const { orders, isLoading } = useOrderStatus(OrderStatus.Completed);
-  const [modalVisible, setModalVisible] = React.useState(false); // State for modal visibility
-  const [withdrawAmount, setWithdrawAmount] = React.useState(''); // State for input amount
+  //const [modalVisible, setModalVisible] = React.useState(false); // State for modal visibility
+  //const [withdrawAmount, setWithdrawAmount] = React.useState(''); // State for input amount
 
   return (
     <Page>
-      <StatusBar backgroundColor="#FF3B30" barStyle="dark-content" />
-      <View style={styles.container}>
+      <Header headerTitle='Transactions' noRightIcon = {true} style='dark'/>     
 
-        <View className='pt-10 px-3'>
-          <Text className='text-center text-white text-xl'>Payment Details</Text>
+      <View className='pt-10 px-3'>
+        <Text className='text-center text-xl'>Payment Details</Text>
 
-          <View className='my-8'>
-            <Text className='text-white text-center'>Account Number</Text>
-            <Text className='text-4xl text-white text-center'>{resturant?.account_number || "N/A"}</Text>
-            {
-              !resturant?.account_number && 
-              <Text className='text-xs text-white text-center'>You must add payment details to start receiving orders</Text>
-            }
-          </View>
+        <View className='my-4'>
+          {/* <Text className='text-center'>Account Number</Text> */}
+          <Text className='text-4xl text-center'>{resturant?.account_number || "N/A"}</Text>
+          {
+            !resturant?.account_number && 
+            <Text className='text-xs text-center'>You must add payment details to start receiving orders</Text>
+          }
+        </View>
 
         {
           /*
@@ -53,22 +53,24 @@ export default function walletPage() {
           */
         }
 
-        {
-          !resturant?.subaccount_code ? 
-          <TouchableOpacity onPress={() => router.push('/admin/wallet/create')} className='bg-white rounded-[50px] p-4'>
-            <Text className='mx-auto'>Add Payment Details</Text>
-          </TouchableOpacity>
-          :
-          <TouchableOpacity onPress={() => router.push('/admin/wallet/create')} className='bg-white rounded-[50px] p-4'>
-            <Text className='mx-auto'>Update Payment Details</Text>
-          </TouchableOpacity>
+        <View style={{marginTop: verticalScale(20)}}>
+          {
+            !resturant?.subaccount_code ? 
+            <TouchableOpacity onPress={() => router.push('/admin/wallet/create')} className='rounded-[50px] p-6 mx-16' style={{backgroundColor: '#f72f2f'}}>
+              <Text className='mx-auto text-white text-lg'>Add Payment Details</Text>
+            </TouchableOpacity>
+            :
+            <TouchableOpacity onPress={() => router.push('/admin/wallet/create')} className='rounded-[50px] p-6 mx-16'  style={{backgroundColor: '#f72f2f'}}>
+              <Text className='mx-auto text-white text-lg'>Update Payment Details</Text>
+            </TouchableOpacity>
 
-        }
+          }
+        </View>
       </View>
 
 
       <View style={styles.transactionContainer}>
-        <View style = {styles.handle}/>
+        <View style= {styles.handle}/>
 
         <Pressable onPress={() => router.push("/admin/wallet/transhistory")}>
           <Text style={styles.transactionTitle}>Transaction History</Text>
@@ -80,39 +82,32 @@ export default function walletPage() {
             <Text>There are no orders available</Text>
           </View> 
           :
-          <ScrollView>
-            {
-              orders?.slice(0, 5).map((order) => (
-                <TransactionItem 
-                  type="Order Income"
-                  amount={order.total_amount.toString()}
-                  date="24 Aug 2023" //change date format
-                  description={`Order Payment from ${order.customer_name}`}
-                  key={order.id}
-                />
-              ))
-            }
-          </ScrollView>
+          <FlatList
+            data={orders}
+            renderItem={({ item: order }) => (
+              <TransactionItem 
+                type="Order Income"
+                amount={order.total_amount.toString()}
+                date="24 Aug 2023" //change date format
+                description={`Order Payment from ${order.customer_name}`}
+                key={order.id}
+              />
+            )}
+            showsVerticalScrollIndicator={false}
+            style={{ marginBottom: 400 }}
+          />
         }
       </View>
 
-   
-
-    </View>
     </Page>
   )
 }
 
 const styles = StyleSheet.create({
-    container: {
-      flex: 1,
-      backgroundColor: '#FF3B30',
-    },
-    
     eyeicon: {
-        position: 'absolute',
-        right: scale(-70)
-        ,
+      position: 'absolute',
+      right: scale(-70),
+      color: 'black'
     },
     walletHeader: {
       padding: 20,
@@ -141,7 +136,6 @@ const styles = StyleSheet.create({
       alignItems: 'center',
     },
     balanceAmount: {
-       
       fontSize: 28,
       fontWeight: 'bold',
       color: 'white',
@@ -171,12 +165,15 @@ const styles = StyleSheet.create({
       backgroundColor: 'white',
       borderTopLeftRadius: 20,
       borderTopRightRadius: 20,
+      borderTopWidth: 1,
       height: "100%",
       padding: 20,
+      position: "absolute",
+      top: verticalScale(240),
       bottom: 0,
       left: 0,
       right: 0,
-      marginTop: verticalScale(16)
+      marginTop: verticalScale(16),
     },
     handle:{
         marginTop: scale(-10),
@@ -186,8 +183,6 @@ const styles = StyleSheet.create({
         alignSelf: "center",
         borderRadius : 30,
         marginBottom: scale(10)
-
-
     }, 
     transactionTitle: {
         alignSelf:"center",

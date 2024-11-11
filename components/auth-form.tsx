@@ -38,15 +38,21 @@ export default function AuthForm({ type }: AuthFormProps) {
             switch (type) {
                 case "login":
                     const user = await signIn(email, password);
-                    const resturant = await getResturantByAdminId(user?.id!);
-                    if (resturant) return router.push('/orders');
-                    
-                    return router.push({
-                        pathname: '/restaurant/create',
-                        params: {
-                            admin_id: user?.id
-                        }
-                    });
+                    if (user?.user_metadata.user_type === "admin") {
+
+                        const resturant = await getResturantByAdminId(user?.id!);
+                        if (resturant) return router.push('/admin/dashboard');
+                        
+                        return router.push({
+                            pathname: '/restaurant/create',
+                            params: {
+                                admin_id: user?.id
+                            }
+                        });
+                    }
+
+                    return router.push('/orders')
+                    break;
                 case "sign-up":
                     await signUpWithEmail({
                         email: email,
@@ -67,11 +73,13 @@ export default function AuthForm({ type }: AuthFormProps) {
                         });
                     })
                     .catch((error) =>  console.log(error))
+                    break;
                 case "forgot-password":
                     break;
                 default:
                     return;
             }
+
         } catch (error) {
             Toast.show({
                 text1: "Error: " +error,
@@ -109,9 +117,11 @@ export default function AuthForm({ type }: AuthFormProps) {
                 <Input
                     inputContainerStyle={styles.inputContainer}
                     placeholder='Email'
+                    placeholderTextColor='#7e7e7e'
                     leftIcon={<Mail stroke={primary} />}
                     value={email}
                     onChangeText={(text) => setEmail(text)}
+                    keyboardType='email-address'
                 />
 
                 <Input
@@ -120,11 +130,12 @@ export default function AuthForm({ type }: AuthFormProps) {
                         <TouchableOpacity 
                             onPress={() => setShowPassword(!showPassword)}
                         >
-                            { !showPassword ? <EyeOff stroke={primary} /> : <Eye stroke={primary}/> }
+                            { !showPassword ? <Eye stroke={primary} /> : <EyeOff stroke={primary}/> }
                         </TouchableOpacity>
                     }
                     inputContainerStyle={styles.inputContainer}
                     placeholder='Password'
+                    placeholderTextColor='#7e7e7e'
                     secureTextEntry={!showPassword}
                     value={password}
                     onChangeText={(text) => setPassword(text)}
@@ -246,7 +257,7 @@ const styles = StyleSheet.create({
         flexDirection: 'column',
         alignItems: 'center',
         width: '100%',
-        marginTop: verticalScale(25)
+        marginTop: verticalScale(50)
     },
     checkboxContainer: { 
         display: 'flex', 

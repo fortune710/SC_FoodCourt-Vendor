@@ -12,8 +12,7 @@ export default function SignUpPage() {
     
 
     return (
-        <Page>
-            <KeyboardAvoidingView behavior="position">
+            <KeyboardAvoidingView behavior="position" style={{marginTop: 50}}>
                 <View style={[globalStyles.flexItemsCenter, { width: "100%", marginVertical: 20, justifyContent: "center" }]}>
                     <Image
                         source={require('../assets/images/login-image.png')}
@@ -27,7 +26,6 @@ export default function SignUpPage() {
 
                 <AuthForm type="sign-up"/>
             </KeyboardAvoidingView>
-        </Page>
     )
 }
 

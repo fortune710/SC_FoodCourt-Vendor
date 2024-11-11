@@ -1,18 +1,19 @@
-import { Button, Input } from "@rneui/themed";
+import { Input } from "@rneui/themed";
 import { useState } from "react";
-import { ScrollView, TextInput, TouchableOpacity, View } from "react-native";
+import { Pressable, ScrollView, TextInput, TouchableOpacity, View } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import Page from "~/components/page";
-import { Select, SelectContent, SelectGroup, SelectItem, SelectLabel, SelectTrigger, SelectValue } from "~/components/ui/select";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "~/components/ui/select";
 import { Text } from "~/components/ui/text";
-import { Addon, CreateMenuItemData, MenuItem } from "~/utils/types";
+import { Addon, MenuItem } from "~/utils/types";
 import { Button as ShadcnButton } from "~/components/ui/button";
-import { ChevronLeft, Minus, Plus } from "lucide-react-native";
+import { ChevronLeft, Minus, Plus, Trash, X } from "lucide-react-native";
 import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger } from "~/components/ui/alert-dialog";
 import Toast from "react-native-toast-message";
 import useMenuItems from "~/hooks/useMenuItems";
 import { useLocalSearchParams, useRouter } from "expo-router";
 import { CATEGORIES, PREPARATION_TIMES } from "~/utils/constants";
+import useThemeColor from "~/hooks/useThemeColor";
 
 
 
@@ -21,6 +22,7 @@ export default function CreateMenuItemPage() {
     const menuItemId = Number(searchParams.id as string);
     const { updateMenuItem, getSingleMenuItem } = useMenuItems();
     const menuItem = getSingleMenuItem(menuItemId, searchParams.category as string);
+    const primary = useThemeColor({}, "primary");
 
 
     const [newMenuItem, setNewMenuItem] = useState<MenuItem>({
@@ -49,6 +51,29 @@ export default function CreateMenuItemPage() {
             type: "success"
         })
     }
+
+    const removeAddon = (foodName: string) => {
+        const addonsLeft = newMenuItem.add_ons?.filter((addon) => addon.foodName !== foodName)
+        setNewMenuItem({ ...newMenuItem, add_ons: addonsLeft });
+
+        return Toast.show({
+            text1: "Item Removed Successfully",
+            type: "success"
+        })
+    }
+
+    const editAddon = (foodName: string) => {
+        const addonsLeft = newMenuItem.add_ons?.filter((addon) => addon.foodName !== foodName)
+        setNewMenuItem({ ...newMenuItem, add_ons: [...addonsLeft!, newAddon] });
+        setNewAddon({ foodName: "", price: 0 });
+
+        return Toast.show({
+            text1: "Item Edited Successfully",
+            type: "success"
+        })
+    }
+
+
 
     const router = useRouter();
 
@@ -190,10 +215,58 @@ export default function CreateMenuItemPage() {
                     <View className="w-full">
                         {
                             newMenuItem.add_ons?.map((addon) => (
-                                <View className="w-full flex flex-row items-center justify-between py-2" key={addon.foodName}>
-                                    <Text>{addon.foodName}</Text>
-                                    <Text>{addon.price}</Text>
-                                </View>
+                                <AlertDialog key={addon.foodName}>
+                                    <AlertDialogTrigger asChild>
+                                        <TouchableOpacity className="w-full flex flex-row items-center justify-between py-3">
+                                            <Text>{addon.foodName}</Text>
+                                            <View className="flex flex-row gap-3">
+                                                <Text>NGN {addon.price}</Text>
+                                                <TouchableOpacity onPress={(e) => {
+                                                    e.stopPropagation();
+                                                    removeAddon(addon.foodName)
+                                                }}>
+                                                    <Trash stroke={primary} className="h-3 w-3"/>
+                                                </TouchableOpacity>
+                                            </View>
+                                        </TouchableOpacity>
+                                    </AlertDialogTrigger>
+
+                                    <AlertDialogContent>
+                                        <AlertDialogHeader>
+                                            <AlertDialogTitle>Edit Add on</AlertDialogTitle>
+                                        </AlertDialogHeader>
+
+                                        <View>
+                                            <Input
+                                                label="Add on Name"
+                                                placeholder="Enter Add on Name"
+                                                onChangeText={(text) => setNewAddon({ ...addon, foodName: text })}
+                                                defaultValue={addon.foodName}
+                                            />
+
+                                            <Input
+                                                label="Add on Price"
+                                                placeholder="Enter Add on Price"
+                                                onChangeText={text => setNewAddon({ ...addon, price: Number(text) })}
+                                                defaultValue={String(addon.price)}
+                                                keyboardType="numeric"
+                                            />
+                                        </View>
+
+                                        <AlertDialogFooter>
+                                            <AlertDialogCancel>
+                                                <Text>Cancel</Text>
+                                            </AlertDialogCancel>
+
+                                            <AlertDialogAction onPress={() => editAddon(addon.foodName)}>
+                                                <Text>Save</Text>
+                                            </AlertDialogAction>
+                                        </AlertDialogFooter>
+                                    </AlertDialogContent>
+
+                                
+                                
+                                </AlertDialog>
                             ))
                         }
 

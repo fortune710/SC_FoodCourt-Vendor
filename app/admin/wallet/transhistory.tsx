@@ -18,7 +18,7 @@ export default function transhistory() {
   return (
     <Page>
       <StatusBar backgroundColor="white" barStyle="dark-content" />
-    
+
       <SafeAreaView style={styles.container}>
         <View style={styles.header}>
           <TouchableOpacity style={styles.backButton} onPress={()=>router.back()}>

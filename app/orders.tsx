@@ -12,6 +12,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "~/components/ui/tabs";
 import { Text } from "~/components/ui/text";
 import useOrders from "~/hooks/useOrders";
 import { Order, OrderStatus } from "~/utils/types";
+import ChangePasswordDialog from "~/components/change-password-dialog";
 
 export default function OrdersPage() {
     const [activeTab, setActiveTab] = useState<"new"|"preparing"|"completed">("new");
@@ -26,6 +27,7 @@ export default function OrdersPage() {
     return (
         <Page>
             <Header style="dark" headerTitle='Orders'/>
+            <ChangePasswordDialog/>
             <Tabs
                 value={activeTab}
                 onValueChange={(value) => setActiveTab(value as any)}

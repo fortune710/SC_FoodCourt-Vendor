@@ -25,7 +25,7 @@ export interface CreateMenuItemData {
 }
 
 export interface ResturantData {
-    id?: string,
+    id?: number,
     admin_id: string,
     name: string,
     phone_number?: string,
@@ -54,6 +54,7 @@ export interface Order {
     order_date: Date | string,
     customer_name: string,
     preparation_time: number,
+    start_time: Date | number,
     items: {
         id: number,
         quantity: number,
@@ -62,6 +63,7 @@ export interface Order {
         menu_item: {
             name: string,
             price: number,
+            category: string
         }
     }[]
 }
