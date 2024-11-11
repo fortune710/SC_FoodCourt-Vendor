@@ -25,7 +25,7 @@ export interface CreateMenuItemData {
 }
 
 export interface ResturantData {
-    id?: string,
+    id?: number,
     admin_id: string,
     name: string,
     phone_number?: string,
