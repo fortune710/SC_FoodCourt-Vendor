@@ -18,6 +18,11 @@ import { Text } from '~/components/ui/text';
 import useAnalytics from '~/hooks/useAnalytics';
 import useResturant from '~/hooks/useResturant';
 import ChangePasswordDialog from '~/components/change-password-dialog';
+import useOrders from '~/hooks/useOrders';
+import { OrderStatus } from '~/utils/types';
+import useThemeColor from '~/hooks/useThemeColor';
+import useStock from '~/hooks/useStock';
+import useMenuItems from '~/hooks/useMenuItems';
 
 export default function AdminDashboard() {
   return (
@@ -104,49 +109,71 @@ function DashboardMetricsContainer() {
 
 
 function StockAlertBanner() {
+    const { menuItemsRaw, isLoading } = useMenuItems();
+
+    const lowStockCount = menuItemsRaw?.filter((item) => item.quantity < item.warning_stock_value).length;
+
+    if (isLoading || lowStockCount === 0) return null
+
     return (
         <View className='border border-black rounded-lg p-4'>
             <Text style={{fontSize: 16, fontWeight: 600}}>Low Stock Alert</Text>
             <Text>
-                You have 8 low stock items. <Link className='text-primary' href="/admin/stock">See them</Link>
+                You have {lowStockCount} low stock items. <Link className='text-primary' href="/admin/stock">See them</Link>
             </Text>
         </View>
     )
 }
 
 function AnalyticsChart() {
-    //const { resturant } = useResturant();
-    //const { orderCounts, isLoading } = useAnalytics(resturant?.id);
-
-    const testData = [
-        { label: "23/8", value: 64 },
-        { label: "26/8", value: 93 },
-        { label: "29/8", value: 56 },
-        { label: "01/9", value: 84 },
-        { label: "04/9", value: 67 },
-        { label: "07/9", value: 79 },
-        { label: "10/9", value: 95 },
-        { label: "13/9", value: 61 },
-        { label: "16/9", value: 89 },
-        { label: "19/9", value: 72 },
-    ];
-
+    const { resturant } = useResturant();
+    const { orderCounts } = useAnalytics(resturant?.id!);
+    const primary = useThemeColor({}, "primary");
+    
     
 
     return (
-        <View className='bg-primary-tint p-4 rounded-3xl border border-input'>
-            <View >
+        <View className='bg-primary-tint overflow-hidden p-4 rounded-3xl border border-input'>
+            <Text className='text-2xl font-semibold'>Orders in Past 30 Days</Text>
+            <View className='mt-4'>
                 {
                     // isLoading ? <ActivityIndicator/> :
-                    <LineChart data={testData} color="#177AD5" dataPointsColor='#177AD5' />
+                    <LineChart 
+                        width={scale(250)}
+                        data={orderCounts} 
+                        color={primary} 
+                        dataPointsColor={primary} 
+                    />
                 }
-
             </View>
         </View>
     )
 }
 
 function ChartData() {
+    const { orders } = useOrders();
+    const primary = useThemeColor({}, "primary");
+
+    const cancelledOrders = orders?.filter((order) => order.status === OrderStatus.Cancelled);
+    const completedOrders = orders?.filter((order) => order.status >= OrderStatus.Completed && order.status <= OrderStatus.Collected);
+    const successRate = completedOrders?.length! / orders?.length!
+    
+
+    const data = [
+        {
+            name: "Total Orders",
+            value: orders?.length || 0,
+        },
+        {
+            name: "Completed",
+            value: completedOrders?.length || 0,
+        },
+        {
+            name: "Cancelled",
+            value: cancelledOrders?.length || 0,
+        },
+    ]
+
     return (
         <Card>
             <CardHeader className='p-6'>
@@ -154,14 +181,24 @@ function ChartData() {
             </CardHeader>
             <CardContent className='flex flex-row items-center justify-between'>
                 <View className='w-3/5'>
-                    <Text>Total Orders</Text>
-                    <Text>Completed</Text>
-                    <Text>Cancelled</Text>
+                    {
+                        data.map((metric) => (
+                            <View key={metric.name} className='py-2 flex flex-row gap-5'>
+                                <Text className='text-xl'>{metric.name}</Text>
+                                <Text className='text-2xl font-semibold'>{metric.value}</Text>
+                            </View>
+                        ))
+                    }
                 </View>
                 <AnimatedCircularProgress
-                    fill={70}
-                    width={15}
-                    size={100}
+                    fill={successRate * 100}
+                    key={successRate}
+                    backgroundColor={primary + "80"}
+                    tintColor={primary}
+                    width={10}
+                    size={120}
+                    style={{ borderRadius: 10 }}
+                    children={() => <Text className='text-2xl font-semibold'>{successRate * 100}%</Text>}
                 />
             </CardContent>
         </Card>

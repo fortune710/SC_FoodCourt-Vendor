@@ -14,9 +14,9 @@ export default function useAnalytics(restaurantId: number) {
 
     const { data, error } = await supabase
       .from(SupabaseTables.Orders)
-      .select('created_at')
-      .gte('created_at', startDate.toISOString())
-      .lte('created_at', endDate.toISOString())
+      .select('order_date')
+      .gte('order_date', startDate.toISOString())
+      .lte('order_date', endDate.toISOString())
       .eq('restaurant_id', restaurantId);
 
     if (error) throw new Error(error.message);
@@ -31,12 +31,14 @@ export default function useAnalytics(restaurantId: number) {
     const orderCounts = dates.map(date => {
       const nextDate = new Date(date.getTime() + 3 * 24 * 60 * 60 * 1000);
       const count = data.filter(order => 
-        new Date(order.created_at) >= date && 
-        new Date(order.created_at) < nextDate
+        new Date(order.order_date) >= date && 
+        new Date(order.order_date) < nextDate
       ).length;
 
+      const dateString = `${date.getDate()}/${date.getMonth() + 1}`
+
       return {
-        label: date.toISOString().split('T')[0], // Format as YYYY-MM-DD
+        label: dateString, // Format as YYYY-MM-DD
         value: count
       };
     });
@@ -57,9 +59,9 @@ export default function useAnalytics(restaurantId: number) {
       .from('orders')
       .select('*')
       .eq('restaurant_id', restaurantId)
-      .gte('created_at', today.toISOString())
-      .lt('created_at', tomorrow.toISOString())
-      .order('created_at', { ascending: false });
+      .gte('order_date', today.toISOString())
+      .lt('order_date', tomorrow.toISOString())
+      .order('order_date', { ascending: false });
   
     if (error) {
       throw new Error(error.message);

@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { supabase } from "~/utils/supabase";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import Toast from "react-native-toast-message";
+import useResturant from './useResturant';
 
 interface StockItem {
   id: number;
@@ -18,13 +19,17 @@ interface UpdateStockData {
 export default function useStock() {
   const queryClient = useQueryClient();
   const [updateError, setUpdateError] = useState<string | null>(null);
+  const { resturant } = useResturant();
 
   async function getLowStockItems() {
     const { data, error } = await supabase
       .from('menu_items')
       .select('*')
       .lt('quantity', 15)
+      .eq('resturant_id', resturant?.id!)
       .order('quantity', { ascending: true });
+
+    console.log(data, error, "stock")
 
     if (error) throw new Error(error.message);
     return data as StockItem[];
