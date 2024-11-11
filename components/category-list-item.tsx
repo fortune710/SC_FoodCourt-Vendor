@@ -7,16 +7,23 @@ import { ChevronDown } from "lucide-react-native";
 import useThemeColor from "~/hooks/useThemeColor";
 import { Text } from "~/components/ui/text"
 import { useRouter } from "expo-router";
+import useCurrentUser from "~/hooks/useCurrentUser";
 
 
 export default function CategoryListItem({ foodName, addons, price, id, category, quantity }: CategoryListItemProps) {
     const [showAddons, setShowAddons] = useState(false);
     const primary = useThemeColor({}, "primary");
     const router = useRouter();
+    const { currentUser } = useCurrentUser();
+
+    const moveToEditPage = () => {
+        if (currentUser?.user_type !== "admin") return;
+        return router.push({ pathname: "/menu/edit", params: { id, category } })
+    }
     
     return (
         <Pressable 
-            onPress={() => router.push({ pathname: "/menu/edit", params: { id, category } })} 
+            onPress={moveToEditPage} 
             className="py-4" 
             style={styles.listItem}
         >
