@@ -29,7 +29,6 @@ export default function useResturant() {
             .single()
 
         if (error) throw new Error(error.message)
-        console.log(data, "in staff")
         return data as ResturantData
     }
 
