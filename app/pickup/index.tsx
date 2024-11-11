@@ -18,7 +18,7 @@ export default function PickupPage() {
         router.push({
             pathname: "/pickup/orders",
             params: {
-                order_nums: orderNumbers.split(","),
+                order_nums: orderNumbers.split(",").map((id) => id.trim()),
             }
         })
     }

@@ -74,9 +74,9 @@ export default function useOrderPickup(orderIds: number[]) {
   const { mutateAsync: markOrderAsCollected } = useMutation({
     mutationFn: markAsCollected,
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["order-pickup", orderIds] });
+      queryClient.invalidateQueries({ queryKey: ["order-pickup", ...orderIds] });
       // Also invalidate the order status queries if you're using useOrderStatus hook
-      queryClient.invalidateQueries({ queryKey: ["order-status"] });
+      queryClient.invalidateQueries({ queryKey: ["orders"] });
       Toast.show({
         text1: "Order marked as collected",
         type: "success"

@@ -1,16 +1,16 @@
 import OrderCard from "../../components/orders/order-card";
 import Page from "../../components/page";
 import OrderCardDetails from "../../components/orders/order-card-details";
-import { ActivityIndicator, View } from "react-native";
+import { ActivityIndicator, ScrollView, View } from "react-native";
 import { Button } from "@rneui/themed";
 import Header from "../../components/page-header";
 import { useLocalSearchParams } from "expo-router";
 import useOrderPickup from "~/hooks/useOrderPickup";
+import { Order, OrderStatus } from "~/utils/types";
 
 export default function PickupOrders() {
-    const { order_nums } = useLocalSearchParams();
-    const orderIds = (order_nums as string[]).map((order_num) => parseInt(order_num));
-
+    const params = useLocalSearchParams();
+    const orderIds = String(params.order_nums).split(",").map((id) => Number(id));
     const { orders, isLoading, markOrderAsCollected } = useOrderPickup(orderIds)
 
     return (
@@ -18,18 +18,22 @@ export default function PickupOrders() {
             <Header headerTitle="Pickup" /> 
             {
                 isLoading ? <ActivityIndicator/> :
-                orders?.map((order) => {
-                    return (
-                        <OrderCard>
-                            <OrderCardDetails/>
-                            <View>
-                                <Button onPress={() => markOrderAsCollected(order?.id)}>
-                                    Mark as Collected
-                                </Button>
-                            </View>
-                        </OrderCard>
-                    )
-                })
+                <ScrollView contentContainerClassName="px-6">
+                    {
+                        orders?.map((order: any) => {
+                            return (
+                                <OrderCard key={order.id}>
+                                    <OrderCardDetails order={order}/>
+                                    <View className="pt-3">
+                                        <Button disabled={order.status === OrderStatus.Collected} onPress={() => markOrderAsCollected(order?.id)}>
+                                            {order.status === OrderStatus.Collected ? "Collected" : "Mark as Collected"}
+                                        </Button>
+                                    </View>
+                                </OrderCard>
+                            )
+                        })
+                    }
+                </ScrollView>
             }
         </Page>
     )
