@@ -50,7 +50,7 @@ const AccordionItem = ({ title, children } : AccordionItemProps) => {
   );
 };
 
-export default function OrderCardDetails({ showTime, order } : OrderCardDetailsProps ) {
+export default function OrderCardDetails({ showTime, order } : OrderCardDetailsProps) {
 
   return (
     <View style={styles.container}>
