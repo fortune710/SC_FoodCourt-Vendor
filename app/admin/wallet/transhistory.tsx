@@ -55,7 +55,7 @@ export default function transhistory() {
             <TransactionItem //Usiere- static data even though I changed things like description
               type="Order Income"
               amount={order.total_amount.toString()}
-              date={order.order_date.toDateString()} //change date format
+              date={new Date(order.order_date).toDateString()} //change date format
               description={`Received Payment for ${order.id}`}
             />
           )}

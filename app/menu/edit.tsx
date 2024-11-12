@@ -36,6 +36,8 @@ export default function CreateMenuItemPage() {
         warning_stock_value: menuItem.warning_stock_value,
         opening_stock_value: menuItem.opening_stock_value,
         restocking_value: menuItem.restocking_value,
+        is_disabled: menuItem.is_disabled,
+        is_deleted: menuItem.is_deleted,
     })
 
     const [newAddon, setNewAddon] = useState<Addon>({
@@ -91,9 +93,21 @@ export default function CreateMenuItemPage() {
     }
 
     //Usiere- I've set the buttons. Work your magic on the logic
-    const disableItem = () => {console.log('disable')} //disable removes the item from the customers view
+    const disableItem = () => {
+        const newData = {
+            ...newMenuItem,
+            is_disabled: true
+        }
+        return updateMenuItem(newData)
+    } //disable removes the item from the customers view
 
-    const removeItem = () => {console.log('remove')}
+    const removeItem = () => {
+        const newData = {
+            ...newMenuItem,
+            is_deleted: true
+        }
+        return updateMenuItem(newData)
+    }
 
 
     return (

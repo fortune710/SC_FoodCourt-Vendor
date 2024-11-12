@@ -44,7 +44,9 @@ export interface ICreateSubaccount {
 }
 
 export interface MenuItem extends CreateMenuItemData {
-    id: number
+    id: number,
+    is_deleted?: boolean,
+    is_disabled?: boolean
 }
 
 export interface Order {
