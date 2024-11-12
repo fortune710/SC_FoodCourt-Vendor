@@ -52,7 +52,7 @@ export default function CreateStaffPage() {
     setEmail('');
     setPosition('');
 
-    //router.back();
+    router.back();
 
   }
 
@@ -107,7 +107,7 @@ export default function CreateStaffPage() {
           className="w-full"
           onValueChange={(option) => setPosition(option?.value!)}
         >
-            <SelectTrigger className='w-full'>
+            <SelectTrigger className='w-full border-b'>
                 <SelectValue
                   className='text-foreground text-sm native:text-lg'
                   placeholder='Select a position'
