@@ -21,7 +21,7 @@ export default function MenuPage(){
 
     if (mode === "search") {
         return (
-            <Page>
+            <Page> 
                 <View className="px-4">
                     <View className="flex flex-row items-center justify-between w-full py-3">
                         <TouchableOpacity onPressIn={() => searchRef?.current?.focus()} className="border flex gap-2 flex-row items-center border-primary w-4/5 py-2 h-14 rounded-[24px] bg-[#FC5757]/10 to-transparent px-5">
@@ -40,6 +40,8 @@ export default function MenuPage(){
                         </TouchableOpacity>
                     </View>
                     <View>
+                    {/*Usiere- Sort the results in category ascending order please*/}
+
                     {
                         !searchQuery ?
                         menuItemsRaw?.map((menuItem: MenuItem) => (
@@ -80,11 +82,11 @@ export default function MenuPage(){
                 rightIcon={
                     <View className="flex flex-row gap-4 items-center">
                         <TouchableOpacity onPress={() => setMode("search")}>
-                            <Search size={30} stroke={primary}/>
+                            <Search size={24} stroke={primary}/>
                         </TouchableOpacity>
 
                         <Link className="active:bg-accent rounded-full" href="/menu/create">
-                            <Plus size={30} stroke={primary}/>
+                            <Plus size={32} stroke={primary}/>
                         </Link>
                     </View>
                 }
@@ -98,6 +100,7 @@ export default function MenuPage(){
                     availableCategories.map((category) => (
                         <View className="mt-4" key={category}>
                             <Text className="text-2xl font-medium">{category}</Text>
+                            {/*Usiere- Sort the categories in ascending order please*/}
                             {
                                 menuItems![category]?.map((menuItem: MenuItem) => (
                                     <CategoryListItem

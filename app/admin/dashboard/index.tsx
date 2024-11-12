@@ -1,6 +1,6 @@
 import { Link } from 'expo-router';
 import { ArrowsUpFromLine, ShoppingBag, ShoppingCart, Truck } from 'lucide-react-native';
-import { ActivityIndicator, View ,ScrollView, StyleSheet} from 'react-native'
+import { ActivityIndicator, Image, View ,ScrollView, StyleSheet} from 'react-native'
 import { AnimatedCircularProgress } from 'react-native-circular-progress';
 import { LineChart } from 'react-native-gifted-charts';
 import Header from '~/components/header'
@@ -52,7 +52,7 @@ interface DashboardMetricCardProps {
 
 function DashboardMetricsCard({ title, value, icon }: DashboardMetricCardProps) {
     return (
-    <Card className='bg-primary rounded-3xl' style={{paddingLeft: 16, paddingRight: 16, paddingTop: 16, paddingBottom: 24}}>
+    <Card className='bg-primary' style={{paddingLeft: 16, paddingRight: 16, paddingTop: 16, paddingBottom: 24}}>
         <CardHeader className='flex flex-row items-center justify-between'>
           <CardTitle className='text-4xl text-white'>{value}</CardTitle>
           <View className='bg-white rounded-full p-4'>
@@ -76,6 +76,11 @@ function DashboardMetricsContainer() {
             title: "Orders Received Today",
             value: dashboardMetrics?.ordersReceivedToday || 0,
             icon: <ShoppingCart size="16px" stroke="#F72F2F"/>
+            //Usiere- My SVGs are just not visible. I've checked the stroke color in the code and still nothing
+
+            // icon: <Image source={require("../../../assets/icons/shopping-cart.svg")} style={{ height: 30, width: 30 }}/>
+            // icon: <View style={{ backgroundColor: 'green' }}><Image source={require("../../../assets/icons/shopping-cart.svg")} style={{ height: 30, width: 30 }}/></View>
+            // icon: <View style={{ height: 30, width: 30, backgroundColor: 'green' }}/>
         },
         {
             title: "Orders Accepted Today",

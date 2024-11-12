@@ -57,7 +57,7 @@ export default function CreateMenuItemPage() {
         setNewMenuItem({ ...newMenuItem, add_ons: addonsLeft });
 
         return Toast.show({
-            text1: "Item Removed Successfully",
+            text1: "Add on Removed Successfully",
             type: "success"
         })
     }
@@ -85,10 +85,17 @@ export default function CreateMenuItemPage() {
       right: 12,
     };
 
-    const editItems = async () => {
+    const editItem = async () => {
         await updateMenuItem(newMenuItem)
         return router.replace('/menu')
     }
+
+    //Usiere- I've set the buttons. Work your magic on the logic
+    const disableItem = () => {console.log('disable')} //disable removes the item from the customers view
+
+    const removeItem = () => {console.log('remove')}
+
+
     return (
         <Page>
             <ScrollView contentContainerClassName="pb-32">
@@ -99,7 +106,10 @@ export default function CreateMenuItemPage() {
 
                     <Text className="text-3xl font-medium">Edit Item</Text>
 
-                    <View className="mr-8"/>
+                    <TouchableOpacity onPress={editItem}>
+                        <Text style= {{fontSize: 18, fontWeight: 500, color: '#f72f2f'}}>Save</Text>
+                    </TouchableOpacity>
+
                 </View>
 
                 <Input
@@ -112,7 +122,7 @@ export default function CreateMenuItemPage() {
                 <View className="mb-7 px-3">
                     <Text>Category</Text>
                     <Select 
-                        className="w-full"
+                        className="w-full border-b"
                         defaultValue={{ label: newMenuItem.category, value: newMenuItem.category }}
                         onValueChange={(option) => setNewMenuItem({ ...newMenuItem, category: option?.value! })}
                     >
@@ -144,7 +154,7 @@ export default function CreateMenuItemPage() {
                 <View className="mb-7 px-3">
                     <Text>Preparation Time</Text>
                     <Select 
-                        className="w-full"
+                        className="w-full border-b"
                         defaultValue={{ label: newMenuItem.preparation_time, value: newMenuItem.preparation_time }}
                         onValueChange={(option) => setNewMenuItem({ ...newMenuItem, preparation_time: option?.value! })}
                     >
@@ -346,12 +356,12 @@ export default function CreateMenuItemPage() {
 
 
                 <View className="flex flex-col items-center gap-5 px-3 w-full mt-20">
-                    <ShadcnButton onPress={editItems} className="w-full rounded-[50px]">
-                        <Text>Save</Text>
+                    <ShadcnButton onPress={disableItem} className="w-full rounded-[50px]">
+                        <Text>Disable Item</Text>
                     </ShadcnButton>
 
-                    <ShadcnButton variant="outline" className="w-full rounded-[50px]">
-                        <Text>Cancel</Text>
+                    <ShadcnButton onPress={removeItem} variant="outline" className="w-full rounded-[50px]">
+                        <Text>Delete Item</Text>
                     </ShadcnButton>
                 </View>
             </ScrollView>

@@ -52,14 +52,14 @@ export default function transhistory() {
         <FlatList
           data={orders}
           renderItem={({ item: order }) => (
-            <TransactionItem 
+            <TransactionItem //Usiere- static data even though I changed things like description
               type="Order Income"
               amount={order.total_amount.toString()}
-              date="24 Aug 2023" //change date format
-              description={`Order Payment from ${order.customer_name}`}
+              date={order.order_date.toDateString()} //change date format
+              description={`Received Payment for ${order.id}`}
             />
           )}
-          keyExtractor={item => item.id}
+          keyExtractor={item => item.id.toString()}
           contentContainerStyle={styles.transactionList}
         />
       }
