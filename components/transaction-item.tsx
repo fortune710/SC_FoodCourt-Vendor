@@ -17,7 +17,7 @@ const TransactionItem: React.FC<TransactionProps> = ({ type, amount, date, descr
                 <Ionicons 
                     name={type === 'Payout' ? 'arrow-up' : 'arrow-down'} 
                     size={24} 
-                    color={type === 'Payout' ? '#FF3B30' : 'green'} 
+                    color={type === 'Payout' ? '#FF3B30' : '#37E80F'} 
                 />
             </View>
             <View style={styles.transactionDetails}>
@@ -60,10 +60,11 @@ const styles = StyleSheet.create({
       width: 40,
       height: 40,
       borderRadius: 20,
-      backgroundColor: '#F0F0F0',
+      borderWidth: 0.3,
+      borderColor: '#37E80F',
       justifyContent: 'center',
       alignItems: 'center',
-      marginRight: 10,
+      marginRight: 10
     },
     transactionDetails: {
       flex: 1,
