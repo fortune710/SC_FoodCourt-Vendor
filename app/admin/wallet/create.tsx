@@ -1,7 +1,7 @@
 import { Input } from "@rneui/themed";
 import { useRouter, useLocalSearchParams } from "expo-router";
 import { Banknote, UserRound } from "lucide-react-native";
-import { useRef, useState } from "react";
+import { useRef, useState, useEffect } from "react";
 import { ScrollView, StyleSheet, View } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import Page from "~/components/page";
@@ -42,7 +42,11 @@ export default function CreatePaymentProfile() {
       right: 12,
     };
   
-
+    useEffect(() => {
+        if (account?.account_name) {
+            setAccountName(account.account_name);
+        }
+    }, [account]);
 
     const handleCreatePaymentProfile = async () => {
         try {
@@ -105,16 +109,14 @@ export default function CreatePaymentProfile() {
                     placeholder='Account Number'
                     value={accountNumber}
                     onChangeText={(text) => setAccountNumber(text)} 
-                    errorMessage={account?.account_name}
                 />
             </View>
         
             <Input
                 inputContainerStyle={styles.inputContainer}
-                placeholder='Business Name'
+                placeholder='Account Name'
                 value={accountName}
-                // readOnly
-                onChangeText={(text) => setAccountName(text)}  
+                readOnly
             />
 
             <Button 
