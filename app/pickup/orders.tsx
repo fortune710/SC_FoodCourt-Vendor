@@ -25,7 +25,11 @@ export default function PickupOrders() {
                                 <OrderCard key={order.id}>
                                     <OrderCardDetails order={order}/>
                                     <View className="pt-3">
-                                        <Button disabled={order.status === OrderStatus.Collected} onPress={() => markOrderAsCollected(order?.id)}>
+                                        <Button disabled={order.status === OrderStatus.Collected} onPress={() => {
+                                            markOrderAsCollected(order?.id)
+                                            // Usiere- check out
+                                            // router.back()
+                                        }}>
                                             {order.status === OrderStatus.Collected ? "Collected" : "Mark as Collected"}
                                         </Button>
                                     </View>
