@@ -14,11 +14,14 @@ import { useState } from "react";
 import { scale } from "react-native-size-matters";
 import useCurrentUser from "~/hooks/useCurrentUser";
 import useAuth from "~/hooks/useAuth";
+import useResturant from "~/hooks/useResturant";
 
 export default function EditProfile() {
     const primary = useThemeColor({}, "primary");
     const router = useRouter();
     const  { currentUser } = useCurrentUser();
+
+    const { resturant } = useResturant();
     const { updateUser } = useAuth();
     const [phoneNumber, setPhoneNumber] = useState(currentUser?.phone_number);
     const [password, setPassword] = useState('');

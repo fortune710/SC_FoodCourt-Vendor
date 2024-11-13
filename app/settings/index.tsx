@@ -87,7 +87,7 @@ function ResturantOptions({ userType }: { userType: string }) {
             <>
                 <View className="w-full flex flex-row items-center gap-4 py-3">
                     <Avatar alt="User Avatar">
-                        <AvatarImage source={{ uri: currentUser?.image_url }} />
+                        <AvatarImage source={{ uri: resturant?.image_url }} />
                         <AvatarFallback>
                             <Text>{currentUser?.full_name?.at(0)}</Text>
                         </AvatarFallback>
@@ -156,7 +156,10 @@ function AccountsOptions() {
             name: "Profile",
             icon: require('~/assets/icons/profile-icon.svg'),
             onPress: () => {
-                return router.push("/settings/profile")
+                if (currentUser?.user_type === "admin") {
+                    return router.push("/settings/profile/admin")
+                }
+                return router.push("/settings/profile/staff")
             },
             canToggle: false,
             style: { width: 32, height: 32 }
