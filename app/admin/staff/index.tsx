@@ -34,7 +34,8 @@ export default function StaffPage() {
                     renderItem={({ item }) => (
                         <TouchableOpacity 
                             onPress={() => router.push(`/admin/staff/${item.id}`)} 
-                            className="flex flex-row items-center gap-4 mb-3"
+                            className="flex flex-row items-center gap-4"
+                            style={{marginVertical: 16}}
                         >
                             <Avatar className="w-16 h-16" alt={`${item.full_name}'s Avatar`}>
                                 <AvatarFallback>
@@ -43,12 +44,12 @@ export default function StaffPage() {
                                 <AvatarImage source={{ uri: item.image_url }} />
                             </Avatar>
                             <View>
-                                <Text>{item.full_name}</Text>
+                                <Text style={{fontSize: 18, fontWeight: 500}}>{item.full_name}</Text>
                                 <Text>{item.position}</Text>
                             </View>
                         </TouchableOpacity>
                     )}
-                    style={{ paddingHorizontal: 12 }}
+                    style={{ paddingHorizontal: 24 }}
                 />
                 
             }
