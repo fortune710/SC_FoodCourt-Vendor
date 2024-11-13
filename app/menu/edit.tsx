@@ -15,14 +15,16 @@ import { useLocalSearchParams, useRouter } from "expo-router";
 import { CATEGORIES, PREPARATION_TIMES } from "~/utils/constants";
 import useThemeColor from "~/hooks/useThemeColor";
 
-
-
 export default function CreateMenuItemPage() {
     const searchParams = useLocalSearchParams();
     const menuItemId = Number(searchParams.id as string);
     const { updateMenuItem, getSingleMenuItem } = useMenuItems();
     const menuItem = getSingleMenuItem(menuItemId, searchParams.category as string);
     const primary = useThemeColor({}, "primary");
+
+    const [categorySearchQuery, setCategorySearchQuery] = useState('');
+    const categorySearchResults = !categorySearchQuery ? CATEGORIES: CATEGORIES?.filter((CATEGORIES) => CATEGORIES?.toLowerCase().includes(categorySearchQuery.toLowerCase())).slice(0, 5);
+
 
 
     const [newMenuItem, setNewMenuItem] = useState<MenuItem>({
@@ -147,13 +149,17 @@ export default function CreateMenuItemPage() {
                             />
                         </SelectTrigger>
                         <SelectContent insets={contentInsets} className='w-full'>
-                            {
-                                CATEGORIES.map((category) => (
-                                    <SelectItem key={category} label={category} value={category}>
-                                        {category}
-                                    </SelectItem>
-                                ))
-                            }
+                            <ScrollView stickyHeaderIndices={[0]}>
+                                <Input value={categorySearchQuery} onChangeText={setCategorySearchQuery} style={{backgroundColor: 'white'}} />
+
+                                {
+                                    categorySearchResults.sort((a, b) => a.localeCompare(b)).map((category) => (
+                                        <SelectItem key={category} label={category} value={category}>
+                                            {category}
+                                        </SelectItem>
+                                    ))
+                                }
+                            </ScrollView>
                         </SelectContent>
                     </Select>     
                 </View>
@@ -238,7 +244,7 @@ export default function CreateMenuItemPage() {
                     
                     <View className="w-full">
                         {
-                            newMenuItem.add_ons?.map((addon) => (
+                            newMenuItem.add_ons?.sort((a, b) => a.foodName.localeCompare(b.foodName)).map((addon) => (
                                 <AlertDialog key={addon.foodName}>
                                     <AlertDialogTrigger asChild>
                                         <TouchableOpacity className="w-full flex flex-row items-center justify-between py-3">
@@ -297,7 +303,7 @@ export default function CreateMenuItemPage() {
                     </View>
                 </View>
                 
-                <View className="w-full px-4">
+                <View className="w-full px-4 mt-4">
                     <Text className="text-lg font-semibold">Stock</Text>
 
                     <View className="flex flex-row items-center mb-5 justify-between w-full">

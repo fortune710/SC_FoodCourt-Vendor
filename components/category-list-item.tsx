@@ -27,8 +27,8 @@ export default function CategoryListItem({ foodName, addons, price, id, category
             className="py-4" 
             style={styles.listItem}
         >
-            <View style={styles.header}>
-                <Text className="text-lg font-medium">{foodName}</Text>
+            <View style={[styles.header, {alignItems: 'flex-start'}]}>
+                <Text className="text-lg font-medium" style={{width: '70%'}}>{foodName}</Text>
                 <Text className="text-lg font-medium">NGN {price}</Text>
             </View>
 
@@ -37,10 +37,11 @@ export default function CategoryListItem({ foodName, addons, price, id, category
 
                 <TouchableOpacity  
                     onPress={() => setShowAddons(!showAddons)}
-                    style={[styles.header, { width: scale(80) }]}
+                    style={[styles.header, { width: scale(70) }]}
                 >
                     <Text className="text-base font-light">Add ons</Text>
-                    <ChevronDown stroke={primary}/>
+
+                    <ChevronDown stroke={primary}/> 
                 </TouchableOpacity>
             </View>
 
@@ -48,10 +49,10 @@ export default function CategoryListItem({ foodName, addons, price, id, category
                 !showAddons ? null :
                 <View className="py-2 space-y-1" style={{ width: '100%' }}>
                     {
-                        addons.map((addon) => (
+                        addons.sort((a, b) => a.foodName.localeCompare(b.foodName)).map((addon) => (
                             <View key={addon.foodName} className="py-0.5 flex flex-row items-center justify-between">
                                 <Text className="font-medium">{addon.foodName}</Text>
-                                <Text className="font-medium">NGN {addon.price}</Text>
+                                <Text className="font-medium">+ NGN {addon.price}</Text>
                             </View>
                         ))
                     }

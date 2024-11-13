@@ -83,7 +83,7 @@ export default function CreatePaymentProfile() {
                     </SelectTrigger>
 
                     <SelectContent insets={contentInsets} className='w-full'>
-                        <ScrollView>
+                        <ScrollView stickyHeaderIndices={[0]}>
                             <Input value={bankSearchQuery} onChangeText={setBankSearchQuery} />
                             {
                                 bankSearchResults?.map((bank, index) => (

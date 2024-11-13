@@ -1,6 +1,6 @@
 import React, { useRef, useState } from "react";
 import Page from '../../components/page'
-import { ActivityIndicator, TextInput, Text, TouchableOpacity, View } from "react-native";
+import { ActivityIndicator, ScrollView, TextInput, Text, TouchableOpacity, View, StyleSheet } from "react-native";
 import CategoryListItem from '../../components/category-list-item';
 import { CategoryListItemProps, MenuItem } from "../../utils/types";
 import Header from "~/components/header";
@@ -44,7 +44,7 @@ export default function MenuPage(){
 
                     {
                         !searchQuery ?
-                        menuItemsRaw?.map((menuItem: MenuItem) => (
+                        menuItemsRaw?.sort((a: MenuItem, b: MenuItem) => a.name.localeCompare(b.name)).map((menuItem: MenuItem) => (
                             <CategoryListItem
                                 foodName={menuItem.name}
                                 price={menuItem.price}
@@ -56,7 +56,7 @@ export default function MenuPage(){
                             />
                         ))
                         :
-                        menuItemsRaw?.filter((item) => item.name.toLowerCase().includes(searchQuery.toLowerCase()))
+                        menuItemsRaw?.filter((item) => item.name.toLowerCase().includes(searchQuery.toLowerCase())).sort((a: MenuItem, b: MenuItem) => a.name.localeCompare(b.name))
                         .map((menuItem: MenuItem) => (
                             <CategoryListItem
                                 foodName={menuItem.name}
@@ -93,16 +93,17 @@ export default function MenuPage(){
                 headerTitle="Menu" 
                 style="dark"
             />
-            <View className="px-4">
+
+            <ScrollView contentContainerStyle={styles.contentContainer} contentInset={{bottom: 80}} >
                 {
                     isLoading ? <ActivityIndicator/> :
                     menuItemsRaw?.length === 0 ? <NoMenuItems/> :
-                    availableCategories.map((category) => (
-                        <View className="mt-4" key={category}>
-                            <Text className="text-2xl font-medium">{category}</Text>
-                            {/*Usiere- Sort the categories in ascending order please*/}
+                    availableCategories.sort((a, b) => a.localeCompare(b)).map((category) => (
+                        <View key={category}>
+                            <Text className="text-2xl font-semibold ">{category} ({menuItems[category]?.length || 0})</Text>
+                                                        
                             {
-                                menuItems![category]?.map((menuItem: MenuItem) => (
+                                menuItems![category]?.sort((a: MenuItem, b: MenuItem) => a.name.localeCompare(b.name)).map((menuItem: MenuItem) => (
                                     <CategoryListItem
                                         foodName={menuItem.name}
                                         price={menuItem.price}
@@ -118,7 +119,7 @@ export default function MenuPage(){
                         </View>
                     ))
                 }
-            </View>
+            </ScrollView>
         </Page>
     )
 }
@@ -131,3 +132,12 @@ function NoMenuItems() {
         </View>
     )
 }
+
+const styles = StyleSheet.create({
+    contentContainer: {
+        padding: 8,
+        marginBottom: 150,
+        gap: 40,
+        borderWidth: 1
+    }
+})

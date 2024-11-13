@@ -34,6 +34,7 @@ const styles = StyleSheet.create({
         width: Dimensions.get('screen').width,
         height: Dimensions.get('screen').height,
         position: 'relative',
-        backgroundColor: "white"
+        backgroundColor: "white",
+        paddingBottom: 150
     },
 })

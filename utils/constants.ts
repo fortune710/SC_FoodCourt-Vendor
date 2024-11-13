@@ -7,6 +7,18 @@ export const CATEGORIES = [
     "Grills",
     "Sandwiches",
     "Burgers",
+    "Breakfast",
+    "Pottage",
+    "Fries",
+    "Sides",
+    "Milkshakes",
+    "Juice/Slushy/Smoothie",
+    "Proteins",
+    "Soup/Swallow",
+    "Snacks",
+    "Bubble Tea",
+    "Ice Cream/Milkshakes/Popsicles",
+    "Others"
 ]
 
 export const PREPARATION_TIMES = [

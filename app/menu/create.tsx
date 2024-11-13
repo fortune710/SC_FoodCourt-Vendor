@@ -7,31 +7,14 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "~
 import { Text } from "~/components/ui/text";
 import { Addon, CreateMenuItemData } from "~/utils/types";
 import { Button as ShadcnButton } from "~/components/ui/button";
-import { ChevronLeft, Minus, Plus } from "lucide-react-native";
+import { ChevronLeft, Minus, Plus, Trash } from "lucide-react-native";
 import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger } from "~/components/ui/alert-dialog";
 import Toast from "react-native-toast-message";
 import useMenuItems from "~/hooks/useMenuItems";
 import { useRouter } from "expo-router";
+import useThemeColor from "~/hooks/useThemeColor";
+import { CATEGORIES, PREPARATION_TIMES } from "~/utils/constants";
 
-const CATEGORIES = [
-    "Rice",
-    "Pasta",
-    "Sharwama",
-    "Drinks",
-    "Desserts",
-    "Grills",
-    "Sandwiches",
-    "Burgers",
-]
-
-const PREPARATION_TIMES = [
-    "5 mins",
-    "10 mins",
-    "15 mins",
-    "20 mins",
-    "25 mins",
-    "30 mins",
-]
 
 const defaultMenuItemState: CreateMenuItemData = {
     name: "",
@@ -47,6 +30,11 @@ const defaultMenuItemState: CreateMenuItemData = {
 
 export default function CreateMenuItemPage() {
     const [newMenuItem, setNewMenuItem] = useState<CreateMenuItemData>(defaultMenuItemState);
+    const primary = useThemeColor({}, "primary");
+
+    const [categorySearchQuery, setCategorySearchQuery] = useState('');
+    const categorySearchResults = !categorySearchQuery ? CATEGORIES: CATEGORIES?.filter((CATEGORIES) => CATEGORIES?.toLowerCase().includes(categorySearchQuery.toLowerCase())).slice(0, 5);
+
 
     const [newAddon, setNewAddon] = useState<Addon>({
         foodName: "",
@@ -70,6 +58,11 @@ export default function CreateMenuItemPage() {
         })
     }
 
+    const removeAddon = (foodName: string) => {
+        const addonsLeft = newMenuItem.add_ons?.filter((addon) => addon.foodName !== foodName)
+        setNewMenuItem({ ...newMenuItem, add_ons: addonsLeft });
+    }
+
     const { createMenuItem } = useMenuItems();
     const router = useRouter();
 
@@ -78,6 +71,13 @@ export default function CreateMenuItemPage() {
         setNewMenuItem(defaultMenuItemState);
         return router.replace("/menu");
     }
+
+    const createItemAndNew = async (data: CreateMenuItemData) => {
+        await createMenuItem(data);
+        setNewMenuItem(defaultMenuItemState);
+        return router.replace("/menu/create");
+    }
+
 
     return (
             <Page>
@@ -112,13 +112,17 @@ export default function CreateMenuItemPage() {
                                 />
                             </SelectTrigger>
                             <SelectContent insets={contentInsets} className='w-full'>
-                                {
-                                    CATEGORIES.map((category) => (
-                                        <SelectItem key={category} label={category} value={category}>
-                                            {category}
-                                        </SelectItem>
-                                    ))
-                                }
+                                <ScrollView stickyHeaderIndices={[0]}>
+                                    <Input value={categorySearchQuery} onChangeText={setCategorySearchQuery} style={{backgroundColor: 'white'}} />
+
+                                    {
+                                        categorySearchResults.sort((a, b) => a.localeCompare(b)).map((category) => (
+                                            <SelectItem key={category} label={category} value={category}>
+                                                {category}
+                                            </SelectItem>
+                                        ))
+                                    }
+                                </ScrollView>
                             </SelectContent>
                         </Select>     
                     </View>
@@ -203,10 +207,19 @@ export default function CreateMenuItemPage() {
                         
                         <View className="w-full">
                             {
-                                newMenuItem.add_ons?.map((addon) => (
+                                newMenuItem.add_ons?.sort((a, b) => a.foodName.localeCompare(b.foodName)).map((addon) => (
                                     <View className="w-full flex flex-row items-center justify-between py-2" key={addon.foodName}>
                                         <Text>{addon.foodName}</Text>
-                                        <Text>NGN {addon.price}</Text>
+
+                                        <View className="flex flex-row gap-3">
+                                                <Text>NGN {addon.price}</Text>
+                                                <TouchableOpacity onPress={(e) => {
+                                                    e.stopPropagation();
+                                                    removeAddon(addon.foodName)
+                                                }}>
+                                                    <Trash stroke={primary} className="h-3 w-3"/>
+                                                </TouchableOpacity>
+                                            </View>
                                     </View>
                                 ))
                             }
@@ -215,11 +228,11 @@ export default function CreateMenuItemPage() {
                     </View>
 
                     
-                    <View className="w-full px-4">
+                    <View className="w-full px-4 mt-3" >
                         <Text className="text-lg font-semibold">Stock</Text>
 
                         <View className="flex flex-row items-center mb-5 justify-between w-full">
-                            <Text className="text-base font-light">Default Opening Stock Value</Text>
+                            <Text className="text-base font-medium">Default Opening Stock Value</Text>
                             <View className="flex flex-row items-center gap-3">
                                 <TouchableOpacity 
                                     disabled={newMenuItem.opening_stock_value === 0}
@@ -230,7 +243,7 @@ export default function CreateMenuItemPage() {
                                 <TextInput
                                     onChangeText={(text) => setNewMenuItem({ ...newMenuItem, opening_stock_value: Number(text) })}
                                     value={String(newMenuItem.opening_stock_value || 0)}
-                                    className="border rounded-md h-12 w-12 text-center"
+                                    className="border rounded-md h-12 w-12 text-center font-medium font-medium"
                                 />
                                 <TouchableOpacity 
                                     onPress={() => setNewMenuItem({ ...newMenuItem, opening_stock_value: newMenuItem.opening_stock_value + 1 })}
@@ -241,7 +254,7 @@ export default function CreateMenuItemPage() {
                         </View>
 
                         <View className="flex flex-row items-center mb-5 justify-between w-full">
-                            <Text className="text-base font-light">Warning Stock Value</Text>
+                            <Text className="text-base font-medium">Warning Stock Value</Text>
                             <View className="flex flex-row items-center gap-3">
                                 <TouchableOpacity 
                                     disabled={newMenuItem.warning_stock_value === 0}
@@ -252,7 +265,7 @@ export default function CreateMenuItemPage() {
                                 <TextInput
                                     onChangeText={(text) => setNewMenuItem({ ...newMenuItem, warning_stock_value: Number(text) })}
                                     value={String(newMenuItem.warning_stock_value || 0)}
-                                    className="border rounded-md h-12 w-12 text-center"
+                                    className="border rounded-md h-12 w-12 text-center font-medium"
                                 />
                                 <TouchableOpacity 
                                     onPress={() => setNewMenuItem({ ...newMenuItem, warning_stock_value: newMenuItem.warning_stock_value + 1 })}
@@ -263,7 +276,7 @@ export default function CreateMenuItemPage() {
                         </View>
 
                         <View className="flex flex-row items-center justify-between w-full">
-                            <Text className="text-base font-light">Default Restocking Value</Text>
+                            <Text className="text-base font-medium">Default Restocking Value</Text>
                             <View className="flex flex-row items-center gap-3">
                                 <TouchableOpacity 
                                     disabled={newMenuItem.restocking_value === 0}
@@ -274,7 +287,7 @@ export default function CreateMenuItemPage() {
                                 <TextInput
                                     onChangeText={(text) => setNewMenuItem({ ...newMenuItem, restocking_value: Number(text) })}
                                     value={String(newMenuItem.restocking_value || 0)}
-                                    className="border rounded-md h-12 w-12 text-center"
+                                    className="border rounded-md h-12 w-12 text-center font-medium"
                                 />
                                 <TouchableOpacity 
                                     onPress={() => setNewMenuItem({ ...newMenuItem, restocking_value: newMenuItem.restocking_value + 1 })}
@@ -289,9 +302,15 @@ export default function CreateMenuItemPage() {
 
 
                     <View className="flex flex-col items-center gap-5 px-3 w-full mt-16">
-                        <ShadcnButton onPress={() => createItem(newMenuItem)} className="w-full rounded-[50px]">
-                            <Text>Save</Text>
-                        </ShadcnButton>
+                        <View className='border flex-row w-full justify-between px-8'>
+                            <ShadcnButton onPress={() => createItem(newMenuItem)} className="rounded-[50px]" style={{paddingHorizontal: 64}}>
+                                <Text>Save</Text>
+                            </ShadcnButton>
+
+                            <ShadcnButton onPress={() => createItemAndNew(newMenuItem)} className="rounded-[50px]">
+                                <Text>Save & New</Text>
+                            </ShadcnButton>
+                        </View>
 
                         <ShadcnButton variant="outline" className="w-full rounded-[50px]">
                             <Text>Cancel</Text>
