@@ -49,7 +49,7 @@ export default function ProfilePage() {
         <TouchableOpacity onPress={() => router.back()}>
           <Ionicons name="arrow-back" size={24} color="white" />
         </TouchableOpacity>
-        <TouchableOpacity style={styles.editButton} onPress={() => router.push("/settings/profile/edit")}>
+        <TouchableOpacity style={styles.editButton} onPress={() => router.push("/settings/profile/staff/edit")}>
           <Ionicons name="pencil" size={24} color="white" />
         </TouchableOpacity>
       </View>
