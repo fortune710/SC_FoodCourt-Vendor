@@ -37,7 +37,7 @@ export default function CategoryListItem({ foodName, addons, price, id, category
 
                 <TouchableOpacity  
                     onPress={() => setShowAddons(!showAddons)}
-                    style={[styles.header, { width: scale(70) }]}
+                    style={[styles.header, { width: scale(80) }]}
                 >
                     <Text className="text-base font-light">Add ons</Text>
 
