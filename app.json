@@ -27,7 +27,7 @@
       "package": "com.teamfortune.foodcourtvendor"
     },
     "web": {
-      "favicon": "./assets/favicon.png",
+      "favicon": "./assets/icon.png",
       "output": "single",
       "bundler": "metro"
     },
