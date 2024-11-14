@@ -110,14 +110,15 @@ export default function CreatePaymentProfile() {
                     value={accountNumber}
                     onChangeText={(text) => setAccountNumber(text)} 
                 />
+                
+                <Input
+                    inputContainerStyle={styles.inputContainer}
+                    placeholder='Account Name'
+                    value={accountName}
+                    readOnly
+                />
             </View>
         
-            <Input
-                inputContainerStyle={styles.inputContainer}
-                placeholder='Account Name'
-                value={accountName}
-                readOnly
-            />
 
             <Button 
                 disabled={loading} 
