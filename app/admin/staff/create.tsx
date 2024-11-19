@@ -113,7 +113,7 @@ export default function CreateStaffPage() {
                   placeholder='Select a position'
                 />
             </SelectTrigger>
-            <SelectContent insets={contentInsets} className='w-full'>
+            <SelectContent insets={contentInsets} className='w-full overflow-scroll'>
                 {
                   STAFF_POSITIONS.map((time) => (
                     <SelectItem key={time} label={time} value={time}>

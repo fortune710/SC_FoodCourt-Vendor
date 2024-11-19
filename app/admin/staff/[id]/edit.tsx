@@ -112,7 +112,7 @@ export default function editStaffPage() {
                   placeholder='Select a position'
                 />
               </SelectTrigger>
-              <SelectContent className='w-full'>
+              <SelectContent className='w-full overflow-scroll'>
                 {
                   STAFF_POSITIONS.map((time) => (
                     <SelectItem key={time} label={time} value={time}>

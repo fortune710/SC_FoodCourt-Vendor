@@ -82,7 +82,7 @@ export default function CreatePaymentProfile() {
                         />
                     </SelectTrigger>
 
-                    <SelectContent insets={contentInsets} className='w-full'>
+                    <SelectContent insets={contentInsets} className='w-full overflow-scroll'>
                         <ScrollView stickyHeaderIndices={[0]}>
                             <Input value={bankSearchQuery} onChangeText={setBankSearchQuery} />
                             {

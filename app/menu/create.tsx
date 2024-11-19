@@ -111,7 +111,7 @@ export default function CreateMenuItemPage() {
                                     placeholder='Select a category'
                                 />
                             </SelectTrigger>
-                            <SelectContent insets={contentInsets} className='w-full'>
+                            <SelectContent insets={contentInsets} className='w-full overflow-scroll'>
                                 <ScrollView stickyHeaderIndices={[0]}>
                                     <Input value={categorySearchQuery} onChangeText={setCategorySearchQuery} style={{backgroundColor: 'white'}} />
 
@@ -147,7 +147,7 @@ export default function CreateMenuItemPage() {
                                     placeholder='Select a preparation time'
                                 />
                             </SelectTrigger>
-                            <SelectContent insets={contentInsets} className='w-full'>
+                            <SelectContent insets={contentInsets} className='w-full overflow-scroll'>
                                 {
                                     PREPARATION_TIMES.map((time) => (
                                         <SelectItem key={time} label={time} value={time}>
