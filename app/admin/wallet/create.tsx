@@ -53,7 +53,7 @@ export default function CreatePaymentProfile() {
             await createPaymentProfile({
                 business_name: accountName,
                 bank_code: bankCode,
-                percentage_charge: 5,
+                // percentage_charge: 5,
                 account_number:  accountNumber
             })
             return router.back()

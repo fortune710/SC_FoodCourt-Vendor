@@ -39,7 +39,7 @@ export interface ResturantData {
 export interface ICreateSubaccount {
     bank_code: string,
     account_number: string,
-    percentage_charge: number,
+    percentage_charge?: number,
     business_name: string
 }
 
