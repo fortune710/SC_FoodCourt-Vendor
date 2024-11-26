@@ -103,7 +103,7 @@ export default function CreatePaymentProfile() {
 
             </View>        
 
-            <View>
+            <View style={{gap: 16}}>
                 <Input
                     inputContainerStyle={styles.inputContainer}
                     placeholder='Account Number'
@@ -111,17 +111,18 @@ export default function CreatePaymentProfile() {
                     onChangeText={(text) => setAccountNumber(text)} 
                 />
                 
+                {accountName !== '' ?
                 <Input
                     inputContainerStyle={styles.inputContainer}
                     placeholder='Account Name'
                     value={accountName}
                     readOnly
-                />
+                /> : null }
             </View>
         
 
             <Button 
-                disabled={loading} 
+                disabled={loading || accountName === ''} 
                 onPress={handleCreatePaymentProfile}
                 buttonStyle={{ marginHorizontal: 12, borderRadius: 32, marginTop: 50 }}
             >

@@ -212,7 +212,7 @@ function ChartData() {
 
 const styles = StyleSheet.create({
     container:{
-        paddingBottom:scale(200)
+        // paddingBottom:scale(200)
     }
 
 })
