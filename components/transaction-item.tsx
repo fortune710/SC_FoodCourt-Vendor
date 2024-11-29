@@ -20,12 +20,18 @@ const TransactionItem: React.FC<TransactionProps> = ({ type, amount, date, descr
                     color={type === 'Payout' ? '#FF3B30' : '#37E80F'} 
                 />
             </View>
-            <View style={styles.transactionDetails}>
-                <Text style={styles.transactionType}>{type}</Text>
-                <Text style={styles.transactionDate}>{date}</Text>
-                <Text style={styles.transactionDescription}>{description}</Text>
+
+            <View style={styles.transactionContainer}> 
+              <View style={styles.transactionDetails}>
+                <View>
+                  <Text style={styles.transactionType}>{type}</Text>
+                  <Text style={styles.transactionDate}>{date}</Text>
+                </View>
+                  <Text style={styles.transactionAmount}>N {amount}</Text>
+              </View>
+
+              <Text style={styles.transactionDescription}>{description}</Text>
             </View>
-            <Text style={styles.transactionAmount}>N {amount}</Text>
         </View>
         <View style = {styles.seperator}></View>
     </View>
@@ -40,10 +46,6 @@ const styles = StyleSheet.create({
     },
     transactionContainer: {
       flex: 1,
-      backgroundColor: 'white',
-      borderTopLeftRadius: 20,
-      borderTopRightRadius: 20,
-      padding: 20,
     },
     transactionTitle: {
         alignSelf:"center",
@@ -53,8 +55,6 @@ const styles = StyleSheet.create({
     },
     transaction: {
       flexDirection: 'row',
-      alignItems: 'center',
-      marginBottom: 0,
     },
     transactionIcon: {
       width: 40,
@@ -64,21 +64,22 @@ const styles = StyleSheet.create({
       borderColor: '#37E80F',
       justifyContent: 'center',
       alignItems: 'center',
-      marginRight: 10
+      marginRight: 12
     },
     transactionDetails: {
       flex: 1,
+      flexDirection: 'row',
+      justifyContent: 'space-between',
     },
     transactionType: {
       fontWeight: 'bold',
     },
     transactionDate: {
       fontSize: 12,
-      color: '#888',
+      color: '#7e7e7e',
     },
     transactionDescription: {
       fontSize: 12,
-      color: '#888',
     },
     transactionAmount: {
       fontWeight: 'bold',

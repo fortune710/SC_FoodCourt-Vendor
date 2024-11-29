@@ -89,7 +89,7 @@ export default function walletPage() {
                 type="Order Income"
                 amount={order.total_amount.toString()}
                 date="24 Aug 2023" //change date format
-                description={`Order Payment from ${order.customer_name}`}
+                description={`Payment for Order #${order.id}`}
                 key={order.id}
               />
             )}

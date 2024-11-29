@@ -41,7 +41,7 @@ const AccordionItem = ({ title, children } : AccordionItemProps) => {
       </TouchableOpacity>
      
       {isOpen && <View style={styles.accordionContent}>
-        {(title === "Food" || title === "Drinks")  &&(<View style={styles.labelsRow}>
+        {(title === "Food" || title === "Drinks") && (<View style={styles.labelsRow}>
             <Text style={[styles.label, styles.labelItem]}>Item</Text>
             <Text style={[styles.label,styles.labelQty]}>Qty</Text>
             <Text style={[styles.label,styles.labelPrice]}>Price</Text>
