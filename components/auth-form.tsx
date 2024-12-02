@@ -130,13 +130,13 @@ export default function AuthForm({ type }: AuthFormProps) {
                         <TouchableOpacity 
                             onPress={() => setShowPassword(!showPassword)}
                         >
-                            { !showPassword ? <Eye stroke={primary} /> : <EyeOff stroke={primary}/> }
+                            { showPassword ? <Eye stroke={primary} /> : <EyeOff stroke={primary}/> }
                         </TouchableOpacity>
                     }
                     inputContainerStyle={styles.inputContainer}
                     placeholder='Password'
                     placeholderTextColor='#7e7e7e'
-                    secureTextEntry={!showPassword}
+                    secureTextEntry={showPassword}
                     value={password}
                     onChangeText={(text) => setPassword(text)}
                 />
