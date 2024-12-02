@@ -7,7 +7,8 @@
     "android": "expo start --android",
     "ios": "expo start --ios",
     "web": "expo start --web",
-    "postinstall": "node fix.js"
+    "postinstall": "node fix.js",
+    "prebuild": "rm -rf node_modules"
   },
   "dependencies": {
     "@expo/metro-runtime": "~4.0.0",
