@@ -9,12 +9,6 @@
         "source": "/:path*",
         "destination": "/"
       }
-    ],
-    "builds": [
-      {
-        "src": "package.json",
-        "use": "@vercel/node"
-      }
     ]
 }
   
