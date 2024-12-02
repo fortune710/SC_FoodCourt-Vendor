@@ -161,7 +161,7 @@ function ChartData() {
 
     const cancelledOrders = orders?.filter((order) => order.status === OrderStatus.Cancelled);
     const completedOrders = orders?.filter((order) => order.status >= OrderStatus.Completed && order.status <= OrderStatus.Collected);
-    const successRate = completedOrders?.length! / orders?.length!
+    const successRate = Number(completedOrders?.length! / orders?.length!).toFixed(3)
     
 
     const data = [
@@ -196,14 +196,14 @@ function ChartData() {
                     }
                 </View>
                 <AnimatedCircularProgress
-                    fill={successRate * 100}
+                    fill={Number(successRate) * 100}
                     key={successRate}
                     backgroundColor={primary + "80"}
                     tintColor={primary}
                     width={10}
                     size={120}
                     style={{ borderRadius: 10 }}
-                    children={() => <Text className='text-2xl font-semibold'>{successRate * 100}%</Text>}
+                    children={() => <Text className='text-2xl font-semibold'>{Number(successRate) * 100}%</Text>}
                 />
             </CardContent>
         </Card>

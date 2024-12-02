@@ -24,11 +24,16 @@ export default function useAuth() {
     }
     
     const signIn = async (email: string, password: string) => {
-        const res = await supabase.auth.signInWithPassword({
+        const { data, error } = await supabase.auth.signInWithPassword({
             email,
             password,
-        })        
-        return res.data.user;
+        })     
+        if (error) {
+            console.log(error);
+            throw new Error(error.message)   
+        }
+        
+        return data.user;
     }
 
     const signUpWithEmail = async (data: SignUpData) => {
