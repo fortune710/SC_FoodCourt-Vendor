@@ -30,11 +30,13 @@
     "web": {
       "favicon": "./assets/favicon.png",
       "output": "single",
-      "bundler": "metro"
+      "bundler": "metro",
+      "shortName": "SC: FoodCourt"
     },
     "plugins": [
       "expo-router",
-      "expo-font"
+      "expo-font",
+      "expo-notifications"
     ],
     "extra": {
       "eas": {
