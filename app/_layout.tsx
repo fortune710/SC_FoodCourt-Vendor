@@ -21,11 +21,11 @@ import * as Device from 'expo-device';
 // import { registerServiceWorker } from '~/utils/registerServiceWorker'
 import { getWebToken } from '~/utils/firebase'
 
-const LIGHT_THEME: Theme = {
+const LIGHT_THEME: any = {
     dark: false,
     colors: NAV_THEME.light,
 };
-  const DARK_THEME: Theme = {
+  const DARK_THEME: any = {
     dark: true,
     colors: NAV_THEME.dark,
 };
@@ -81,13 +81,15 @@ const theme = createTheme({
 
 SplashScreen.preventAutoHideAsync()
 
-AppState.addEventListener('change', (state) => {
+AppState?.addEventListener('change', (state) => {
     if (state === 'active') {
       supabase.auth.startAutoRefresh()
     } else {
       supabase.auth.stopAutoRefresh()
     }
 })
+
+const queryClient = new QueryClient();
 
 export default function RootLayout() {
     const [expoPushToken, setExpoPushToken] = useState<any>('');
@@ -140,11 +142,16 @@ export default function RootLayout() {
         return null;
     }
 
-    return <RootLayoutNav/>
+    
+
+    return (
+        <QueryClientProvider client={queryClient}>
+            <RootLayoutNav/>
+        </QueryClientProvider>
+    )
 
 }
 
-const queryClient = new QueryClient();
 
 
 function RootLayoutNav() {
@@ -153,15 +160,13 @@ function RootLayoutNav() {
     return (
         <VendorViewProvider>
             <ThemeProvider theme={theme}>
-                <QueryClientProvider client={queryClient}>
-                    <StatusBar 
-                        backgroundColor="#fff" 
-                        style="dark"
-                    />
-                    <Stack screenOptions={{ headerShown: false }}/>
-                    <Toast position="top" />
-                    <PortalHost/>
-                </QueryClientProvider>
+                <StatusBar 
+                    backgroundColor="#fff" 
+                    style="dark"
+                />
+                <Stack screenOptions={{ headerShown: false }}/>
+                <Toast position="top" />
+                <PortalHost/>
             </ThemeProvider>
         </VendorViewProvider>
     )

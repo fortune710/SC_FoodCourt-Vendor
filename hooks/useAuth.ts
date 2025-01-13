@@ -73,6 +73,10 @@ export default function useAuth() {
         ])
     }
 
+    const sendPasswordResetMail = async (email: string) => {
+        return await supabase.auth.resetPasswordForEmail(email)
+    }
+
 
     const signOut = async () => {
         await supabase.auth.signOut();
@@ -87,6 +91,7 @@ export default function useAuth() {
         getCurrentUser,
         signOut,
         updateUser,
-        changePassword
+        changePassword,
+        sendPasswordResetMail
     }
 }
