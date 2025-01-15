@@ -156,44 +156,38 @@ const AdminStaffMenu = ({ closeMenu }: { closeMenu: () => void }) => {
 
             <View className="flex flex-col gap-6 mt-16">
                 <Pressable onPress={moveToDashboard} className="flex flex-row items-center gap-3 p-2" >
-                    <Image source={require('../assets/icons/home.svg')} width={ICON_SIZE} height={ICON_SIZE}/>
-                    {/* <Home size={ICON_SIZE} color='white'/> */}
+                    <Image source={require('../assets/icons/home.svg')} style={{width: ICON_SIZE, height: ICON_SIZE}}/>
                     <Text className="text-white text-xl font-semibold">Dashboard</Text>
                 </Pressable>
 
                 <Pressable className="flex flex-row items-center gap-3 p-2" style={{marginLeft: scale(48)}}>
-                    <Image source={require('../assets/icons/pie.svg')} width={ICON_SIZE} height={ICON_SIZE}/>
-                    {/* <ChartPie color='#7e7e7e' size={ICON_SIZE}/>     */}
+                    <Image source={require('../assets/icons/pie.svg')} style={{width: ICON_SIZE, height: ICON_SIZE}}/>
                     <Text className="text-xl text-gray-500 font-semibold" >Analytics</Text>                                                     
                 </Pressable>
 
                 <Pressable className="flex flex-row items-center gap-3 p-2" onPress={moveToMenu} style={{marginLeft: scale(96)}}>
-                    <LayoutGrid color='white' size={ICON_SIZE}/> 
+                    <Image source={require('../assets/icons/grid-outline.svg')} style={{width: ICON_SIZE, height: ICON_SIZE}}/>
                     <Text className="text-white text-xl font-semibold">Menu</Text>                                     
                 </Pressable>
 
 
                 <Pressable onPress={moveToOrders} className="flex flex-row items-center gap-3 p-2" style={{marginLeft: scale(144)}}>
-                    <Image source={require('../assets/icons/sc-envelope.svg')} width={ICON_SIZE} height={ICON_SIZE}/>
-                    {/* <Mail color='white' size={ICON_SIZE}/>   */}
+                    <Image source={require('../assets/icons/sc-envelope-outline.svg')} style={{width: ICON_SIZE, height: ICON_SIZE}} />
                     <Text className="text-white text-xl font-semibold">Orders</Text>                  
                 </Pressable>
 
                 <Pressable onPress={moveToWallet} className="flex flex-row items-center gap-3 p-2" style={{marginLeft: scale(96)}}>
-                    <Image source={require('../assets/icons/wallet.svg')} width={ICON_SIZE} height={ICON_SIZE}/>
-                    {/* <Wallet color='white' size={ICON_SIZE}/>   */}
+                    <Image source={require('../assets/icons/wallet.svg')} style={{width: ICON_SIZE, height: ICON_SIZE}}/>
                     <Text className="text-white text-xl font-semibold">Transactions</Text>                  
                 </Pressable>
 
                 <Pressable onPress={moveToStaff} className="flex flex-row items-center gap-3 p-2" style={{marginLeft: scale(48)}}>
-                    <Image source={require('../assets/icons/people.svg')} width={ICON_SIZE} height={ICON_SIZE}/>
-                    {/* <UsersRound size={ICON_SIZE} color='white'/> */}
+                    <Image source={require('../assets/icons/people.svg')} style={{width: ICON_SIZE, height: ICON_SIZE}}/>
                     <Text className="text-white text-xl font-semibold">Staff</Text>
                 </Pressable>
 
                 <Pressable onPress={moveToSettings} className="flex flex-row items-center gap-3 p-2">
-                    <Image source={require('../assets/icons/settings.svg')} width={ICON_SIZE} height={ICON_SIZE}/>
-                    {/* <Settings color='white' size={ICON_SIZE}/>     */}
+                    <Image source={require('../assets/icons/settings.svg')} style={{width: ICON_SIZE, height: ICON_SIZE}}/>
                     <Text className="text-white text-xl font-semibold">Settings</Text>                
                 </Pressable>
             </View>
@@ -237,27 +231,21 @@ const VendorStaffMenu = ({ closeMenu }: { closeMenu: () => void }) => {
         
         <View className="flex flex-col gap-12 mt-16" style={{marginLeft: scale(48)}}>
             <Pressable className="flex flex-row items-center gap-3" onPress={moveToMenu}>
-                <LayoutGrid color='white' size={ICON_SIZE}/> 
+                <Image source={require('../assets/icons/grid-outline.svg')} style={{width: ICON_SIZE, height: ICON_SIZE}}/>
                 <Text className="text-white text-xl font-semibold">Menu</Text>                                     
             </Pressable>
 
             <Pressable onPress={moveToOrders} className="flex flex-row items-center gap-3" style={{marginLeft: scale(64)}}>
-                <Image source={require('../assets/icons/sc-envelope.svg')} width={ICON_SIZE} height={ICON_SIZE}/>
-                {/* <Package size={ICON_SIZE} color='white'/> */}
+                <Image source={require('../assets/icons/sc-envelope-outline.svg')} style={{width: ICON_SIZE, height: ICON_SIZE}}/>
                 <Text className="text-white text-xl font-semibold">Orders</Text>
             </Pressable>
 
 
             <Pressable onPress={moveToSettings} className="flex flex-row items-center gap-3">
-                <Image source={require('../assets/icons/settings.svg')} width={ICON_SIZE} height={ICON_SIZE}/>
-                {/* <Settings color='white' size={ICON_SIZE}/>     */}
+                <Image source={require('../assets/icons/settings.svg')} style={{width: ICON_SIZE, height: ICON_SIZE}}/>
                 <Text className="text-white text-xl font-semibold">Settings</Text>                
             </Pressable>
 
-            {/* <Pressable onPress={moveToAdmin} className="flex flex-row items-center gap-2">
-                <UsersRound size={ICON_SIZE} color='white'/>
-                <Text className="text-white text-xl font-semibold">Admin</Text>
-            </Pressable> */}
         </View>
     </View>
     )
