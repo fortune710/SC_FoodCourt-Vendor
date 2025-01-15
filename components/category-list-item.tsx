@@ -29,7 +29,7 @@ export default function CategoryListItem({ foodName, addons, price, id, category
         >
             <View style={[styles.header, {alignItems: 'flex-start'}]}>
                 <Text className="text-lg font-medium" style={{width: '70%'}}>{foodName}</Text>
-                <Text className="text-lg font-medium">NGN {price}</Text>
+                <Text className="text-lg font-medium">NGN {new Intl.NumberFormat('en-US').format(price)}</Text>
             </View>
 
             <View className="flex flex-row gap-2 items-center">
@@ -52,7 +52,7 @@ export default function CategoryListItem({ foodName, addons, price, id, category
                         addons.sort((a, b) => a.foodName.localeCompare(b.foodName)).map((addon) => (
                             <View key={addon.foodName} className="py-0.5 flex flex-row items-center justify-between">
                                 <Text className="font-medium">{addon.foodName}</Text>
-                                <Text className="font-medium">+ NGN {addon.price}</Text>
+                                <Text className="font-medium">+ NGN {new Intl.NumberFormat('en-US').format(addon.price)}</Text>
                             </View>
                         ))
                     }

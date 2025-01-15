@@ -250,7 +250,7 @@ export default function CreateMenuItemPage() {
                                         <TouchableOpacity className="w-full flex flex-row items-center justify-between py-3">
                                             <Text>{addon.foodName}</Text>
                                             <View className="flex flex-row gap-3">
-                                                <Text>NGN {addon.price}</Text>
+                                                <Text>NGN {new Intl.NumberFormat('en-US').format(addon.price)}</Text>
                                                 <TouchableOpacity onPress={(e) => {
                                                     e.stopPropagation();
                                                     removeAddon(addon.foodName)
