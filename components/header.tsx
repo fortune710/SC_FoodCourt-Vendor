@@ -1,6 +1,6 @@
 import React from "react";
 import { Dimensions, Pressable, View } from "react-native";
-import { Link, SplashScreen, Stack, useRootNavigation, useRouter } from "expo-router";
+import { Link, router, SplashScreen, Stack, useRootNavigation, useRouter } from "expo-router";
 import { MaterialIcons } from "@expo/vector-icons";
 import { Ionicons, Octicons } from "@expo/vector-icons";
 import { globalStyles } from "../constants/Styles";
@@ -40,6 +40,7 @@ export default function Header({ style = "dark", headerTitle, rightIcon ,noRight
     const [menuOpen, setMenuOpen] = useState<boolean>(false);
     const route = useRootNavigation();
     const pageName = route?.getCurrentRoute()?.name! as string;
+    const router = useRouter()
 
 
     const primary = useThemeColor({}, "primary");
@@ -81,7 +82,7 @@ export default function Header({ style = "dark", headerTitle, rightIcon ,noRight
                 </>
             }
         
-            <View style={[styles.header, { backgroundColor: toolbarColorPerPage[pageName], }]}>
+            <View style={[styles.header, { backgroundColor: toolbarColorPerPage[pageName] }]}>
                 <View style={globalStyles.flexItemsCenter}>
                     <Pressable onPress={() => setMenuOpen(!menuOpen)}>
                         <Image 
@@ -99,9 +100,10 @@ export default function Header({ style = "dark", headerTitle, rightIcon ,noRight
                     noRightIcon ? 
                     null : 
                     rightIcon || (pageName === 'settings/index' ? null : // If rightIcon is provided, render it; otherwise check pageName
-                    <Link href="/pickup" style={{alignItems: 'center', justifyContent: 'center'}}>
+                    <Pressable onPress={() => router.push('pickup')}>   
                         <Image style={{width: 32, height: 32}} source={ShoppingBag}/>
-                    </Link>)
+                    </Pressable>
+                    )   
                 }
 
             </View>
