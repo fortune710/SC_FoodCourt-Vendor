@@ -55,7 +55,7 @@ function DashboardMetricsCard({ title, value, icon }: DashboardMetricCardProps) 
     <Card className='bg-primary' style={{paddingLeft: 16, paddingRight: 16, paddingTop: 16, paddingBottom: 24}}>
         <CardHeader className='flex flex-row items-center justify-between'>
           <CardTitle className='text-4xl text-white'>{value}</CardTitle>
-          <View className='bg-white rounded-full p-4'>
+          <View className='bg-white rounded-full p-2 drop-shadow-2xl '>
             {icon}
           </View>
         </CardHeader>
@@ -75,27 +75,22 @@ function DashboardMetricsContainer() {
         {
             title: "Orders Received Today",
             value: dashboardMetrics?.ordersReceivedToday || 0,
-            icon: <ShoppingCart size="16px" stroke="#F72F2F"/>
-            //Usiere- My SVGs are just not visible. I've checked the stroke color in the code and still nothing
-
-            // icon: <Image source={require("../../../assets/icons/shopping-cart.svg")} style={{ height: 30, width: 30 }}/>
-            // icon: <View style={{ backgroundColor: 'green' }}><Image source={require("../../../assets/icons/shopping-cart.svg")} style={{ height: 30, width: 30 }}/></View>
-            // icon: <View style={{ height: 30, width: 30, backgroundColor: 'green' }}/>
+            icon: <Image source={require("../../../assets/icons/shopping-cart.svg")} style={{ height: 40, width: 40 }}/>
         },
         {
             title: "Orders Accepted Today",
             value: dashboardMetrics?.ordersAcceptedToday || 0,
-            icon: <ArrowsUpFromLine size="16px" stroke="#F72F2F"/>
+            icon: <Image source={require("../../../assets/icons/list.svg")} style={{ height: 40, width: 40, marginRight: -4 }}/>
         },
         {
             title: "Orders Ready",
             value: dashboardMetrics?.ordersReady || 0,
-            icon: <ShoppingBag size="16px" stroke="#F72F2F"/>
+            icon: <Image source={require("../../../assets/icons/bell.svg")} style={{ height: 40, width: 40 }}/>
         },
         {
             title: "Orders Delivered",
             value: dashboardMetrics?.ordersDelivered || 0,
-            icon: <Truck size="16px" stroke="#F72F2F"/>
+            icon: <Image source={require("../../../assets/icons/shopping-bag.svg")} style={{ height: 40, width: 40 }}/>
         },
     ]
 
