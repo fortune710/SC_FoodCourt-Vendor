@@ -24,10 +24,10 @@ const TransactionItem: React.FC<TransactionProps> = ({ type, amount, date, descr
             <View style={styles.transactionContainer}> 
               <View style={styles.transactionDetails}>
                 <View>
-                  <Text>{type}</Text>
+                  <Text style={{fontWeight: 'bold'}}>{type}</Text>
                   <Text style={{color: '#7e7e7e'}}>{date}</Text>
                 </View>
-                  <Text>₦ {new Intl.NumberFormat('en-US').format(amount)}</Text>
+                  <Text style={{fontWeight: 'bold'}}>₦ {new Intl.NumberFormat('en-US').format(amount)}</Text>
               </View>
 
               <Text>{description}</Text>
