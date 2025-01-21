@@ -2,7 +2,7 @@ import Page from "../components/page";
 import { Text } from "@rneui/themed"; 
 import { Image } from "expo-image";
 import useThemeColor from "../hooks/useThemeColor";
-import { KeyboardAvoidingView, StyleSheet, View } from "react-native";
+import { KeyboardAvoidingView, ScrollView, StyleSheet, View } from "react-native";
 import AuthForm from "../components/auth-form";
 import Button from "../components/custom/button";
 import { useRouter } from "expo-router";
@@ -16,6 +16,7 @@ export default function LoginPage() {
 
     return (
         // <Page>
+        <ScrollView style={{flex: 1}}>
             <KeyboardAvoidingView behavior="position" style={{marginTop: 50}}>
                 <View style={[globalStyles.flexItemsCenter, { width: "100%", marginVertical: 20, justifyContent: "center" }]}>
                     <Image
@@ -32,6 +33,7 @@ export default function LoginPage() {
 
                 <AuthForm type="login"/>
             </KeyboardAvoidingView>
+        </ScrollView>
     )
 }
 

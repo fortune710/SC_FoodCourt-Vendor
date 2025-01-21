@@ -2,7 +2,7 @@ import Page from "../components/page";
 import { Text } from "@rneui/themed"; 
 import { Image } from "expo-image";
 import useThemeColor from "../hooks/useThemeColor";
-import { KeyboardAvoidingView, StyleSheet, View } from "react-native";
+import { KeyboardAvoidingView, ScrollView, StyleSheet, View } from "react-native";
 import AuthForm from "../components/auth-form";
 import { useRouter } from "expo-router";
 import { globalStyles } from "../constants/Styles";
@@ -12,6 +12,7 @@ export default function SignUpPage() {
     
 
     return (
+        <ScrollView style={{flex: 1}}>
             <KeyboardAvoidingView behavior="position" style={{marginTop: 50}}>
                 <View style={[globalStyles.flexItemsCenter, { width: "100%", marginVertical: 20, justifyContent: "center" }]}>
                     <Image
@@ -26,6 +27,7 @@ export default function SignUpPage() {
 
                 <AuthForm type="sign-up"/>
             </KeyboardAvoidingView>
+        </ScrollView>
     )
 }
 
