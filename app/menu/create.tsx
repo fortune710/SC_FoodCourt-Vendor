@@ -165,8 +165,8 @@ export default function CreateMenuItemPage() {
 
                             <AlertDialog>
                                 <AlertDialogTrigger asChild>
-                                    <ShadcnButton className="rounded-full h-7 w-7 p-2" size="icon">
-                                        <Plus className="w-2 h-2" stroke="white"/>
+                                    <ShadcnButton  size="icon" style={{width: 30, height: 30, borderRadius: 30/2, padding: 4}}>
+                                        <Plus stroke="white" style={{height: 24}}/>
                                     </ShadcnButton>
                                 </AlertDialogTrigger>
 
