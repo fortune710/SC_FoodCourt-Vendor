@@ -51,7 +51,6 @@ export default function OrderCardName({ order }: { order: Order }) {
 const styles = StyleSheet.create({
 
   dateTime: {
-    fontFamily: 'Montserrat',
     fontSize: 16,
     fontWeight: '600',
     marginBottom: 16,
@@ -86,7 +85,6 @@ const styles = StyleSheet.create({
       
     },
     date: {
-      fontFamily: "Montserrat",
       fontSize: 16,
       fontWeight: "bold",
       color: '#000'
@@ -109,7 +107,6 @@ const styles = StyleSheet.create({
     },
     time: {
       textAlign: "right",
-      fontFamily: "Montserrat",
       fontWeight: "bold"
     },
     status: {
