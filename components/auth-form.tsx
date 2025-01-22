@@ -106,11 +106,6 @@ export default function AuthForm({ type }: AuthFormProps) {
                             value={name}
                             onChangeText={(text) => setName(text)}    
                         />
-
-                        
-
-                    
-                    
                     </>
                 }
 
@@ -122,6 +117,8 @@ export default function AuthForm({ type }: AuthFormProps) {
                     value={email}
                     onChangeText={(text) => setEmail(text)}
                     keyboardType='email-address'
+                    style={{ marginLeft: 8 }}
+
                 />
 
                 <Input
@@ -139,6 +136,8 @@ export default function AuthForm({ type }: AuthFormProps) {
                     secureTextEntry={showPassword}
                     value={password}
                     onChangeText={(text) => setPassword(text)}
+                    style={{ marginLeft: 8 }}
+
                 />
 
                 {
@@ -223,10 +222,10 @@ export default function AuthForm({ type }: AuthFormProps) {
 const styles = StyleSheet.create({
     inputContainer: {
         borderWidth: 1, 
-        paddingHorizontal: 20, 
+        paddingHorizontal: 32, 
         borderRadius: 32, 
         borderColor: '#f72f2f',
-        paddingVertical: 5
+        paddingVertical: 4
     },
     moveToOtherPage: {
         borderWidth: 1, 
@@ -248,8 +247,9 @@ const styles = StyleSheet.create({
 
     },
     formContainer: {
-        marginVertical: 12,
-        paddingHorizontal: 8
+        // marginVertical: 12,
+        paddingHorizontal: 12,
+        gap: 12
     },
 
     actions: {

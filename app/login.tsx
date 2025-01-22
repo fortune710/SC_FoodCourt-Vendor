@@ -15,23 +15,22 @@ export default function LoginPage() {
     
 
     return (
-        // <Page>
-            <KeyboardAvoidingView behavior="position" style={{marginTop: 50}}>
-                <View style={[globalStyles.flexItemsCenter, { width: "100%", marginVertical: 20, justifyContent: "center" }]}>
+        <Page>
+            <KeyboardAvoidingView behavior="position" style={{marginTop: 24}}>
+                <View style={[globalStyles.flexItemsCenter, { width: "100%", justifyContent: "center", marginBottom: 40 }]}>
                     <Image
                         source={require('../assets/images/login-image.png')}
                         style={{ height: 233, width: 286 }}
                     />
                 </View>
 
-                <View style={{marginTop: 8, marginBottom: 24}}>
-                    <Text style={styles.loginText}>
-                        Login
-                    </Text>
-                </View>
+                <Text style={styles.loginText}>
+                    Login
+                </Text>
 
                 <AuthForm type="login"/>
             </KeyboardAvoidingView>
+        </Page>
     )
 }
 
@@ -40,6 +39,7 @@ const styles = StyleSheet.create({
         color: "#FF3551", 
         textAlign: "center", 
         fontSize: 30, 
-        fontWeight: "700" 
+        fontWeight: "700",
+        marginBottom: 24
     }
 })
