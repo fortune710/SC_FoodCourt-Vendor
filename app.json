@@ -54,6 +54,13 @@
       "reactNativeDirectoryCheck": {
         "listUnknownPackages": false
       }
+    },
+    "babel": {
+      "presets": [
+        ["babel-preset-expo", {
+          "unstable_transformImportMeta": true
+        }]
+      ]
     }
   }
 }
