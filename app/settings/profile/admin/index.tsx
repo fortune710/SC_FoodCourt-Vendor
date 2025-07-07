@@ -7,7 +7,7 @@ import { Image } from "expo-image";
 import { useRouter } from "expo-router";
 import useThemeColor from "hooks/useThemeColor";
 import { BrickWall, Edit, Lock, Mail, Phone } from "lucide-react-native";
-import { StyleSheet, TouchableOpacity, View ,  SafeAreaView} from "react-native";
+import { StyleSheet, TouchableOpacity, View ,  SafeAreaView, Pressable} from "react-native";
 import { StatusBar } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { scale } from "react-native-size-matters";
@@ -62,9 +62,11 @@ export default function ProfilePage() {
           <Text style={styles.subName}>
             {!resturant?.is_closed ? "Opened" : "Closed"}
           </Text>
+          <Pressable style={{borderWidth: 3, width: 100, height: 40, backgroundColor: '#fff'}} onPress={()=> console.log('abc')}></Pressable>
         </View>
       
       </View> 
+
       <Image
           source={{ uri: resturant?.image_url! }} // Replace with actual image URL
           style={styles.profileImage}
@@ -73,10 +75,9 @@ export default function ProfilePage() {
       <View style={styles.diagonal} />
       
       <View style={styles.detailsContainer}>
-        <ProfileItem icon="call" label="Phone Number" value={resturant?.phone_number! || "N/A"} />
+        <ProfileItem icon="mail-outline" label="Email" value={resturant?.email || "N/A"} />
+        <ProfileItem icon="call-outline" label="Phone Number" value={resturant?.phone_number! || "N/A"} />
         <ProfileItem icon="link" label="Website" value={resturant?.website_link || "N/A"} />
-
-        {/* <ProfileItem icon="lock-closed" label="Password" value="••••••••••" /> */}
       </View>
 
     </View>
@@ -92,7 +93,6 @@ const styles = StyleSheet.create({
       flexDirection: 'row',
       justifyContent: 'space-between',
       padding: 16,
-      marginTop: 36
     },
     editButton: {
       padding: 8,
@@ -125,7 +125,7 @@ const styles = StyleSheet.create({
       borderWidth: 3,
       borderColor: 'white',
       position: 'absolute',
-      top: scale(110),
+      top: scale(70),
       right: scale(20),
       zIndex: 100,
     

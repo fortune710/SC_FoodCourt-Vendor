@@ -28,6 +28,7 @@ export interface ResturantData {
     id?: number,
     admin_id: string,
     name: string,
+    email: string,
     phone_number?: string,
     website_link?: string,
     is_closed?: boolean,

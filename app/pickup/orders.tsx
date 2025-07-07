@@ -25,11 +25,15 @@ export default function PickupOrders() {
                                 <OrderCard key={order.id}>
                                     <OrderCardDetails order={order}/>
                                     <View className="pt-3">
-                                        <Button disabled={order.status === OrderStatus.Collected} onPress={() => {
-                                            markOrderAsCollected(order?.id)
-                                            // Usiere- check out
-                                            // router.back()
-                                        }}>
+                                        <Button 
+                                            disabled={order.status === OrderStatus.Collected} 
+                                            disabledStyle={{backgroundColor: '#fdc1c1'}}
+                                            onPress={() => {
+                                                markOrderAsCollected(order?.id)
+                                                // Usiere- check out
+                                                // router.back()
+                                            }}
+                                        >
                                             {order.status === OrderStatus.Collected ? "Collected" : "Mark as Collected"}
                                         </Button>
                                     </View>

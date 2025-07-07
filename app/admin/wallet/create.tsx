@@ -123,6 +123,7 @@ export default function CreatePaymentProfile() {
 
             <Button 
                 disabled={loading || accountName === ''} 
+                disabledStyle={{backgroundColor: '#FDC1C1'}}
                 onPress={handleCreatePaymentProfile}
                 buttonStyle={{ marginHorizontal: 12, borderRadius: 32, marginTop: 50 }}
             >
@@ -131,6 +132,7 @@ export default function CreatePaymentProfile() {
 
             <Button 
                 disabled={loading} 
+                disabledStyle={{backgroundColor: '#FDC1C1'}}
                 onPress={()=> router.back()} //it should send back to transaction page
                 buttonStyle={{ marginHorizontal: 12, borderRadius: 32, marginTop: 20, borderWidth: 1, backgroundColor: '#fff' }}
             >

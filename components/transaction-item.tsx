@@ -24,13 +24,13 @@ const TransactionItem: React.FC<TransactionProps> = ({ type, amount, date, descr
             <View style={styles.transactionContainer}> 
               <View style={styles.transactionDetails}>
                 <View>
-                  <Text style={styles.transactionType}>{type}</Text>
-                  <Text style={styles.transactionDate}>{date}</Text>
+                  <Text style={{fontWeight: 'bold'}}>{type}</Text>
+                  <Text style={{color: '#7e7e7e'}}>{date}</Text>
                 </View>
-                  <Text style={styles.transactionAmount}>N {amount}</Text>
+                  <Text style={{fontWeight: 'bold'}}>₦ {new Intl.NumberFormat('en-US').format(amount)}</Text>
               </View>
 
-              <Text style={styles.transactionDescription}>{description}</Text>
+              <Text>{description}</Text>
             </View>
         </View>
         <View style = {styles.seperator}></View>
@@ -44,18 +44,22 @@ const styles = StyleSheet.create({
     activeDot: {
       backgroundColor: 'white',
     },
+
     transactionContainer: {
       flex: 1,
     },
+
     transactionTitle: {
-        alignSelf:"center",
+      alignSelf:"center",
       fontSize: 18,
       fontWeight: 'bold',
       marginBottom: 15,
     },
+
     transaction: {
       flexDirection: 'row',
     },
+
     transactionIcon: {
       width: 40,
       height: 40,
@@ -66,24 +70,27 @@ const styles = StyleSheet.create({
       alignItems: 'center',
       marginRight: 12
     },
+
     transactionDetails: {
       flex: 1,
       flexDirection: 'row',
       justifyContent: 'space-between',
     },
+
     transactionType: {
       fontWeight: 'bold',
     },
+
     transactionDate: {
       fontSize: 12,
       color: '#7e7e7e',
+      borderWidth: 3,
     },
-    transactionDescription: {
-      fontSize: 12,
-    },
+
     transactionAmount: {
       fontWeight: 'bold',
     },
+
     seperator: {
         marginVertical: scale(10),
         height: scale(1),
