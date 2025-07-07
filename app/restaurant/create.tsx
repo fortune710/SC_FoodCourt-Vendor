@@ -2,7 +2,7 @@ import { Input } from "@rneui/themed";
 import Page from "~/components/page";
 import useAuth from "~/hooks/useAuth";
 
-import { KeyboardAvoidingView, StyleSheet, View } from "react-native";
+import { KeyboardAvoidingView, ScrollView, StyleSheet, View } from "react-native";
 import { Link, Phone, UserRound } from "lucide-react-native";
 import { useState } from "react";
 import useThemeColor from "~/hooks/useThemeColor";
@@ -46,6 +46,7 @@ export default function CreateResturant() {
 
 
     return (
+        <ScrollView style={{flex: 1}}>
         <Page>
             <KeyboardAvoidingView className="px-3 pt-3">
 
@@ -81,6 +82,7 @@ export default function CreateResturant() {
             </KeyboardAvoidingView>
 
         </Page>
+        </ScrollView>
     )
 }
 
