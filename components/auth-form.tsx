@@ -28,7 +28,7 @@ export default function AuthForm({ type }: AuthFormProps) {
     const [showPassword, setShowPassword] = useState(false);
 
 
-    const { signIn, signUpWithEmail } = useAuth();
+    const { signIn, signUpWithEmail, sendPasswordResetMail } = useAuth();
     const { getResturantByAdminId } = useResturant();
     const router = useRouter();
     const primary = useThemeColor({}, "primary")
@@ -75,6 +75,20 @@ export default function AuthForm({ type }: AuthFormProps) {
                     .catch((error) =>  console.log(error))
                     break;
                 case "forgot-password":
+                    await sendPasswordResetMail(email)
+                    .then(() => {
+                        return Toast.show({
+                            text1: "Sent Reset Email Successfully",
+                            text2: "Check your email",
+                            type : "success"
+                        })
+                    })
+                    .catch(() => {
+                        return Toast.show({
+                            text1: "Error while sending reset email",
+                            type: "error"
+                        })
+                    })
                     break;
                 default:
                     return;
